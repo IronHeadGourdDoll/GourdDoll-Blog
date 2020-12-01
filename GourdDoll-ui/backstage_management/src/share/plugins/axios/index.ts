@@ -1,8 +1,34 @@
 import axios from "axios";
 
-const request = axios.create({
-  baseURL: process.env.VUE_APP_API, // 基础url,如果是多环境配置这样写，也可以像下面一行的写死。
-  timeout: 1000 * 60 * 3 // 请求超时时间，三分钟。
+const instance = axios.create({
+  baseURL: process.env.VUE_APP_API,
+  timeout: 1000 * 60 * 3 // 请求超时时间
 });
 
-export default { request };
+// Add a request interceptor
+instance.interceptors.request.use(
+  function(config) {
+    // Do something before request is sent
+    return config;
+  },
+  function(error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+instance.interceptors.response.use(
+  function(response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  },
+  function(error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  }
+);
+
+export default instance;
