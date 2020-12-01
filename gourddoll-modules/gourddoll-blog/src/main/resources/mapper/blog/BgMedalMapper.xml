@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgMedalMapper">
+    
+    <resultMap type="BgMedal" id="BgMedalResult">
+        <result property="id"    column="id"    />
+        <result property="medalName"    column="medal_name"    />
+        <result property="img"    column="img"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectBgMedalVo">
+        select id, medal_name, img, description from bg_medal
+    </sql>
+
+    <select id="selectBgMedalList" parameterType="BgMedal" resultMap="BgMedalResult">
+        <include refid="selectBgMedalVo"/>
+        <where>  
+            <if test="medalName != null  and medalName != ''"> and medal_name like concat('%', #{medalName}, '%')</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+        </where>
+    </select>
+    
+    <select id="selectBgMedalById" parameterType="Long" resultMap="BgMedalResult">
+        <include refid="selectBgMedalVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBgMedal" parameterType="BgMedal">
+        insert into bg_medal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="medalName != null">medal_name,</if>
+            <if test="img != null">img,</if>
+            <if test="description != null">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="medalName != null">#{medalName},</if>
+            <if test="img != null">#{img},</if>
+            <if test="description != null">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBgMedal" parameterType="BgMedal">
+        update bg_medal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="medalName != null">medal_name = #{medalName},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="description != null">description = #{description},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBgMedalById" parameterType="Long">
+        delete from bg_medal where id = #{id}
+    </delete>
+
+    <delete id="deleteBgMedalByIds" parameterType="String">
+        delete from bg_medal where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

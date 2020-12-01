@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgBlogStatisticsMapper">
+    
+    <resultMap type="BgBlogStatistics" id="BgBlogStatisticsResult">
+        <result property="blogId"    column="blog_id"    />
+        <result property="readTimes"    column="read_times"    />
+        <result property="likeTimes"    column="like_times"    />
+        <result property="dislikeTimes"    column="dislike_times"    />
+        <result property="commentTimes"    column="comment_times"    />
+    </resultMap>
+
+    <sql id="selectBgBlogStatisticsVo">
+        select blog_id, read_times, like_times, dislike_times, comment_times from bg_blog_statistics
+    </sql>
+
+    <select id="selectBgBlogStatisticsList" parameterType="BgBlogStatistics" resultMap="BgBlogStatisticsResult">
+        <include refid="selectBgBlogStatisticsVo"/>
+        <where>  
+            <if test="readTimes != null "> and read_times = #{readTimes}</if>
+            <if test="likeTimes != null "> and like_times = #{likeTimes}</if>
+            <if test="dislikeTimes != null "> and dislike_times = #{dislikeTimes}</if>
+            <if test="commentTimes != null "> and comment_times = #{commentTimes}</if>
+        </where>
+    </select>
+    
+    <select id="selectBgBlogStatisticsById" parameterType="Long" resultMap="BgBlogStatisticsResult">
+        <include refid="selectBgBlogStatisticsVo"/>
+        where blog_id = #{blogId}
+    </select>
+        
+    <insert id="insertBgBlogStatistics" parameterType="BgBlogStatistics">
+        insert into bg_blog_statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="blogId != null">blog_id,</if>
+            <if test="readTimes != null">read_times,</if>
+            <if test="likeTimes != null">like_times,</if>
+            <if test="dislikeTimes != null">dislike_times,</if>
+            <if test="commentTimes != null">comment_times,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="blogId != null">#{blogId},</if>
+            <if test="readTimes != null">#{readTimes},</if>
+            <if test="likeTimes != null">#{likeTimes},</if>
+            <if test="dislikeTimes != null">#{dislikeTimes},</if>
+            <if test="commentTimes != null">#{commentTimes},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBgBlogStatistics" parameterType="BgBlogStatistics">
+        update bg_blog_statistics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="readTimes != null">read_times = #{readTimes},</if>
+            <if test="likeTimes != null">like_times = #{likeTimes},</if>
+            <if test="dislikeTimes != null">dislike_times = #{dislikeTimes},</if>
+            <if test="commentTimes != null">comment_times = #{commentTimes},</if>
+        </trim>
+        where blog_id = #{blogId}
+    </update>
+
+    <delete id="deleteBgBlogStatisticsById" parameterType="Long">
+        delete from bg_blog_statistics where blog_id = #{blogId}
+    </delete>
+
+    <delete id="deleteBgBlogStatisticsByIds" parameterType="String">
+        delete from bg_blog_statistics where blog_id in 
+        <foreach item="blogId" collection="array" open="(" separator="," close=")">
+            #{blogId}
+        </foreach>
+    </delete>
+    
+</mapper>

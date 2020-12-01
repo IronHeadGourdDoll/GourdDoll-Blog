@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.gourddoll.system.api.factory.RemoteUserFallbackFactory,\
+  com.gourddoll.system.api.factory.RemoteLogFallbackFactory

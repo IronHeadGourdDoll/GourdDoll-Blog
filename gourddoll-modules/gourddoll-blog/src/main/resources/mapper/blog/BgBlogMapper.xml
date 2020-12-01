@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgBlogMapper">
+    
+    <resultMap type="BgBlog" id="BgBlogResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="author"    column="author"    />
+        <result property="summary"    column="summary"    />
+        <result property="content"    column="content"    />
+        <result property="commend"    column="commend"    />
+        <result property="status"    column="status"    />
+        <result property="headerImg"    column="header_img"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectBgBlogVo">
+        select id, title, author, summary, content, commend, status, header_img, category_id, create_time, update_time, create_by, update_by from bg_blog
+    </sql>
+
+    <select id="selectBgBlogList" parameterType="BgBlog" resultMap="BgBlogResult">
+        <include refid="selectBgBlogVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="author != null  and author != ''"> and author = #{author}</if>
+            <if test="summary != null  and summary != ''"> and summary = #{summary}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="commend != null "> and commend = #{commend}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="headerImg != null  and headerImg != ''"> and header_img = #{headerImg}</if>
+            <if test="categoryId != null  and categoryId != ''"> and category_id = #{categoryId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBgBlogById" parameterType="Long" resultMap="BgBlogResult">
+        <include refid="selectBgBlogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBgBlog" parameterType="BgBlog" useGeneratedKeys="true" keyProperty="id">
+        insert into bg_blog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="author != null">author,</if>
+            <if test="summary != null">summary,</if>
+            <if test="content != null">content,</if>
+            <if test="commend != null">commend,</if>
+            <if test="status != null">status,</if>
+            <if test="headerImg != null">header_img,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="author != null">#{author},</if>
+            <if test="summary != null">#{summary},</if>
+            <if test="content != null">#{content},</if>
+            <if test="commend != null">#{commend},</if>
+            <if test="status != null">#{status},</if>
+            <if test="headerImg != null">#{headerImg},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBgBlog" parameterType="BgBlog">
+        update bg_blog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="summary != null">summary = #{summary},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="commend != null">commend = #{commend},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="headerImg != null">header_img = #{headerImg},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBgBlogById" parameterType="Long">
+        delete from bg_blog where id = #{id}
+    </delete>
+
+    <delete id="deleteBgBlogByIds" parameterType="String">
+        delete from bg_blog where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

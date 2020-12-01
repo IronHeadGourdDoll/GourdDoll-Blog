@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgBlogCommentMapper">
+    
+    <resultMap type="BgBlogComment" id="BgBlogCommentResult">
+        <result property="id"    column="id"    />
+        <result property="blogId"    column="blog_id"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="commentator"    column="commentator"    />
+        <result property="parent"    column="parent"    />
+        <result property="layer"    column="layer"    />
+        <result property="lft"    column="lft"    />
+        <result property="rft"    column="rft"    />
+    </resultMap>
+
+    <sql id="selectBgBlogCommentVo">
+        select id, blog_id, content, create_time, commentator, parent, layer, lft, rft from bg_blog_comment
+    </sql>
+
+    <select id="selectBgBlogCommentList" parameterType="BgBlogComment" resultMap="BgBlogCommentResult">
+        <include refid="selectBgBlogCommentVo"/>
+        <where>  
+            <if test="blogId != null "> and blog_id = #{blogId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="commentator != null  and commentator != ''"> and commentator = #{commentator}</if>
+            <if test="parent != null "> and parent = #{parent}</if>
+            <if test="layer != null "> and layer = #{layer}</if>
+            <if test="lft != null "> and lft = #{lft}</if>
+            <if test="rft != null "> and rft = #{rft}</if>
+        </where>
+    </select>
+    
+    <select id="selectBgBlogCommentById" parameterType="Long" resultMap="BgBlogCommentResult">
+        <include refid="selectBgBlogCommentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBgBlogComment" parameterType="BgBlogComment">
+        insert into bg_blog_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="blogId != null">blog_id,</if>
+            <if test="content != null">content,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="commentator != null">commentator,</if>
+            <if test="parent != null">parent,</if>
+            <if test="layer != null">layer,</if>
+            <if test="lft != null">lft,</if>
+            <if test="rft != null">rft,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="blogId != null">#{blogId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="commentator != null">#{commentator},</if>
+            <if test="parent != null">#{parent},</if>
+            <if test="layer != null">#{layer},</if>
+            <if test="lft != null">#{lft},</if>
+            <if test="rft != null">#{rft},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBgBlogComment" parameterType="BgBlogComment">
+        update bg_blog_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="blogId != null">blog_id = #{blogId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="commentator != null">commentator = #{commentator},</if>
+            <if test="parent != null">parent = #{parent},</if>
+            <if test="layer != null">layer = #{layer},</if>
+            <if test="lft != null">lft = #{lft},</if>
+            <if test="rft != null">rft = #{rft},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBgBlogCommentById" parameterType="Long">
+        delete from bg_blog_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteBgBlogCommentByIds" parameterType="String">
+        delete from bg_blog_comment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

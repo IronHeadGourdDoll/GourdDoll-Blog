@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgFolloweeMapper">
+    
+    <resultMap type="BgFollowee" id="BgFolloweeResult">
+        <result property="followeeId"    column="followee_id"    />
+        <result property="fanId"    column="fan_id"    />
+    </resultMap>
+
+    <sql id="selectBgFolloweeVo">
+        select followee_id, fan_id from bg_followee
+    </sql>
+
+    <select id="selectBgFolloweeList" parameterType="BgFollowee" resultMap="BgFolloweeResult">
+        <include refid="selectBgFolloweeVo"/>
+        <where>  
+            <if test="fanId != null "> and fan_id = #{fanId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBgFolloweeById" parameterType="Long" resultMap="BgFolloweeResult">
+        <include refid="selectBgFolloweeVo"/>
+        where followee_id = #{followeeId}
+    </select>
+        
+    <insert id="insertBgFollowee" parameterType="BgFollowee">
+        insert into bg_followee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="followeeId != null">followee_id,</if>
+            <if test="fanId != null">fan_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="followeeId != null">#{followeeId},</if>
+            <if test="fanId != null">#{fanId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBgFollowee" parameterType="BgFollowee">
+        update bg_followee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fanId != null">fan_id = #{fanId},</if>
+        </trim>
+        where followee_id = #{followeeId}
+    </update>
+
+    <delete id="deleteBgFolloweeById" parameterType="Long">
+        delete from bg_followee where followee_id = #{followeeId}
+    </delete>
+
+    <delete id="deleteBgFolloweeByIds" parameterType="String">
+        delete from bg_followee where followee_id in 
+        <foreach item="followeeId" collection="array" open="(" separator="," close=")">
+            #{followeeId}
+        </foreach>
+    </delete>
+    
+</mapper>

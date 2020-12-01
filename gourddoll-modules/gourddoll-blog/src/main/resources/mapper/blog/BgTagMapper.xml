@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgTagMapper">
+    
+    <resultMap type="BgTag" id="BgTagResult">
+        <result property="id"    column="id"    />
+        <result property="tagName"    column="tag_name"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectBgTagVo">
+        select id, tag_name, description from bg_tag
+    </sql>
+
+    <select id="selectBgTagList" parameterType="BgTag" resultMap="BgTagResult">
+        <include refid="selectBgTagVo"/>
+        <where>  
+            <if test="tagName != null  and tagName != ''"> and tag_name like concat('%', #{tagName}, '%')</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+        </where>
+    </select>
+    
+    <select id="selectBgTagById" parameterType="Long" resultMap="BgTagResult">
+        <include refid="selectBgTagVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBgTag" parameterType="BgTag" useGeneratedKeys="true" keyProperty="id">
+        insert into bg_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tagName != null">tag_name,</if>
+            <if test="description != null">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tagName != null">#{tagName},</if>
+            <if test="description != null">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBgTag" parameterType="BgTag">
+        update bg_tag
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tagName != null">tag_name = #{tagName},</if>
+            <if test="description != null">description = #{description},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBgTagById" parameterType="Long">
+        delete from bg_tag where id = #{id}
+    </delete>
+
+    <delete id="deleteBgTagByIds" parameterType="String">
+        delete from bg_tag where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
