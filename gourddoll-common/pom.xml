@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.gourddoll</groupId>
+        <artifactId>gourddoll</artifactId>
+        <version>0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gourddoll-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        gourddoll-common公共模块
+    </description>
+    <modules>
+        <module>gourddoll-common-core</module>
+        <module>gourddoll-common-security</module>
+        <module>gourddoll-common-datascope</module>
+        <module>gourddoll-common-log</module>
+        <module>gourddoll-common-redis</module>
+        <module>gourddoll-common-swagger</module>
+    </modules>
+
+</project>

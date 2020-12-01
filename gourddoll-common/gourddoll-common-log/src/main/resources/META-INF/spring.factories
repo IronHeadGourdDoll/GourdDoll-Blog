@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.gourddoll.common.log.service.AsyncLogService,\
+  com.gourddoll.common.log.aspect.LogAspect
