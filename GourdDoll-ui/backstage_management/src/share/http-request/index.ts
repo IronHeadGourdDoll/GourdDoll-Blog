@@ -4,11 +4,10 @@ enum HttpRequestMethod {
   get = "GET",
   post = "POST",
   put = "PUT",
-  delete = "DELETE",
+  delete = "DELETE"
 }
 
 class httpRequest {
-
   static get(url: string, params?: any) {
     return instance.request({
       url: url,
@@ -43,7 +42,6 @@ class httpRequest {
       data: data
     });
   }
-
-};
+}
 
 export default httpRequest;

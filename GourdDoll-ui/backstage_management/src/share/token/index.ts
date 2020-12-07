@@ -14,7 +14,7 @@ export function setToken(text: string) {
  * 获取令牌
  */
 export function getToken() {
-  return cookie.get(tokenKey);
+  return cookie()[tokenKey];
 }
 
 /**

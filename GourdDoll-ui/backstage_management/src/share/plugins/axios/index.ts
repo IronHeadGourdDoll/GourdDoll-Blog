@@ -8,12 +8,13 @@ const instance = axios.create({
 
 // Add a request interceptor
 instance.interceptors.request.use(
-  function (config) {
+  function(config) {
     // Do something before request is sent
-    config.headers[tokenKey] = getToken();
+    const token = getToken();
+    config.headers[tokenKey] = token;
     return config;
   },
-  function (error) {
+  function(error) {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -21,12 +22,12 @@ instance.interceptors.request.use(
 
 // Add a response interceptor
 instance.interceptors.response.use(
-  function (response) {
+  function(response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response;
   },
-  function (error) {
+  function(error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);
