@@ -22,6 +22,7 @@
         <module>gourddoll-common-log</module>
         <module>gourddoll-common-redis</module>
         <module>gourddoll-common-swagger</module>
+        <module>gourddoll-common-search</module>
     </modules>
 
 </project>

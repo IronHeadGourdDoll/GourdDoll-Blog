@@ -1,4 +1,4 @@
-package com.gourddoll.search.config;
+package com.gourddoll.common.search.config;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -14,9 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@EnableJpaRepositories(basePackages = {"com.example.elastic.dao"})
-//@EnableElasticsearchRepositories(basePackages = "com.example.elastic.daoes")
-public class AuthenHighLevelElastic {
+public class ElasticSearchConfig {
 
     @Value("${spring.data.elasticsearch.cluster-nodes}")
     private String hostname;
@@ -45,6 +43,8 @@ public class AuthenHighLevelElastic {
                     }
                 });
         RestHighLevelClient client = new RestHighLevelClient(builder);
+        System.out.println("=================port:"+port+",hostname:"+hostname);
+        System.out.println("=================userName:"+userName+",password:"+password);
         return client;
     }
 
