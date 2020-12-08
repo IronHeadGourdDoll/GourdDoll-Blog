@@ -1,7 +1,7 @@
-package com.gourddoll.search.service;
+package com.gourddoll.common.search.service;
 
 import com.google.gson.Gson;
-import org.apache.poi.ss.formula.functions.T;
+import com.gourddoll.common.core.utils.reflect.ReflectUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -20,11 +20,13 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -33,9 +35,10 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +51,7 @@ import java.util.concurrent.TimeUnit;
  * @author gourddoll
  * @date 2020-3-21
  */
-@Service
+@Component
 public class ElasticSearchService {
 
     @Autowired
@@ -60,11 +63,11 @@ public class ElasticSearchService {
     /**
     * 创建索引
     *
-    * @Param: [indexName]
+    * @Param: [index]
     * @return: void
     */
-    public void createIndex(String indexName) throws IOException {
-        CreateIndexRequest request = new CreateIndexRequest(indexName);
+    public void createIndex(String index) throws IOException {
+        CreateIndexRequest request = new CreateIndexRequest(index);
         CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
     }
@@ -72,7 +75,7 @@ public class ElasticSearchService {
     /**
     * 查看索引是否存在
     *
-    * @Param: [indexName, id]
+    * @Param: [index, id]
     * @return: boolean
     */
     public boolean existIndex(String indexName,String id) throws IOException {
@@ -84,24 +87,25 @@ public class ElasticSearchService {
     /**
     * 删除索引
     *
-    * @Param: [indexName]
+    * @Param: [index]
     * @return: void
     */
-    public void deleteIndex(String indexName) throws IOException {
-        DeleteIndexRequest request = new DeleteIndexRequest(indexName);
+    public void deleteIndex(String index) throws IOException {
+        DeleteIndexRequest request = new DeleteIndexRequest(index);
         AcknowledgedResponse delete = client.indices().delete(request, RequestOptions.DEFAULT);
         System.out.println(delete.isAcknowledged());
     }
 
     /**
     * 添加文档
-    * IndexRequest request = new IndexRequest("blog").type("doc");
-    * @Param: [t, request]
+    *
+    * @Param: [index, type, t]
     * @return: java.lang.String
     */
-    public String addDocument(Object object,IndexRequest request) throws IOException {
-        // 将我们的数据放入请求 json
-        request.source(gson.toJson(object), XContentType.JSON);
+    public <T> String addDocument(String index, String type, T t) throws IOException {
+        IndexRequest request = new IndexRequest(index).type(type);
+        // 将保存的数据放入请求 json
+        request.source(gson.toJson(t), XContentType.JSON);
         // 客户端发送请求 , 获取响应的结果
         IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
         System.out.println(indexResponse.toString());
@@ -112,12 +116,13 @@ public class ElasticSearchService {
 
 
     /**
-    * 获取文档，判断是否存在 get /blog/doc/1
-    * GetRequest getRequest = new GetRequest("blog","doc", "1L");
-    * @Param: [getRequest]
+    * 判断文档是否存在
+    *
+    * @Param: [index, type, id]
     * @return: boolean
     */
-    public boolean existDoc(GetRequest getRequest) throws IOException {
+    public boolean existDoc(String index, String type, String id) throws IOException {
+        GetRequest getRequest = new GetRequest(index, type, id);
         // 不获取返回的 _source 的上下文了
         getRequest.fetchSourceContext(new FetchSourceContext(false));
         getRequest.storedFields("_none_");
@@ -126,12 +131,13 @@ public class ElasticSearchService {
 
     /**
     * 获得文档的信息
-    * GetRequest getRequest = new GetRequest("blog","doc", "1L");
-    * @Param: [getRequest]
+    *
+    * @Param: [index, type, id]
     * @return: org.elasticsearch.action.get.GetResponse
     */
-    public GetResponse getReponse(GetRequest getRequest) throws IOException {
-        if (existDoc(getRequest)){
+    public GetResponse getReponse(String index, String type, String id) throws IOException {
+        GetRequest getRequest = new GetRequest(index, type, id);
+        if (existDoc(index, type, id)){
             return client.get(getRequest, RequestOptions.DEFAULT);
         }else {
             return null;
@@ -140,12 +146,13 @@ public class ElasticSearchService {
 
     /**
     * 更新文档的信息
-    * UpdateRequest updateRequest = new UpdateRequest("blog", "doc","101L");
-    * @Param: [updateRequest, newdata]
+    *
+    * @Param: [index, type, id, newData]
     * @return: org.elasticsearch.rest.RestStatus
     */
-    public RestStatus updateRequest(UpdateRequest updateRequest, Object newdata) throws IOException {
-        updateRequest.doc(gson.toJson(newdata), XContentType.JSON);
+    public <T> RestStatus updateRequest(String index, String type, String id, T newData) throws IOException {
+        UpdateRequest updateRequest = new UpdateRequest(index, type, id);
+        updateRequest.doc(gson.toJson(newData), XContentType.JSON);
         UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
         System.out.println(updateResponse.status());
         return updateResponse.status();
@@ -153,11 +160,12 @@ public class ElasticSearchService {
 
     /**
     * 删除文档记录
-    * DeleteRequest request = new DeleteRequest("blog", "doc","101L");
-    * @Param: [request]
+    *
+    * @Param: [index, type, id]
     * @return: org.elasticsearch.rest.RestStatus
     */
-    public RestStatus deleteRequest(DeleteRequest request) throws IOException {
+    public RestStatus deleteRequest(String index, String type, String id) throws IOException {
+        DeleteRequest request = new DeleteRequest(index, type, id);
         DeleteResponse deleteResponse = client.delete(request, RequestOptions.DEFAULT);
         return deleteResponse.status();
     }
@@ -165,11 +173,11 @@ public class ElasticSearchService {
     /**
     * 查询所有
     *
-    * @Param: [index]
+    * @Param: [index, t]
     * @return: java.util.List<java.lang.T>
     */
-    public List<Object> searchAll(String index) throws IOException {
-        List<Object> objects = new ArrayList<>();
+    public <T> List<T> searchAll(String index,T t) throws IOException {
+        List<T> ts = new ArrayList<>();
 
         SearchRequest searchRequest = new SearchRequest(index);
         // 构建搜索条件
@@ -178,30 +186,29 @@ public class ElasticSearchService {
         MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery();
         sourceBuilder.query(matchAllQueryBuilder);
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+
         searchRequest.source(sourceBuilder);
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println(gson.toJson(searchResponse.getHits().getAt(0).getSourceAsMap()));
-        System.out.println("=================================");
         //解析结果
         for (SearchHit documentFields : searchResponse.getHits().getHits()) {
             //map转json
             String tJson = gson.toJson(documentFields.getSourceAsMap());
             //json转实体类
-            Object object = gson.fromJson(tJson, T.class);
-            objects.add(object);
+            t = gson.fromJson(tJson, (Type) t.getClass());
+            ts.add(t);
         }
         //return searchResponse.getHits().getCollapseValues();
-        return objects;
+        return ts;
     }
 
     /**
     * 结果为空,TermQueryBuilder精准查询，不分词
     *
-    * @Param: [index, column, keyword]
+    * @Param: [index, column, keyword,T t]
     * @return: java.util.List<Object>
     */
-    public List<Object> search(String index, String column, String keyword) throws IOException {
-        List<Object> objects = new ArrayList<>();
+    public <T> List<T> search(String index, String column, String keyword,T t) throws IOException {
+        List<T> ts = new ArrayList<>();
 
         SearchRequest searchRequest = new SearchRequest(index);
         // 构建搜索条件
@@ -213,29 +220,27 @@ public class ElasticSearchService {
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         searchRequest.source(sourceBuilder);
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-        //System.out.println(gson.toJson(searchResponse.getHits().getAt(0).getSourceAsMap()));
-        System.out.println("=================================");
         //解析结果
         for (SearchHit documentFields : searchResponse.getHits().getHits()) {
             //map转json
             String tJson = gson.toJson(documentFields.getSourceAsMap());
             //json转实体类
-            Object object = gson.fromJson(tJson, T.class);
-            objects.add(object);
+            t = gson.fromJson(tJson, (Type) t.getClass());
+            ts.add(t);
         }
         //System.out.println(gson.toJson(objects));
         //return searchResponse.getHits().getCollapseValues();
-        return objects;
+        return ts;
     }
 
     /**
     * MatchQueryBuilder分词查询
     *
-    * @Param: [index, column, keyword]
+    * @Param: [index, column, keyword, t]
     * @return: java.util.List<T>
     */
-    public List<Object> searchPhrase(String index, String column, String keyword) throws IOException {
-        List<Object> objects = new ArrayList<>();
+    public <T> List<T> searchPhrase(String index, String column, String keyword,T t) throws IOException {
+        List<T> ts = new ArrayList<>();
         // 构建搜索条件
         SearchRequest searchRequest = new SearchRequest(index);
         MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery(column, keyword);
@@ -256,8 +261,10 @@ public class ElasticSearchService {
         searchRequest.source(sourceBuilder);
         //执行查询，返回结果
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println(gson.toJson(searchResponse.getHits().getAt(0).getSourceAsMap()));
-        System.out.println("=================================");
+        int len = searchResponse.getHits().getHits().length;
+        if (len <= 0){
+            return null;
+        }
         //解析结果
         for (SearchHit documentFields : searchResponse.getHits().getHits()) {
             //查询的源数据
@@ -280,10 +287,11 @@ public class ElasticSearchService {
             //map转json
             String tJson = gson.toJson(sourceAsMap);
             //json转实体类
-            Object object = gson.fromJson(tJson, T.class);
-            objects.add(object);
+            //t = gson.fromJson(tJson, ReflectUtils.getClassGenricType(t.getClass()));
+            t = gson.fromJson(tJson, (Type) t.getClass());
+            ts.add(t);
         }
-        return objects;
+        return ts;
     }
 
     /**
@@ -292,7 +300,7 @@ public class ElasticSearchService {
     * @Param: [index,list]
     * @return: boolean
     */
-    public boolean importListData(String index, List<T> list) throws IOException {
+    public <T> boolean importListData(String index, List<T> list) throws IOException {
 
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("10s");

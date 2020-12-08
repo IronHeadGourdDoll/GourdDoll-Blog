@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.gourddoll.common.search.config.ElasticSearchConfig,\
+  com.gourddoll.common.search.service.ElasticSearchService

@@ -1,5 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.gourddoll.common.redis.configure.RedisConfig,\
   com.gourddoll.common.redis.service.RedisService
-
-  

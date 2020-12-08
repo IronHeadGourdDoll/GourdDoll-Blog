@@ -12,10 +12,10 @@ public class TreeEntity extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 父菜单名称 */
+    /** 父级名称 */
     private String parentName;
 
-    /** 父菜单ID */
+    /** 父级ID */
     private Long parentId;
 
     /** 显示顺序 */
@@ -24,7 +24,7 @@ public class TreeEntity extends BaseEntity
     /** 祖级列表 */
     private String ancestors;
 
-    /** 子部门 */
+    /** 子节点 */
     private List<?> children = new ArrayList<>();
 
     public String getParentName()

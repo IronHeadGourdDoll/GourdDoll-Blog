@@ -84,6 +84,14 @@
             <artifactId>gourddoll-common-core</artifactId>
         </dependency>
 
+        <!-- GourdDoll Common Search,不写导入为unknown-->
+        <dependency>
+            <groupId>com.gourddoll</groupId>
+            <artifactId>gourddoll-common-search</artifactId>
+            <scope>compile</scope>
+            <version>0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
