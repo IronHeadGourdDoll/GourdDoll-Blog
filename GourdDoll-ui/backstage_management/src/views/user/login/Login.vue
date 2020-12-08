@@ -8,9 +8,7 @@
             v-model:value="formInline.user"
             placeholder="输入用户名"
           >
-            <template #prefix
-              ><UserOutlined style="color: rgba(0, 0, 0, 0.25)"
-            /></template>
+            <template #prefix><UserOutlined /></template>
           </a-input>
         </a-form-item>
         <a-form-item>
@@ -20,9 +18,7 @@
             type="password"
             placeholder="输入密码"
           >
-            <template #prefix
-              ><LockOutlined style="color: rgba(0, 0, 0, 0.25)"
-            /></template>
+            <template #prefix><LockOutlined /></template>
           </a-input>
         </a-form-item>
         <a-form-item class="submitdiv">
@@ -30,9 +26,9 @@
             type="primary"
             html-type="submit"
             size="large"
-            :disabled="formInline.user === '' || formInline.password === ''"
+            :disabled="btnIsDisabled"
           >
-            登 录
+            {{ btnText }}
           </a-button>
         </a-form-item>
       </a-form>
@@ -40,27 +36,5 @@
   </div>
 </template>
 
-<style src="./login.scss" lang="scss" scoped></style>
-<script>
-import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-
-export default {
-  components: {
-    UserOutlined,
-    LockOutlined
-  },
-  data() {
-    return {
-      formInline: {
-        user: "",
-        password: ""
-      }
-    };
-  },
-  methods: {
-    handleSubmit() {
-      console.log(this.formInline);
-    }
-  }
-};
-</script>
+<style lang="scss" src="./login.scss" scoped></style>
+<script lang="ts" src="./login.ts"></script>

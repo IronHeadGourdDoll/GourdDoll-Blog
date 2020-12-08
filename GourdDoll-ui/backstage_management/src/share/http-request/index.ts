@@ -1,4 +1,5 @@
 import instance from "../plugins/axios";
+import AjaxResult = model.common.AjaxResult;
 
 enum HttpRequestMethod {
   get = "GET",
@@ -8,39 +9,43 @@ enum HttpRequestMethod {
 }
 
 class httpRequest {
-  static get(url: string, params?: any) {
-    return instance.request({
+  static async get<T = any>(url: string, params?: any) {
+    const result = await instance.request({
       url: url,
       method: HttpRequestMethod.get,
       params: params
     });
+    return result.data as AjaxResult<T>;
   }
 
-  static post(url: string, data?: any, params?: any) {
-    return instance.request({
+  static async post<T = any>(url: string, data?: any, params?: any) {
+    const result = await instance.request({
       url: url,
       method: HttpRequestMethod.post,
       params: params,
       data: data
     });
+    return result.data as AjaxResult<T>;
   }
 
-  static put(url: string, data?: any, params?: any) {
-    return instance.request({
+  static async put<T = any>(url: string, data?: any, params?: any) {
+    const result = await instance.request({
       url: url,
       method: HttpRequestMethod.put,
       params: params,
       data: data
     });
+    return result.data as AjaxResult<T>;
   }
 
-  static delete(url: string, data?: any, params?: any) {
-    return instance.request({
+  static async delete<T = any>(url: string, data?: any, params?: any) {
+    const result = await instance.request({
       url: url,
       method: HttpRequestMethod.delete,
       params: params,
       data: data
     });
+    return result.data as AjaxResult<T>;
   }
 }
 

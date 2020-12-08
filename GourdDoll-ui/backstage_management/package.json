@@ -55,7 +55,11 @@
     "rules": {
       "no-debugger": "off",
       "no-console": "off",
-      "indent": "off"
+      "indent": "off",
+      "comma-dangle": "off",
+      "prefer-const": "off",
+      "no-extra-semi": "off",
+      "semi": "off"
     }
   },
   "browserslist": [

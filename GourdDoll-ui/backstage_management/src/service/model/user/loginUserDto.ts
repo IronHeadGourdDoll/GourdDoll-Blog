@@ -1,41 +1,45 @@
-class loginUserDto {
-  /**
-   * 用户唯一标识
-   */
-  token?: string;
+namespace model.user {
 
-  /**
-   * 用户名id
-   */
-  userid?: bigint;
+  export class LoginUserDto {
+    /**
+     * 用户唯一标识
+     */
+    token?: string;
 
-  /**
-   * 用户名
-   */
-  username?: string;
+    /**
+     * 用户名id
+     */
+    userid?: bigint;
 
-  /**
-   * 登录时间
-   */
-  loginTime?: bigint;
+    /**
+     * 用户名
+     */
+    username?: string;
 
-  /**
-   * 过期时间
-   */
-  expireTime?: bigint;
+    /**
+     * 登录时间
+     */
+    loginTime?: bigint;
 
-  /**
-   * 登录IP地址
-   */
-  ipaddr?: string;
+    /**
+     * 过期时间
+     */
+    expireTime?: bigint;
 
-  /**
-   * 权限列表
-   */
-  permissions: Array<string> = [];
+    /**
+     * 登录IP地址
+     */
+    ipaddr?: string;
 
-  /**
-   * 角色列表
-   */
-  roles: Array<string> = [];
+    /**
+     * 权限列表
+     */
+    permissions: Array<string> = [];
+
+    /**
+     * 角色列表
+     */
+    roles: Array<string> = [];
+  }
+
 }
