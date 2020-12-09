@@ -1,5 +1,7 @@
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { defineComponent, reactive, ref, computed } from "vue";
+import router from "@/router";
+import { setToken } from "@/share/token";
 
 export default defineComponent({
   name: "Login",
@@ -11,6 +13,7 @@ export default defineComponent({
     const formInline = reactive({
       user: "",
       password: "",
+      code: ""
     });
 
     const logintxt = "登 录";
@@ -20,12 +23,17 @@ export default defineComponent({
     function handleSubmit() {
       btnText.value = loginedtxt;
       console.log(formInline);
+      setToken("1");
+      setTimeout(() => {
+        router.push({ path: "/" });
+      }, 2000);
     }
 
     const btnIsDisabled = computed(
       () =>
         formInline.user === "" ||
         formInline.password === "" ||
+        formInline.code === "" ||
         btnText.value == loginedtxt
     );
 

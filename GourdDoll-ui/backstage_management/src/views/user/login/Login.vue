@@ -21,6 +21,10 @@
             <template #prefix><LockOutlined /></template>
           </a-input>
         </a-form-item>
+        <div>
+          <div class="verification_img"></div>
+          <a-input class="verification_code" placeholder="输入验证码" v-model:value="formInline.code" />
+        </div>
         <a-form-item class="submitdiv">
           <a-button
             type="primary"
