@@ -21,6 +21,10 @@
       display: inline-block;
       width: 100px;
       height: 40px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
     .verification_code {
       width: 280px;

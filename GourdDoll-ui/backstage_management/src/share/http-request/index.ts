@@ -1,5 +1,5 @@
 import instance from "../plugins/axios";
-import AjaxResult = model.common.AjaxResult;
+import { AjaxResult } from "@/service/model/common/ajaxResult";
 
 enum HttpRequestMethod {
   get = "GET",
@@ -8,14 +8,15 @@ enum HttpRequestMethod {
   delete = "DELETE"
 }
 
-class httpRequest {
+class HttpRequest {
   static async get<T = any>(url: string, params?: any) {
     const result = await instance.request({
       url: url,
       method: HttpRequestMethod.get,
       params: params
     });
-    return result.data as AjaxResult<T>;
+    const d = result.data as AjaxResult<T>;
+    return d.data;
   }
 
   static async post<T = any>(url: string, data?: any, params?: any) {
@@ -25,7 +26,8 @@ class httpRequest {
       params: params,
       data: data
     });
-    return result.data as AjaxResult<T>;
+    const d = result.data as AjaxResult<T>;
+    return d.data;
   }
 
   static async put<T = any>(url: string, data?: any, params?: any) {
@@ -35,7 +37,8 @@ class httpRequest {
       params: params,
       data: data
     });
-    return result.data as AjaxResult<T>;
+    const d = result.data as AjaxResult<T>;
+    return d.data;
   }
 
   static async delete<T = any>(url: string, data?: any, params?: any) {
@@ -45,8 +48,9 @@ class httpRequest {
       params: params,
       data: data
     });
-    return result.data as AjaxResult<T>;
+    const d = result.data as AjaxResult<T>;
+    return d.data;
   }
 }
 
-export default httpRequest;
+export default HttpRequest;

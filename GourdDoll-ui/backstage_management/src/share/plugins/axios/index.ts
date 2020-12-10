@@ -1,5 +1,4 @@
-import AjaxResult = model.common.AjaxResult;
-import HttpStatus = model.common.HttpStatus;
+import { AjaxResult, HttpStatus } from "@/service/model/common/ajaxResult";
 import axios from "axios";
 import { getToken, tokenKey } from "../../token";
 import { message } from "ant-design-vue";
@@ -10,21 +9,22 @@ const instance = axios.create({
   timeout: 1000 * 60 * 3 // 请求超时时间
 });
 
-
 const cancels = new Map();
 
 // Add a request interceptor
 instance.interceptors.request.use(
-  function (config) {
+  function(config) {
     // Do something before request is sent
     const token = getToken();
     config.headers[tokenKey] = token;
     let cancel;
-    config.cancelToken = new axios.CancelToken(function executor(c) { cancel = c; });
+    config.cancelToken = new axios.CancelToken(function executor(c) {
+      cancel = c;
+    });
     cancels.set(config.cancelToken, cancel);
     return config;
   },
-  function (error) {
+  function(error) {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -32,7 +32,7 @@ instance.interceptors.request.use(
 
 // Add a response interceptor
 instance.interceptors.response.use(
-  function (response) {
+  function(response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
 
@@ -50,12 +50,12 @@ instance.interceptors.response.use(
       if (data.msg) {
         message.warning(data.msg.toString());
       }
-      return Promise.reject(`${data.code}:${data.msg}`);
+      return Promise.reject(data);
     }
 
     return response;
   },
-  function (error) {
+  function(error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);

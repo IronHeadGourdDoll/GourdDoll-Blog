@@ -22,8 +22,14 @@
           </a-input>
         </a-form-item>
         <div>
-          <div class="verification_img"></div>
-          <a-input class="verification_code" placeholder="输入验证码" v-model:value="formInline.code" />
+          <div class="verification_img" @click="loadCodeImg">
+            <img :src="formInline.img" alt="验证码图片" />
+          </div>
+          <a-input
+            class="verification_code"
+            placeholder="输入验证码"
+            v-model:value="formInline.code"
+          />
         </div>
         <a-form-item class="submitdiv">
           <a-button
