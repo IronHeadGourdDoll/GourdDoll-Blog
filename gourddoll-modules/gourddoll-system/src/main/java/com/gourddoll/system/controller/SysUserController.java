@@ -6,7 +6,6 @@ import com.gourddoll.common.core.utils.StringUtils;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -25,7 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,11 +56,11 @@ public class SysUserController extends BaseController
      */
     @PreAuthorize(hasPermi = "system:user:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysUser user)
+    public AjaxResult list(SysUser user)
     {
         startPage();
         List<SysUser> list = userService.selectUserList(user);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
@@ -126,11 +127,11 @@ public class SysUserController extends BaseController
         Set<String> roles = permissionService.getRolePermission(userId);
         // 权限集合
         Set<String> permissions = permissionService.getMenuPermission(userId);
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("user", userService.selectUserById(userId));
-        ajax.put("roles", roles);
-        ajax.put("permissions", permissions);
-        return ajax;
+        Map<String,Object> data = new HashMap<>();
+        data.put("user", userService.selectUserById(userId));
+        data.put("roles", roles);
+        data.put("permissions", permissions);
+        return AjaxResult.success(data);
     }
 
     /**

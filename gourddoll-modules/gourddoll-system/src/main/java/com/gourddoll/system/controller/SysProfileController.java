@@ -6,12 +6,14 @@ import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.service.TokenService;
 import com.gourddoll.common.security.utils.SecurityUtils;
-
 import com.gourddoll.system.api.domain.SysUser;
 import com.gourddoll.system.api.model.LoginUser;
 import com.gourddoll.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 个人信息 业务处理
@@ -35,11 +37,11 @@ public class SysProfileController extends BaseController
     public AjaxResult profile()
     {
         String username = SecurityUtils.getUsername();
-        SysUser user = userService.selectUserByUserName(username);
-        AjaxResult ajax = AjaxResult.success(user);
-        ajax.put("roleGroup", userService.selectUserRoleGroup(username));
-        ajax.put("postGroup", userService.selectUserPostGroup(username));
-        return ajax;
+        Map<String,Object> data = new HashMap<>();
+        data.put("user",userService.selectUserByUserName(username));
+        data.put("roleGroup", userService.selectUserRoleGroup(username));
+        data.put("postGroup", userService.selectUserPostGroup(username));
+        return AjaxResult.success(data);
     }
 
     /**

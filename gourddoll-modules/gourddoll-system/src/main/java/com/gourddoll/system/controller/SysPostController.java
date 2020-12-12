@@ -4,7 +4,6 @@ import com.gourddoll.common.core.constant.UserConstants;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -36,11 +35,11 @@ public class SysPostController extends BaseController
      */
     @PreAuthorize(hasPermi = "system:post:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysPost post)
+    public AjaxResult list(SysPost post)
     {
         startPage();
         List<SysPost> list = postService.selectPostList(post);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)

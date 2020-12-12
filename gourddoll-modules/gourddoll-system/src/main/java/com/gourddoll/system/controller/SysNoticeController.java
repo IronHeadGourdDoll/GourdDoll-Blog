@@ -2,7 +2,6 @@ package com.gourddoll.system.controller;
 
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -32,11 +31,11 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize(hasPermi = "system:notice:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysNotice notice)
+    public AjaxResult list(SysNotice notice)
     {
         startPage();
         List<SysNotice> list = noticeService.selectNoticeList(notice);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**

@@ -3,7 +3,6 @@ package com.gourddoll.system.controller;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -30,11 +29,11 @@ public class SysOperlogController extends BaseController
 
     @PreAuthorize(hasPermi = "system:operlog:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysOperLog operLog)
+    public AjaxResult list(SysOperLog operLog)
     {
         startPage();
         List<SysOperLog> list = operLogService.selectOperLogList(operLog);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)

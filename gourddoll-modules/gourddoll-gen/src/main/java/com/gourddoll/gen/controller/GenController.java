@@ -41,10 +41,10 @@ public class GenController extends BaseController {
      */
     @PreAuthorize(hasPermi = "tool:gen:list")
     @GetMapping("/list")
-    public TableDataInfo genList(GenTable genTable) {
+    public AjaxResult genList(GenTable genTable) {
         startPage();
         List<GenTable> list = genTableService.selectGenTableList(genTable);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**
@@ -66,10 +66,10 @@ public class GenController extends BaseController {
      */
     @PreAuthorize(hasPermi = "tool:gen:list")
     @GetMapping("/db/list")
-    public TableDataInfo dataList(GenTable genTable) {
+    public AjaxResult dataList(GenTable genTable) {
         startPage();
         List<GenTable> list = genTableService.selectDbTableList(genTable);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**

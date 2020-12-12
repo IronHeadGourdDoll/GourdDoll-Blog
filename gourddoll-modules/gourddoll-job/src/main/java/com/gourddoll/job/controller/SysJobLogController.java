@@ -33,11 +33,11 @@ public class SysJobLogController extends BaseController
      */
     @PreAuthorize(hasPermi = "monitor:job:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysJobLog sysJobLog)
+    public AjaxResult list(SysJobLog sysJobLog)
     {
         startPage();
         List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**

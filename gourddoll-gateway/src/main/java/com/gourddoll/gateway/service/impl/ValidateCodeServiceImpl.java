@@ -15,8 +15,11 @@ import org.springframework.util.FastByteArrayOutputStream;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.naming.ldap.HasControls;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -78,14 +81,14 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
             return AjaxResult.error(e.getMessage());
         }
 
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("uuid", uuid);
-        ajax.put("img", Base64.encode(os.toByteArray()));
-        return ajax;
+        Map<String,Object> data = new HashMap<>();
+        data.put("uuid", uuid);
+        data.put("img", Base64.encode(os.toByteArray()));
+        return AjaxResult.success(data);
     }
 
     /**
-     * 校验验证码
+     * 校验验证码，用户传入
      */
     @Override
     public void checkCapcha(String code, String uuid) throws CaptchaException
@@ -98,10 +101,11 @@ public class ValidateCodeServiceImpl implements ValidateCodeService
         {
             throw new CaptchaException("验证码已失效");
         }
-        String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid;
-        String captcha = redisService.getCacheObject(verifyKey);
-        redisService.deleteObject(verifyKey);
+        String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid; //前缀 + 用户key
+        String captcha = redisService.getCacheObject(verifyKey); //服务器value
+        redisService.deleteObject(verifyKey); //删除请求验证码，下次需重新输入
 
+        // 与服务器value校验
         if (!code.equalsIgnoreCase(captcha))
         {
             throw new CaptchaException("验证码错误");

@@ -22,3 +22,14 @@ spring:
         file-extension: yml
         # 共享配置
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        # 连接超时时间
+        config-long-poll-timeout: 700000
+        # 最大重试次数
+        max-retry: 11
+
+# 日志
+logging:
+  level:
+    com:
+      alibaba:
+        nacos: warn
