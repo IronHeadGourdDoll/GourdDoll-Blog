@@ -28,6 +28,7 @@
           <a-input
             class="verification_code"
             placeholder="输入验证码"
+            type="number"
             v-model:value="formInline.code"
           />
         </div>

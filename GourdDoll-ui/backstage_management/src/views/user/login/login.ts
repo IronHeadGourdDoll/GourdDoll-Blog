@@ -4,7 +4,8 @@ import router from "@/router";
 import { setToken } from "@/share/token";
 import UserController from "@/service/controller/user/userController";
 import MenuController from "@/service/controller/menu/menuController";
-import { message } from "ant-design-vue";
+import menuHelp from "@/share/cache/menu";
+import userInfoHelp from "@/share/cache/userInfo";
 
 export default defineComponent({
   name: "Login",
@@ -19,6 +20,12 @@ export default defineComponent({
       code: "",
       img: ""
     });
+
+    if (Object.is(process.env.NODE_ENV, "development")) {
+      formInline.user = "admin";
+      formInline.password = "admin123";
+    }
+
     const logintxt = "登 录";
     const loginedtxt = "登录中···";
     let btnText = ref(logintxt);
@@ -28,6 +35,7 @@ export default defineComponent({
     let uuid = "";
 
     function loadCodeImg() {
+      formInline.code = "";
       const codedata = userService.GetVerificationCode();
       codedata.then(data => {
         formInline.img = `data:image/png;base64,${data.img}`;
@@ -51,15 +59,16 @@ export default defineComponent({
           return userService.getInfo();
         })
         .then(data => {
-          return menuService.GetUserMenu(data.userid);
+          userInfoHelp.set(data);
+          return menuService.GetUserMenu();
         })
         .then(data => {
-          console.log(data);
+          menuHelp.set(data);
           router.push({ path: "/" });
         })
         .catch(() => {
           btnText.value = logintxt;
-          message.warning("登录失败，请稍后重试！");
+          loadCodeImg();
         });
     }
 

@@ -74,3 +74,5 @@ class UserEntity {
    */
   loginDate?: string;
 }
+
+export default UserEntity;

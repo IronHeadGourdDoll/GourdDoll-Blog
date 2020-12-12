@@ -1,8 +1,9 @@
 import ControllerBase from "../controllerBase";
+import MenuTreeDto from "../../model/menu/menuTreeDto";
 
 class MenuController extends ControllerBase {
-  GetUserMenu(userid: bigint) {
-    return this.request.get("/GetUserMenu", userid);
+  GetUserMenu() {
+    return this.request.get<MenuTreeDto>("/system/menu/treeselect-lv");
   }
 }
 

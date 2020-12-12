@@ -1,7 +1,7 @@
 import ControllerBase from "../controllerBase";
 import LoginBodyDto from "../../model/user/loginBodyDto";
 import LoginInfoDto from "../../model/user/loginInfoDto";
-import LoginUserDto from "../../model/user/loginUserDto";
+import UserInfoDto from "../../model/user/userInfoDto";
 import VerificationCodeDto from "../../model/user/verificationCodeDto";
 
 class UserController extends ControllerBase {
@@ -14,7 +14,7 @@ class UserController extends ControllerBase {
   }
 
   getInfo() {
-    return this.request.post<LoginUserDto>("/user/getInfo");
+    return this.request.get<UserInfoDto>("/system/user/getInfo");
   }
 }
 
