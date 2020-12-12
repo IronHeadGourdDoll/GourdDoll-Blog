@@ -1,26 +1,19 @@
 package com.gourddoll.blog.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.gourddoll.blog.domain.BgLeaveMessage;
+import com.gourddoll.blog.service.IBgLeaveMessageService;
+import com.gourddoll.common.core.utils.poi.ExcelUtil;
+import com.gourddoll.common.core.web.controller.BaseController;
+import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
-import com.gourddoll.blog.domain.BgLeaveMessage;
-import com.gourddoll.blog.service.IBgLeaveMessageService;
-import com.gourddoll.common.core.web.controller.BaseController;
-import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.utils.poi.ExcelUtil;
-import com.gourddoll.common.core.web.page.TableDataInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 留言管理Controller
@@ -39,11 +32,11 @@ public class BgLeaveMessageController extends BaseController
      * 查询留言管理列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(BgLeaveMessage bgLeaveMessage)
+    public AjaxResult list(BgLeaveMessage bgLeaveMessage)
     {
         startPage();
         List<BgLeaveMessage> list = bgLeaveMessageService.selectBgLeaveMessageList(bgLeaveMessage);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**

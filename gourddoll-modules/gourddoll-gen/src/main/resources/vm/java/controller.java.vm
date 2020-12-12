@@ -44,10 +44,10 @@ public class ${ClassName}Controller extends BaseController {
 @PreAuthorize(hasPermi = "${permissionPrefix}:list")
 @GetMapping("/list")
     #if($table.crud)
-    public TableDataInfo list(${ClassName} ${className}) {
+    public AjaxResult list(${ClassName} ${className}) {
         startPage();
         List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
     #elseif($table.tree)
         public AjaxResult list(${ClassName} ${className}) {

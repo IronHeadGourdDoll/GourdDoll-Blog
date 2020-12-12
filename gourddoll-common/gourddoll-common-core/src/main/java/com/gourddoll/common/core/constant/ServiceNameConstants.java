@@ -16,4 +16,9 @@ public class ServiceNameConstants
      * 系统模块的serviceid
      */
     public static final String SYSTEM_SERVICE = "gourddoll-system";
+
+    /**
+     * 博客模块的serviceid
+     */
+    public static final String BlOG_SERVICE = "gourddoll-blog";
 }

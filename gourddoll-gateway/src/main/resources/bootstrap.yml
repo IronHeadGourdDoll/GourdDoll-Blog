@@ -24,6 +24,10 @@ spring:
         file-extension: yml
         # 共享配置
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+        # 连接超时时间
+        config-long-poll-timeout: 700000
+        # 最大重试次数
+        max-retry: 11
     sentinel:
       # 取消控制台懒加载
       eager: true
@@ -39,3 +43,10 @@ spring:
             groupId: DEFAULT_GROUP
             data-type: json
             rule-type: flow
+
+# 日志
+logging:
+  level:
+    com:
+      alibaba:
+        nacos: warn

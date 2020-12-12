@@ -4,7 +4,6 @@ import com.gourddoll.common.core.constant.UserConstants;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -33,11 +32,11 @@ public class SysDictTypeController extends BaseController
 
     @PreAuthorize(hasPermi = "system:dict:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictType dictType)
+    public AjaxResult list(SysDictType dictType)
     {
         startPage();
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(title = "字典类型", businessType = BusinessType.EXPORT)

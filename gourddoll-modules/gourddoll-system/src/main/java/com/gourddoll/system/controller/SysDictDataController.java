@@ -3,7 +3,6 @@ package com.gourddoll.system.controller;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -36,11 +35,11 @@ public class SysDictDataController extends BaseController
 
     @PreAuthorize(hasPermi = "system:dict:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictData dictData)
+    public AjaxResult list(SysDictData dictData)
     {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)

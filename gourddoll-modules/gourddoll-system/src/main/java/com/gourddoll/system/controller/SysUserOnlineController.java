@@ -4,12 +4,10 @@ import com.gourddoll.common.core.constant.CacheConstants;
 import com.gourddoll.common.core.utils.StringUtils;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.redis.service.RedisService;
 import com.gourddoll.common.security.annotation.PreAuthorize;
-
 import com.gourddoll.system.api.model.LoginUser;
 import com.gourddoll.system.domain.SysUserOnline;
 import com.gourddoll.system.service.ISysUserOnlineService;
@@ -38,7 +36,7 @@ public class SysUserOnlineController extends BaseController
 
     @PreAuthorize(hasPermi = "monitor:online:list")
     @GetMapping("/list")
-    public TableDataInfo list(String ipaddr, String userName)
+    public AjaxResult list(String ipaddr, String userName)
     {
         Collection<String> keys = redisService.keys(CacheConstants.LOGIN_TOKEN_KEY + "*");
         List<SysUserOnline> userOnlineList = new ArrayList<SysUserOnline>();
@@ -73,7 +71,7 @@ public class SysUserOnlineController extends BaseController
         }
         Collections.reverse(userOnlineList);
         userOnlineList.removeAll(Collections.singleton(null));
-        return getDataTable(userOnlineList);
+        return AjaxResult.success(getDataTable(userOnlineList));
     }
 
     /**

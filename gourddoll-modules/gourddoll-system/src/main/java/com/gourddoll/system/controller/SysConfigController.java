@@ -4,7 +4,6 @@ import com.gourddoll.common.core.constant.UserConstants;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
-import com.gourddoll.common.core.web.page.TableDataInfo;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
@@ -36,11 +35,11 @@ public class SysConfigController extends BaseController
      */
     @PreAuthorize(hasPermi = "system:config:list")
     @GetMapping("/list")
-    public TableDataInfo list(SysConfig config)
+    public AjaxResult list(SysConfig config)
     {
         startPage();
         List<SysConfig> list = configService.selectConfigList(config);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
