@@ -16,6 +16,10 @@ class UserController extends ControllerBase {
   getInfo() {
     return this.request.get<UserInfoDto>("/system/user/getInfo");
   }
+
+  logout() {
+    return this.request.delete("/auth/logout");
+  }
 }
 
 export default UserController;
