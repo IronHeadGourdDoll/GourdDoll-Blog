@@ -1,11 +1,9 @@
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { defineComponent, reactive, ref, computed } from "vue";
 import router from "@/router";
-import { setToken } from "@/share/token";
 import UserController from "@/service/controller/user/userController";
 import MenuController from "@/service/controller/menu/menuController";
-import menuHelp from "@/share/cache/menu";
-import userInfoHelp from "@/share/cache/userInfo";
+import store from "@/store";
 
 export default defineComponent({
   name: "Login",
@@ -47,23 +45,13 @@ export default defineComponent({
     function handleSubmit() {
       btnText.value = loginedtxt;
 
-      userService
-        .login({
-          username: formInline.user,
-          password: formInline.password,
-          code: formInline.code,
-          uuid: uuid
-        })
-        .then(data => {
-          setToken(data.access_token);
-          return userService.getInfo();
-        })
-        .then(data => {
-          userInfoHelp.set(data);
-          return menuService.GetUserMenu();
-        })
-        .then(data => {
-          menuHelp.set(data);
+      store.dispatch("user/login", {
+        username: formInline.user,
+        password: formInline.password,
+        code: formInline.code,
+        uuid: uuid
+      })
+        .then(() => {
           router.push({ path: "/" });
         })
         .catch(() => {
