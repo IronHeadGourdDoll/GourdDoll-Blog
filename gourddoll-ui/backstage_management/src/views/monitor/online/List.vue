@@ -1,10 +1,8 @@
-<template>
-  <router-view />
-</template>
+<template>在线用户</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Content",
+  name: "OnlineList",
 });
 </script>

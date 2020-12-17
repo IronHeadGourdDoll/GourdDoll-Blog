@@ -1,11 +1,11 @@
 <template>
-  <a-menu theme="dark" mode="inline">
+  <a-menu theme="dark" mode="inline" v-model:openKeys="openKeys">
     <NavItem v-for="menu in menus" :key="menu.id" :item="menu"></NavItem>
   </a-menu>
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineComponent, defineAsyncComponent, ref } from "vue";
 import menuHelp from "@/share/cache/menu";
 export default defineComponent({
   name: "Nav",
@@ -14,7 +14,10 @@ export default defineComponent({
   },
   setup() {
     const menus = menuHelp.get();
-    return { menus };
+
+    const openKeys = ref([]);
+
+    return { menus, openKeys };
   },
 });
 </script>

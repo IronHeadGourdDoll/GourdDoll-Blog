@@ -23,7 +23,7 @@
         </a-form-item>
         <div>
           <div class="verification_img" @click="loadCodeImg">
-            <img :src="formInline.img" alt="验证码图片" />
+            <img class="fill" :src="formInline.img" alt="验证码图片" />
           </div>
           <a-input
             class="verification_code"

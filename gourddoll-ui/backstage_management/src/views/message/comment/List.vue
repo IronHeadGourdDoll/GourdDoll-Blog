@@ -1,10 +1,8 @@
-<template>
-  <router-view />
-</template>
+<template>评论管理</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Content",
+  name: "CommentList",
 });
 </script>

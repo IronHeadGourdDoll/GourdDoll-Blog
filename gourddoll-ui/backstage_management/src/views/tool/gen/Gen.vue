@@ -1,10 +1,8 @@
-<template>
-  <router-view />
-</template>
+<template>代码生成</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Content",
+  name: "Gen",
 });
 </script>

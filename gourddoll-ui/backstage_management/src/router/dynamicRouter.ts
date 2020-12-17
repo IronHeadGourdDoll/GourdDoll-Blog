@@ -1,19 +1,17 @@
 import router from "./constRouter";
-import { getToken } from "@/share/token";
+import Empty from "@/share/ExtensionMethod/empty";
+import store from "@/store";
 
 const title = process.env.VUE_APP_TITLE;
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 
   document.title = title;
 
-  const token = getToken();
-  const isTokenInvalid =
-    Object.is(token, undefined) ||
-    Object.is(token, null) ||
-    Object.is(token, "");
+  const token = await store.dispatch("user/getToken");
+  const tokenIsNull = Empty.isStringNull(token);
 
-  if (!Object.is(to.path, "/Login") && isTokenInvalid) {
+  if (!Object.is(to.path, "/Login") && tokenIsNull) {
     next({ path: "/Login", replace: true });
     return;
   }

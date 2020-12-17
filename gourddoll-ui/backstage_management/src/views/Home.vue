@@ -10,12 +10,12 @@
           <menu-unfold-outlined
             v-if="collapsed"
             class="trigger"
-            @click="() => (collapsed = !collapsed)"
+            @click="reverseCollapsed"
           />
           <menu-fold-outlined
             v-else
             class="trigger"
-            @click="() => (collapsed = !collapsed)"
+            @click="reverseCollapsed"
           />
         </div>
         <div class="header-div">
@@ -76,6 +76,7 @@
 <script>
 import { Nav, PageFoot, Content, Header } from "./layout";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
+import { ref } from "vue";
 
 export default {
   components: {
@@ -84,12 +85,16 @@ export default {
     Nav,
     PageFoot,
     Content,
-    Header
+    Header,
   },
-  data() {
-    return {
-      collapsed: false
-    };
-  }
+  setup() {
+    const collapsed = ref(false);
+
+    function reverseCollapsed() {
+      collapsed.value = !collapsed.value;
+    }
+
+    return { collapsed, reverseCollapsed };
+  },
 };
 </script>

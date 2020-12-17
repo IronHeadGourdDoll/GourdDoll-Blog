@@ -1,10 +1,8 @@
-<template>
-  <router-view />
-</template>
+<template>表单构建</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Content",
+  name: "Build",
 });
 </script>

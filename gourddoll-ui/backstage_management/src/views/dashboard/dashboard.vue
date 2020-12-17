@@ -1,10 +1,9 @@
-<template>
-  <router-view />
-</template>
+<template>主页</template>
+
 
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Content",
+  name: "dashboard",
 });
 </script>
