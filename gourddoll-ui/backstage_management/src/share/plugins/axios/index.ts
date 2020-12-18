@@ -40,7 +40,7 @@ instance.interceptors.response.use(
       for (const c of cancels.values()) {
         if (c) c("返回登录页取消请求");
       }
-      router.push({ path: "/Login" });
+      router.push({ path: "/login" });
     } else {
       cancels.delete(response.config.cancelToken);
     }

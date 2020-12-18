@@ -29,17 +29,35 @@
 import { defineComponent, createVNode } from "vue";
 import UserInfo from "@/share/cache/userInfo";
 import { UserOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
-import { Modal } from "ant-design-vue";
-import exitClear from "@/share/exitClear";
+import { Modal, message } from "ant-design-vue";
+import router from "@/router";
+import store from "@/store";
+
 export default defineComponent({
   name: "Header",
   components: {
-    UserOutlined
+    UserOutlined,
   },
   setup() {
     const userInfo = UserInfo.get();
 
     const nickName = userInfo?.user.nickName;
+
+    function exitClear() {
+      const closeLoad = message.loading("安全退出中···");
+      store
+        .dispatch("user/logout")
+        .then(() => {
+          closeLoad();
+          router.push({ path: "/login", replace: true });
+          message.destroy();
+          message.success("安全退出成功", 0.8);
+        })
+        .catch(() => {
+          closeLoad();
+          message.error("安全退出失败");
+        });
+    }
 
     function userExit() {
       Modal.confirm({
@@ -48,11 +66,11 @@ export default defineComponent({
         content: "确定要退出吗？",
         okText: "确认",
         cancelText: "取消",
-        onOk: exitClear
+        onOk: exitClear,
       });
     }
 
     return { nickName, userExit };
-  }
+  },
 });
 </script>

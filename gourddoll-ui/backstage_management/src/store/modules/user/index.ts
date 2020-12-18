@@ -7,6 +7,7 @@ import UserController from "@/service/controller/user/userController";
 import MenuController from "@/service/controller/menu/menuController";
 import menuHelp from "@/share/cache/menu";
 import Empty from "@/share/ExtensionMethod/empty";
+import cookie from "cookiejs";
 
 
 const userService = new UserController();
@@ -55,6 +56,21 @@ obj.actions = {
         return Promise.all([p1, p2]);
       });
     return result;
+  },
+
+  /**
+   * 退出登录
+   */
+  logout({ commit, state }) {
+    const logout = new UserController().logout();
+    return logout.then(() => {
+      commit(Mutation.setToken, "");
+      commit(Mutation.setUserInfo, {});
+      commit(Mutation.setMenu, []);
+      localStorage.clear();
+      sessionStorage.clear();
+      cookie.clear();
+    });
   },
 
   /**

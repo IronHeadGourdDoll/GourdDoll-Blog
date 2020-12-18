@@ -5,6 +5,11 @@ export default class menuTreeDto {
   id!: bigint;
 
   /**
+   * 唯一编码
+   */
+  pathCode!: string;
+
+  /**
    * 显示名称
    */
   label!: bigint;
@@ -17,7 +22,7 @@ export default class menuTreeDto {
   /**
    * 路由地址
    */
-  path?: string;
+  path!: string;
 
   /**
    * 图标

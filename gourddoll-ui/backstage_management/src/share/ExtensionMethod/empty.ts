@@ -23,21 +23,21 @@ class Empty {
    */
   static isNullOrWhiteSpace(s: any): boolean {
     if (_isNull(s) === false) return false;
-    return (s as string).toString().trim().length > 0;
+    return (s as string).toString().trim().length === 0;
   }
 
   /**
    * 判断对象是否是空对象。如果对象为null或者undefined或者{}则返回true。
    */
   static isObjectNull(s: any): boolean {
-    return _isNull(s) || Object.is(s, {});
+    return _isNull(s) || Object.is(Object.getOwnPropertyNames(s).length, 0);
   }
 
   /**
    * 判断对象是否空数组。如果对象为null或者undefined或者[]则返回true。
    */
   static isArrayNull(s: any): boolean {
-    return _isNull(s) || Object.is(s, []);
+    return _isNull(s) || Object.is(s.length, 0);
   }
 
   /**

@@ -1,12 +1,20 @@
 <template>
-  <a-menu theme="dark" mode="inline" v-model:openKeys="openKeys">
-    <NavItem v-for="menu in menus" :key="menu.id" :item="menu"></NavItem>
+  <a-menu
+    theme="dark"
+    mode="inline"
+    v-model:openKeys="openKeys"
+    @click="showContent"
+  >
+    <NavItem v-for="menu in menus" :key="menu.pathCode" :item="menu"></NavItem>
   </a-menu>
 </template>
 
 <script lang="ts">
 import { defineComponent, defineAsyncComponent, ref } from "vue";
 import menuHelp from "@/share/cache/menu";
+import router from "@/router";
+import { isUrl, openWindow } from "@/share/util";
+
 export default defineComponent({
   name: "Nav",
   components: {
@@ -17,7 +25,15 @@ export default defineComponent({
 
     const openKeys = ref([]);
 
-    return { menus, openKeys };
+    function showContent({ key }: { key: string }) {
+      if (isUrl(key)) {
+        openWindow(key);
+        return;
+      }
+      router.push({ name: key });
+    }
+
+    return { menus, openKeys, showContent };
   },
 });
 </script>
