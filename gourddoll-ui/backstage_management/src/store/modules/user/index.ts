@@ -8,6 +8,7 @@ import MenuController from "@/service/controller/menu/menuController";
 import menuHelp from "@/share/cache/menu";
 import Empty from "@/share/ExtensionMethod/empty";
 import cookie from "cookiejs";
+import { addMenuRoute } from "@/router/operation";
 
 const userService = new UserController();
 const menuService = new MenuController();
@@ -48,6 +49,7 @@ obj.actions = {
       const p2 = menuService.GetUserMenu().then(d => {
         commit(Mutation.setMenu, d);
         menuHelp.set(state.menu);
+        addMenuRoute(state.menu);
       });
       return Promise.all([p1, p2]);
     });
