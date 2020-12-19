@@ -7,7 +7,6 @@ import { isUrl } from "@/share/util";
 import Home from "@/views/Home.vue";
 import EmptyContent from "@/views/layout/emptyContent/EmptyContent.vue";
 
-
 /**
  * 添加路由
  * @param menus 菜单
@@ -56,10 +55,9 @@ function addMenuRoute(menus: Array<MenuTreeDto>) {
 
 const title = process.env.VUE_APP_TITLE;
 
-const ignoreList = ['/login'] //不需要跳转登录的路由
+const ignoreList = ["/login"]; //不需要跳转登录的路由
 
 router.beforeEach(async (to, from, next) => {
-
   document.title = title;
 
   const token = await store.dispatch("user/getToken");

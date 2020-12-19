@@ -1,7 +1,12 @@
-import { Module, GetterTree, ActionTree, MutationTree, ModuleTree } from "vuex/types";
+import {
+  Module,
+  GetterTree,
+  ActionTree,
+  MutationTree,
+  ModuleTree
+} from "vuex/types";
 
 export default class StoreModule<S = any, R = any> implements Module<S, R> {
-
   /**
    * 默认开启命名空间
    */
@@ -12,5 +17,4 @@ export default class StoreModule<S = any, R = any> implements Module<S, R> {
   actions!: ActionTree<S, R>;
   mutations!: MutationTree<S>;
   modules?: ModuleTree<R>;
-
 }

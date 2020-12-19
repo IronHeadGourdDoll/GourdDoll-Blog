@@ -2,7 +2,6 @@ function _isNull(s: any): boolean {
   return Object.is(s, undefined) || Object.is(s, null);
 }
 
-
 class Empty {
   /**
    * 判断对象是否为空。如果对象为null或者undefined则返回true。

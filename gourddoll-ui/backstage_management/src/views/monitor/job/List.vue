@@ -3,6 +3,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "JobList",
+  name: "JobList"
 });
 </script>

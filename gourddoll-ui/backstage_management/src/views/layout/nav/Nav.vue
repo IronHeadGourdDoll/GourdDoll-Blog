@@ -18,7 +18,7 @@ import { isUrl, openWindow } from "@/share/util";
 export default defineComponent({
   name: "Nav",
   components: {
-    NavItem: defineAsyncComponent(() => import("./NavItem.vue")),
+    NavItem: defineAsyncComponent(() => import("./NavItem.vue"))
   },
   setup() {
     const menus = menuHelp.get();
@@ -34,6 +34,6 @@ export default defineComponent({
     }
 
     return { menus, openKeys, showContent };
-  },
+  }
 });
 </script>

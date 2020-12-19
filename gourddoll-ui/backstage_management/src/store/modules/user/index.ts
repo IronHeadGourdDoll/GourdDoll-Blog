@@ -9,7 +9,6 @@ import menuHelp from "@/share/cache/menu";
 import Empty from "@/share/ExtensionMethod/empty";
 import cookie from "cookiejs";
 
-
 const userService = new UserController();
 const menuService = new MenuController();
 const obj = new StoreModule();
@@ -18,7 +17,7 @@ obj.state = {
   token: "",
   userInfo: {},
   roles: [],
-  menu: [],
+  menu: []
 };
 
 obj.mutations = {
@@ -35,26 +34,23 @@ obj.mutations = {
 };
 
 obj.actions = {
-
   /**
    * 登录
    */
   login({ commit, state }, userInfo: LoginBodyDto) {
-    const result = userService
-      .login(userInfo)
-      .then(data => {
-        commit(Mutation.setToken, data.access_token);
-        setToken(state.token);
-        const p1 = userService.getInfo().then((d) => {
-          commit(Mutation.setUserInfo, d);
-          userInfoHelp.set(state.userInfo);
-        });
-        const p2 = menuService.GetUserMenu().then((d) => {
-          commit(Mutation.setMenu, d);
-          menuHelp.set(state.menu);
-        });
-        return Promise.all([p1, p2]);
+    const result = userService.login(userInfo).then(data => {
+      commit(Mutation.setToken, data.access_token);
+      setToken(state.token);
+      const p1 = userService.getInfo().then(d => {
+        commit(Mutation.setUserInfo, d);
+        userInfoHelp.set(state.userInfo);
       });
+      const p2 = menuService.GetUserMenu().then(d => {
+        commit(Mutation.setMenu, d);
+        menuHelp.set(state.menu);
+      });
+      return Promise.all([p1, p2]);
+    });
     return result;
   },
 
