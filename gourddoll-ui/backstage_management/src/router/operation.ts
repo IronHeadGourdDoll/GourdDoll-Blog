@@ -32,7 +32,8 @@ export function addMenuRoute(menus: Array<MenuTreeDto>) {
     } else if (isExistChildren && menu.parentId != 0n) {
       route.component = EmptyContent as any;
     } else {
-      route.component = (() => import(`@/views${menu.component}`)) as any;
+      const request = menu.component;
+      route.component = (() => import(/* webpackChunkName: "[request]" */`@/views/${request}.vue`)) as any;
     }
     const menuChildren: Array<RouteRecordRaw> = [];
     if (isExistChildren) {
