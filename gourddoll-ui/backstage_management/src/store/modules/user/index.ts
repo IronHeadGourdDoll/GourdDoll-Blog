@@ -6,7 +6,7 @@ import LoginBodyDto from "@/service/model/user/loginBodyDto";
 import UserController from "@/service/controller/user/userController";
 import MenuController from "@/service/controller/menu/menuController";
 import menuHelp from "@/share/cache/menu";
-import Empty from "@/share/ExtensionMethod/empty";
+import Empty from "@/share/extensionMethod/empty";
 import cookie from "cookiejs";
 import { addMenuRoute } from "@/router/operation";
 

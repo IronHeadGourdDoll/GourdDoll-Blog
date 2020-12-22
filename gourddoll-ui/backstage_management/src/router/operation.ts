@@ -4,7 +4,7 @@ import EmptyContent from "@/views/layout/emptyContent/EmptyContent.vue";
 import { RouteRecordRaw } from "vue-router";
 import MenuTreeDto from "@/service/model/menu/menuTreeDto";
 import router from "./constRouter";
-import Empty from "@/share/ExtensionMethod/empty";
+import Empty from "@/share/extensionMethod/empty";
 
 /**
  * 添加路由
@@ -33,11 +33,14 @@ export function addMenuRoute(menus: Array<MenuTreeDto>) {
       route.component = EmptyContent as any;
     } else {
       const request = menu.component;
-      route.component = (() => import(/* webpackChunkName: "[request]" */`@/views/${request}.vue`)) as any;
+      route.component = (() =>
+        import(
+          /* webpackChunkName: "[request]" */ `@/views/${request}.vue`
+        )) as any;
     }
     const menuChildren: Array<RouteRecordRaw> = [];
     if (isExistChildren) {
-      for (const sonMenu of menu.children!) {
+      for (const sonMenu of menu.children) {
         if (isIgnore(sonMenu)) continue;
         menuChildren.push(menuToRoute(sonMenu));
       }

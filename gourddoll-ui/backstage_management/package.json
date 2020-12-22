@@ -60,7 +60,7 @@
       "prefer-const": "off",
       "no-extra-semi": "off",
       "semi": "off",
-      "no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off",
       "no-non-null-assertion": "off"
     }
   },

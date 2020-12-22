@@ -1,5 +1,5 @@
 import router from "./constRouter";
-import Empty from "@/share/ExtensionMethod/empty";
+import Empty from "@/share/extensionMethod/empty";
 import store from "@/store";
 import MenuTreeDto from "@/service/model/menu/menuTreeDto";
 import { addMenuRoute } from "./operation";
