@@ -1,4 +1,4 @@
-import UserSex from "../../../enumeration/userSex";
+import SexEnum from "../../../enumeration/sexEnum";
 import BaseEntity from "../../common/baseEntity";
 
 class UserEntity extends BaseEntity {
@@ -40,7 +40,7 @@ class UserEntity extends BaseEntity {
   /**
    * 用户性别
    */
-  sex?: UserSex;
+  sex?: SexEnum;
 
   /**
    * 用户头像

@@ -3,7 +3,7 @@ import {
   GetterTree,
   ActionTree,
   MutationTree,
-  ModuleTree
+  ModuleTree,
 } from "vuex/types";
 
 export default class StoreModule<S = any, R = any> implements Module<S, R> {

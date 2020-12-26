@@ -5,7 +5,7 @@ enum HttpRequestMethod {
   get = "GET",
   post = "POST",
   put = "PUT",
-  delete = "DELETE"
+  delete = "DELETE",
 }
 
 class HttpRequest {
@@ -13,7 +13,7 @@ class HttpRequest {
     const result = await instance.request({
       url: url,
       method: HttpRequestMethod.get,
-      params: params
+      params: params,
     });
     const d = result.data as AjaxResult<T>;
     return d.data;
@@ -24,7 +24,7 @@ class HttpRequest {
       url: url,
       method: HttpRequestMethod.post,
       params: params,
-      data: data
+      data: data,
     });
     const d = result.data as AjaxResult<T>;
     return d.data;
@@ -35,7 +35,7 @@ class HttpRequest {
       url: url,
       method: HttpRequestMethod.put,
       params: params,
-      data: data
+      data: data,
     });
     const d = result.data as AjaxResult<T>;
     return d.data;
@@ -46,7 +46,7 @@ class HttpRequest {
       url: url,
       method: HttpRequestMethod.delete,
       params: params,
-      data: data
+      data: data,
     });
     const d = result.data as AjaxResult<T>;
     return d.data;

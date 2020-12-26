@@ -26,12 +26,12 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
     SnippetsOutlined,
-    TagOutlined
-  }
+    TagOutlined,
+  },
 };
 </script>

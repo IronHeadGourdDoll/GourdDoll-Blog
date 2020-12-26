@@ -77,7 +77,7 @@ enum HttpStatus {
   /**
    * 接口未实现
    */
-  NOT_IMPLEMENTED = 501
+  NOT_IMPLEMENTED = 501,
 }
 
 class AjaxResult<T> {

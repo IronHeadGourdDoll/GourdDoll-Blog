@@ -1,21 +1,21 @@
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { defineComponent, reactive, ref, computed } from "vue";
-import router from "@/router";
 import UserController from "@/service/controller/system/userController";
+import router from "@/router";
 import store from "@/store";
 
 export default defineComponent({
   name: "Login",
   components: {
     UserOutlined,
-    LockOutlined
+    LockOutlined,
   },
   setup() {
     const formInline = reactive({
       user: "",
       password: "",
       code: "",
-      img: ""
+      img: "",
     });
 
     if (Object.is(process.env.NODE_ENV, "development")) {
@@ -33,7 +33,7 @@ export default defineComponent({
     function loadCodeImg() {
       formInline.code = "";
       const codedata = userService.getVerificationCode();
-      codedata.then(data => {
+      codedata.then((data) => {
         formInline.img = `data:image/png;base64,${data.img}`;
         uuid = data.uuid;
       });
@@ -48,7 +48,7 @@ export default defineComponent({
           username: formInline.user,
           password: formInline.password,
           code: formInline.code,
-          uuid: uuid
+          uuid: uuid,
         })
         .then(() => {
           router.push({ path: "/" });
@@ -68,5 +68,5 @@ export default defineComponent({
     );
 
     return { formInline, handleSubmit, btnText, btnIsDisabled, loadCodeImg };
-  }
+  },
 });

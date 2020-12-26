@@ -1,14 +1,14 @@
 /**
  * 表格返回格式
  */
-export default class TableResult<T = any> {
+export default interface TableResult<T = any> {
   /**
    * 总条数
    */
-  total!: bigint;
+  total: bigint;
 
   /**
    * 行数据
    */
-  rows: Array<T> = [];
+  rows: Array<T>;
 }

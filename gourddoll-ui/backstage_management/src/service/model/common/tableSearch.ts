@@ -1,7 +1,7 @@
 /**
  * 表格搜索
  */
-export default class TableSearch {
+export default interface TableSearch {
   /**
    * 快捷搜索文本
    */
@@ -10,10 +10,10 @@ export default class TableSearch {
   /**
    * 当前页码
    */
-  page!: number;
+  pageNum: number;
 
   /**
    * 每页条数
    */
-  limit!: number;
+  pageSize: number;
 }

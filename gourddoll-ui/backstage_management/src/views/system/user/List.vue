@@ -1,8 +1,15 @@
-<template>用户管理</template>
+<template>
+  <a-table
+    :columns="columns"
+    :data-source="data"
+    :pagination="pagination"
+    rowKey="userId"
+  >
+    <template #name="{ text }">
+      <a>{{ text }}</a>
+    </template>
+  </a-table>
+</template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "UserList"
-});
-</script>
+<style lang="scss" src="./List.scss" scoped></style>
+<script lang="ts" src="./List.ts"></script>

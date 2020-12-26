@@ -1,4 +1,4 @@
-enum UserSex {
+enum SexEnum {
   /**
    * 男
    */
@@ -12,7 +12,7 @@ enum UserSex {
   /**
    * 无
    */
-  none = "2"
+  none = "2",
 }
 
-export default UserSex;
+export default SexEnum;

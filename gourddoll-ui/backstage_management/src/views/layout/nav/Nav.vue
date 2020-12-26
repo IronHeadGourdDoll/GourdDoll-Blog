@@ -12,13 +12,13 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent, ref } from "vue";
 import menuHelp from "@/share/cache/menu";
-import router from "@/router";
 import { isUrl, openWindow } from "@/share/util";
+import router from "@/router";
 
 export default defineComponent({
   name: "Nav",
   components: {
-    NavItem: defineAsyncComponent(() => import("./NavItem.vue"))
+    NavItem: defineAsyncComponent(() => import("./NavItem.vue")),
   },
   setup() {
     const menus = menuHelp.get();
@@ -34,6 +34,6 @@ export default defineComponent({
     }
 
     return { menus, openKeys, showContent };
-  }
+  },
 });
 </script>

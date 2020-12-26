@@ -18,7 +18,7 @@ obj.state = {
   token: "",
   userInfo: {},
   roles: [],
-  menu: []
+  menu: [],
 };
 
 obj.mutations = {
@@ -31,7 +31,7 @@ obj.mutations = {
   },
   [Mutation.setMenu](state, menu) {
     state.menu = menu;
-  }
+  },
 };
 
 obj.actions = {
@@ -39,14 +39,14 @@ obj.actions = {
    * 登录
    */
   login({ commit, state }, userInfo: LoginBodyDto) {
-    const result = userService.login(userInfo).then(data => {
+    const result = userService.login(userInfo).then((data) => {
       commit(Mutation.setToken, data.access_token);
       setToken(state.token);
-      const p1 = userService.getInfo().then(d => {
+      const p1 = userService.getInfo().then((d) => {
         commit(Mutation.setUserInfo, d);
         userInfoHelp.set(state.userInfo);
       });
-      const p2 = menuService.GetUserMenu().then(d => {
+      const p2 = menuService.GetUserMenu().then((d) => {
         commit(Mutation.setMenu, d);
         menuHelp.set(state.menu);
         addMenuRoute(state.menu);
@@ -113,7 +113,7 @@ obj.actions = {
       commit(Mutation.setMenu, menu);
     }
     return menu;
-  }
+  },
 };
 
 export default obj;

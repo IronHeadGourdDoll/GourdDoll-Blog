@@ -23,7 +23,7 @@ export function addMenuRoute(menus: Array<MenuTreeDto>) {
       path: menu.path,
       name: menu.pathCode,
       redirect: "",
-      meta: { id, label, icon, isFrame, isCache, perms }
+      meta: { id, label, icon, isFrame, isCache, perms },
     };
 
     const isExistChildren = !Empty.isArrayNull(menu.children);

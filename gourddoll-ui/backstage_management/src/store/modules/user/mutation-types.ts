@@ -12,7 +12,7 @@ enum Mutation {
   /**
    * 设置菜单
    */
-  setMenu = "SET_MENU"
+  setMenu = "SET_MENU",
 }
 
 export default Mutation;
