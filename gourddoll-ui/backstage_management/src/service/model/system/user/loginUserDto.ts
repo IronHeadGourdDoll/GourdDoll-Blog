@@ -1,4 +1,4 @@
-import UserEntity from "../system/userEntity";
+import UserEntity from "./userEntity";
 
 export default class LoginUserDto extends UserEntity {
   /**

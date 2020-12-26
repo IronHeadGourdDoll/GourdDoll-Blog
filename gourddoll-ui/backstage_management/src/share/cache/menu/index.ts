@@ -1,4 +1,4 @@
-import MenuTreeDto from "@/service/model/menu/menuTreeDto";
+import MenuTreeDto from "@/service/model/system/menu/menuTreeDto";
 import CacheHelp from "../cacheHelp";
 
 const key = process.env.VUE_APP_MENU;

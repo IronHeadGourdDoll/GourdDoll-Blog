@@ -1,5 +1,5 @@
 import ControllerBase from "../controllerBase";
-import MenuTreeDto from "../../model/menu/menuTreeDto";
+import MenuTreeDto from "../../model/system/menu/menuTreeDto";
 
 class MenuController extends ControllerBase {
   GetUserMenu() {

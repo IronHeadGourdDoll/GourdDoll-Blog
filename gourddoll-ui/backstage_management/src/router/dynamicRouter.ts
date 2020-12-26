@@ -1,7 +1,7 @@
 import router from "./constRouter";
 import Empty from "@/share/extensionMethod/empty";
 import store from "@/store";
-import MenuTreeDto from "@/service/model/menu/menuTreeDto";
+import MenuTreeDto from "@/service/model/system/menu/menuTreeDto";
 import { addMenuRoute } from "./operation";
 
 const title = process.env.VUE_APP_TITLE;

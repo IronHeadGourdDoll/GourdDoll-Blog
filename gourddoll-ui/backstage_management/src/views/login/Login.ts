@@ -1,7 +1,7 @@
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { defineComponent, reactive, ref, computed } from "vue";
 import router from "@/router";
-import UserController from "@/service/controller/user/userController";
+import UserController from "@/service/controller/system/userController";
 import store from "@/store";
 
 export default defineComponent({
@@ -32,7 +32,7 @@ export default defineComponent({
 
     function loadCodeImg() {
       formInline.code = "";
-      const codedata = userService.GetVerificationCode();
+      const codedata = userService.getVerificationCode();
       codedata.then(data => {
         formInline.img = `data:image/png;base64,${data.img}`;
         uuid = data.uuid;

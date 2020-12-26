@@ -1,4 +1,4 @@
-import UserInfoDto from "@/service/model/user/userInfoDto";
+import UserInfoDto from "@/service/model/system/user/userInfoDto";
 import CacheHelp from "../cacheHelp";
 
 const key = "userInfo";

@@ -2,7 +2,7 @@ import { isUrl } from "@/share/util";
 import Home from "@/views/Home.vue";
 import EmptyContent from "@/views/layout/emptyContent/EmptyContent.vue";
 import { RouteRecordRaw } from "vue-router";
-import MenuTreeDto from "@/service/model/menu/menuTreeDto";
+import MenuTreeDto from "@/service/model/system/menu/menuTreeDto";
 import router from "./constRouter";
 import Empty from "@/share/extensionMethod/empty";
 
