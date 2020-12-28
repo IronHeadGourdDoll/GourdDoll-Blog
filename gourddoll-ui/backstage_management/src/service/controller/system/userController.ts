@@ -40,7 +40,19 @@ class UserController extends ControllerBase {
    * 获取用户列表
    */
   getList(data: TableSearch) {
-    return this.request.get<TableResult<UserEntity>>("/system/user/list", data);
+    const { pageNum, pageSize, quickText } = data;
+    const userSearch = {
+      pageNum,
+      pageSize,
+      userName: quickText,
+      nickName: quickText,
+      email: quickText,
+      phonenumber: quickText,
+    };
+    return this.request.get<TableResult<UserEntity>>(
+      "/system/user/list",
+      userSearch
+    );
   }
 }
 

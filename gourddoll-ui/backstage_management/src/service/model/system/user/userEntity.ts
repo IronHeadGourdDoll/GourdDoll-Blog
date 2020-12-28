@@ -76,6 +76,11 @@ class UserEntity extends BaseEntity {
    * 最后登录时间
    */
   loginDate?: string;
+
+  /**
+   * 是否管理员
+   */
+  admin?: boolean;
 }
 
 export default UserEntity;

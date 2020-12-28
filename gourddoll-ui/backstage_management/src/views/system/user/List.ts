@@ -1,101 +1,114 @@
-import { defineComponent } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import UserController from "@/service/controller/system/userController";
-import pageSizeEnum from "@/service/enumeration/pageSizeEnum";
+import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
+import { getSexText } from "@/service/enumeration/sexEnum";
+import { getYesNoText } from "@/service/enumeration/yesNoEnum";
+import { SearchOutlined } from "@ant-design/icons-vue";
+import TableResult from "@/service/model/common/tableResult";
+import UserEntity from "@/service/model/system/user/userEntity";
 
 export default defineComponent({
   name: "UserList",
-  async setup() {
+  components: {
+    SearchOutlined,
+  },
+  setup() {
     const columns = [
       {
-        title: "nickName",
+        title: "姓名",
         dataIndex: "nickName",
         key: "nickName",
-        slots: { customRender: "name" },
+      },
+      {
+        title: "用户名",
+        dataIndex: "userName",
+        key: "userName",
+      },
+      {
+        title: "性别",
+        dataIndex: "sex",
+        key: "sex",
+        slots: { customRender: "sex" },
+      },
+      {
+        title: "邮箱",
+        dataIndex: "email",
+        key: "email",
+      },
+      {
+        title: "电话",
+        dataIndex: "phonenumber",
+        key: "phonenumber",
+      },
+      {
+        title: "是否管理员",
+        dataIndex: "admin",
+        key: "admin",
+        slots: { customRender: "admin" },
+      },
+      {
+        title: "备注",
+        dataIndex: "remark",
+        key: "remark",
       },
     ];
 
-    // const columns = [
-    //   {
-    //     title: "Name",
-    //     dataIndex: "name",
-    //     key: "name",
-    //     slots: { customRender: "name" },
-    //   },
-    //   {
-    //     title: "Age",
-    //     dataIndex: "age",
-    //     key: "age",
-    //     width: 80,
-    //   },
-    //   {
-    //     title: "Address",
-    //     dataIndex: "address",
-    //     key: "address 1",
-    //     ellipsis: true,
-    //   },
-    //   {
-    //     title: "Long Column Long Column Long Column",
-    //     dataIndex: "address",
-    //     key: "address 2",
-    //     ellipsis: true,
-    //   },
-    //   {
-    //     title: "Long Column Long Column",
-    //     dataIndex: "address",
-    //     key: "address 3",
-    //     ellipsis: true,
-    //   },
-    //   {
-    //     title: "Long Column",
-    //     dataIndex: "address",
-    //     key: "address 4",
-    //     ellipsis: true,
-    //   },
-    // ];
-
-    // const data = [
-    //   {
-    //     key: "1",
-    //     name: "John Brown",
-    //     age: 32,
-    //     address: "New York No. 1 Lake Park, New York No. 1 Lake Park",
-    //     tags: ["nice", "developer"],
-    //   },
-    //   {
-    //     key: "2",
-    //     name: "Jim Green",
-    //     age: 42,
-    //     address: "London No. 2 Lake Park, London No. 2 Lake Park",
-    //     tags: ["loser"],
-    //   },
-    //   {
-    //     key: "3",
-    //     name: "Joe Black",
-    //     age: 32,
-    //     address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
-    //     tags: ["cool", "teacher"],
-    //   },
-    // ];
-
     const userController = new UserController();
-    const data = await userController.getList({
-      quickText: "",
-      pageNum: 1,
-      pageSize: 50,
-    });
 
-    const pagination = {
-      pageSizeOptions: Object.values(pageSizeEnum)
-        .filter((p) => Number.isFinite(p))
-        .map((p) => p.toString()),
-      // current: 1,
-      // pageSize: 50,
-      defaultPageSize: 50,
+    let searchText = ref("");
+
+    let data: TableResult<UserEntity> = { total: 0n, rows: [] };
+
+    let dataRows: Array<UserEntity> = reactive([]);
+
+    const defaultPageSize = pageSizeEnum.fifty;
+
+    const pagination = reactive({
+      pageSizeOptions: pageSizes,
+      defaultPageSize: defaultPageSize,
       showQuickJumper: true,
       showSizeChanger: true,
-      total: data.total,
+      total: Number.parseInt(data.total as any),
+      showTotal(total: any, range: any) {
+        return `显示${range[0]}-${range[1]}条数据，共${total}条`;
+      },
+      current: 1,
+      pageSize: defaultPageSize,
+    });
+
+    function loadData(currentPage = 1) {
+      userController
+        .getList({
+          quickText: searchText.value,
+          pageNum: currentPage,
+          pageSize: pagination.pageSize,
+        })
+        .then((p) => {
+          data = p;
+          pagination.total = Number.parseInt(data.total as any);
+          dataRows.splice(0, dataRows.length, ...data.rows);
+        });
+    }
+    loadData();
+
+    const handleTableChange = async function (
+      changePagination: any /*, filters: any, sorter: any, { currentDataSource }: any */
+    ) {
+      const { current, pageSize } = changePagination;
+      pagination.current = current;
+      pagination.pageSize = pageSize;
+      loadData(current);
     };
 
-    return { data: data.rows, columns, pagination };
+    return {
+      dataRows,
+      columns,
+      pagination,
+      handleTableChange,
+      getSexText,
+      getYesNoText,
+      searchText,
+      loadData,
+    };
   },
 });

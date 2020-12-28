@@ -10,3 +10,9 @@ enum PageSizeEnum {
 }
 
 export default PageSizeEnum;
+
+const pageSizes = Object.values(PageSizeEnum)
+  .filter((p) => Number.isFinite(p))
+  .map((p) => p.toString());
+
+export { pageSizes };

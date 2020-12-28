@@ -16,3 +16,14 @@ enum SexEnum {
 }
 
 export default SexEnum;
+
+export function getSexText(sex: any) {
+  switch (sex) {
+    case SexEnum.man:
+      return "男";
+    case SexEnum.girl:
+      return "女";
+    default:
+      return "";
+  }
+}
