@@ -1,10 +1,23 @@
 <template>
   <div class="head">
+    <div class="left-float">
+      <a-button-group>
+        <a-button @click="add">
+          <template #icon><PlusOutlined /></template>添加
+        </a-button>
+        <a-button @click="edit">
+          <template #icon><EditOutlined /></template>修改
+        </a-button>
+        <a-button @click="deleted">
+          <template #icon><DeleteOutlined /></template>删除
+        </a-button>
+      </a-button-group>
+    </div>
     <a-input-search
       v-model:value="searchText"
       placeholder="输入 姓名/用户名/邮箱/电话 搜索 "
       @search="loadData()"
-      class="search-input"
+      class="search-input right-float"
     >
       <template #enterButton>
         <a-button type="primary">
@@ -19,6 +32,7 @@
     :pagination="pagination"
     @change="handleTableChange"
     rowKey="userId"
+    :row-selection="rowSelection"
   >
     <template #sex="{ text }">
       {{ getSexText(text) }}

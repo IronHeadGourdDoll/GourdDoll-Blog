@@ -1,16 +1,26 @@
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, createVNode } from "vue";
 import UserController from "@/service/controller/system/userController";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
 import { getSexText } from "@/service/enumeration/sexEnum";
 import { getYesNoText } from "@/service/enumeration/yesNoEnum";
-import { SearchOutlined } from "@ant-design/icons-vue";
+import {
+  SearchOutlined,
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons-vue";
 import TableResult from "@/service/model/common/tableResult";
 import UserEntity from "@/service/model/system/user/userEntity";
+import { Modal, message } from "ant-design-vue";
 
 export default defineComponent({
   name: "UserList",
   components: {
     SearchOutlined,
+    PlusOutlined,
+    EditOutlined,
+    DeleteOutlined,
   },
   setup() {
     const columns = [
@@ -87,18 +97,74 @@ export default defineComponent({
           data = p;
           pagination.total = Number.parseInt(data.total as any);
           dataRows.splice(0, dataRows.length, ...data.rows);
+          tableSelectedRows = [];
+          tableSelectedRowKeys.splice(0, tableSelectedRowKeys.length);
         });
     }
     loadData();
 
-    const handleTableChange = async function (
+    function handleTableChange(
       changePagination: any /*, filters: any, sorter: any, { currentDataSource }: any */
     ) {
       const { current, pageSize } = changePagination;
       pagination.current = current;
       pagination.pageSize = pageSize;
       loadData(current);
+    }
+
+    const tableSelectedRowKeys: Array<any> = reactive([]);
+    let tableSelectedRows: Array<any> = [];
+    const rowSelection = {
+      selectedRowKeys: tableSelectedRowKeys,
+      hideDefaultSelections: true,
+      onChange: (selectedRowKeys: any, selectedRows: any) => {
+        tableSelectedRows = selectedRows;
+        tableSelectedRowKeys.splice(
+          0,
+          tableSelectedRowKeys.length,
+          ...selectedRowKeys
+        );
+      },
     };
+
+    function add() {
+      message.success("还没做新增");
+    }
+
+    function edit() {
+      if (tableSelectedRows.length <= 0) {
+        message.error("请先选择，再进行此操作");
+        return;
+      } else if (tableSelectedRows.length > 1) {
+        message.error("请选择一条数据进行编辑");
+        return;
+      }
+      message.success("还没做编辑");
+    }
+
+    function deleted() {
+      let msg: string;
+      if (tableSelectedRows.length <= 0) {
+        message.error("请先选择，再进行此操作");
+        return;
+      } else if (tableSelectedRows.length == 1) {
+        const name = tableSelectedRows[0].nickName;
+        msg = `确认要删除「${name}」吗？`;
+      } else {
+        msg = `您选择了${tableSelectedRows.length}条数据，确认要删除吗？`;
+      }
+
+      Modal.confirm({
+        title: "删除确认",
+        icon: createVNode(ExclamationCircleOutlined),
+        content: msg,
+        okText: "确认",
+        cancelText: "取消",
+        onOk() {
+          message.success("还没做删除");
+        },
+      });
+    }
 
     return {
       dataRows,
@@ -109,6 +175,10 @@ export default defineComponent({
       getYesNoText,
       searchText,
       loadData,
+      rowSelection,
+      add,
+      edit,
+      deleted,
     };
   },
 });
