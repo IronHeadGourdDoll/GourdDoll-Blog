@@ -13,6 +13,7 @@ import {
 import TableResult from "@/service/model/common/tableResult";
 import UserEntity from "@/service/model/system/user/userEntity";
 import { Modal, message } from "ant-design-vue";
+import AddUser from "./components/addUser/AddUser.vue";
 
 export default defineComponent({
   name: "UserList",
@@ -21,6 +22,7 @@ export default defineComponent({
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
+    AddUser,
   },
   setup() {
     const columns = [
@@ -127,8 +129,9 @@ export default defineComponent({
       },
     };
 
+    const isAddModal = ref(false);
     function add() {
-      message.success("还没做新增");
+      isAddModal.value = true;
     }
 
     function edit() {
@@ -179,6 +182,7 @@ export default defineComponent({
       add,
       edit,
       deleted,
+      isAddModal,
     };
   },
 });

@@ -62,7 +62,8 @@
       "no-extra-semi": "off",
       "semi": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "no-non-null-assertion": "off"
+      "no-non-null-assertion": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
     }
   },
   "browserslist": [

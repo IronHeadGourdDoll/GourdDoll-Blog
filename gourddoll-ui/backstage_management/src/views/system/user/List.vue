@@ -15,7 +15,7 @@
     </div>
     <a-input-search
       v-model:value="searchText"
-      placeholder="输入 姓名/用户名/邮箱/电话 搜索 "
+      placeholder="输入 姓名/用户名/邮箱/电话 搜索"
       @search="loadData()"
       class="search-input right-float"
     >
@@ -41,6 +41,8 @@
       {{ getYesNoText(text) }}
     </template>
   </a-table>
+
+  <AddUser @saveComplete="loadData()" v-model:visible="isAddModal"></AddUser>
 </template>
 
 <style lang="scss" src="./List.scss" scoped></style>

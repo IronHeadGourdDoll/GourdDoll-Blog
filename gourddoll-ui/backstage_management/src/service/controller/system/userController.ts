@@ -54,6 +54,13 @@ class UserController extends ControllerBase {
       userSearch
     );
   }
+
+  /**
+   * 新增用户
+   */
+  add(data: UserEntity) {
+    return this.request.post("/system/user", data);
+  }
 }
 
 export default UserController;
