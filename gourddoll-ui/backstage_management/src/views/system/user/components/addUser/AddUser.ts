@@ -1,6 +1,6 @@
 import { reactive, toRaw, toRefs } from "vue";
 import { useForm } from "@ant-design-vue/use";
-import SexEnum from "@/service/enumeration/sexEnum";
+import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
 import UserController from "@/service/controller/system/userController";
 import { SetupContext } from "vue";
 
@@ -80,6 +80,7 @@ export default {
       onSubmit,
       visible,
       hideModal,
+      sexMap: getSexMap(),
     };
   },
 };

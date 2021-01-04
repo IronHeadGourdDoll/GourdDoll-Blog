@@ -23,9 +23,13 @@
       </a-form-item>
       <a-form-item label="性别">
         <a-select v-model:value="modelRef.sex" placeholder="请选择性别">
-          <a-select-option value="2">&emsp;</a-select-option>
-          <a-select-option value="0">男</a-select-option>
-          <a-select-option value="1">女</a-select-option>
+          <a-select-option
+            v-for="([key, value], index) in sexMap.entries()"
+            :value="key"
+            :key="index"
+          >
+            {{ value }}
+          </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="邮箱" v-bind="validateInfos.email">
