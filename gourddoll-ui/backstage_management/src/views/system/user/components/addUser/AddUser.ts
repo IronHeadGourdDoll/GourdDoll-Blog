@@ -1,13 +1,16 @@
-import { reactive, toRaw, toRefs } from "vue";
+import { reactive, toRaw, toRefs, SetupContext } from "vue";
 import { useForm } from "@ant-design-vue/use";
 import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
 import UserController from "@/service/controller/system/userController";
-import { SetupContext } from "vue";
+import FormModal from "@/components/formModal/FormModal.vue";
 
 export default {
   name: "AddUser",
   props: {
     visible: Boolean,
+  },
+  components: {
+    FormModal,
   },
   setup(props: any, context: SetupContext) {
     const { visible } = toRefs(props);
@@ -22,6 +25,7 @@ export default {
       remark: "",
       password: "",
     });
+
     const rulesRef = reactive({
       nickName: [
         {
@@ -54,23 +58,22 @@ export default {
         },
       ],
     });
+
     const { resetFields, validate, validateInfos } = useForm(
       modelRef,
       rulesRef
     );
-    const onSubmit = (e: Event) => {
-      e.preventDefault();
+
+    function onSubmit() {
       validate().then(() => {
         new UserController().add(toRaw(modelRef)).then(() => {
           context.emit("saveComplete");
-          hideModal();
         });
       });
-    };
+    }
 
-    function hideModal() {
+    function onCancel() {
       context.emit("update:visible", false);
-      resetFields();
     }
 
     return {
@@ -79,8 +82,8 @@ export default {
       modelRef,
       onSubmit,
       visible,
-      hideModal,
       sexMap: getSexMap(),
+      onCancel,
     };
   },
 };
