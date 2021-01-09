@@ -15,7 +15,7 @@
       <slot></slot>
       <a-form-item class="downBtn" :wrapper-col="{ span: 14, offset: 4 }">
         <a-button type="primary" @click="onSubmit">保存</a-button>
-        <a-button type="danger" @click="onReset">重置</a-button>
+        <a-button type="danger" v-if="isReset" @click="onReset">重置</a-button>
         <a-button @click="onCancel">取消</a-button>
       </a-form-item>
     </a-form>

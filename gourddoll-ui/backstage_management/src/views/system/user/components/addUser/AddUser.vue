@@ -46,5 +46,4 @@
   </FormModal>
 </template>
 
-<style lang="scss" src="./AddUser.scss" scoped></style>
 <script lang="ts" src="./AddUser.ts"></script>

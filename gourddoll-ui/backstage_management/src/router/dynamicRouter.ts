@@ -9,7 +9,11 @@ const title = process.env.VUE_APP_TITLE;
 const ignoreList = ["/login"]; //不需要跳转登录的路由
 
 router.beforeEach(async (to, from, next) => {
-  document.title = `${to.meta.label}-${title}`;
+  if (to.meta.label) {
+    document.title = `${to.meta.label}-${title}`;
+  } else {
+    document.title = title;
+  }
 
   const token = await store.dispatch("user/getToken");
   const tokenIsNull = Empty.isStringNull(token);

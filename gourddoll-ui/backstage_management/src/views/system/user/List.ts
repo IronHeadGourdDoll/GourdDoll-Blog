@@ -14,6 +14,9 @@ import TableResult from "@/service/model/common/tableResult";
 import UserEntity from "@/service/model/system/user/userEntity";
 import { Modal, message } from "ant-design-vue";
 import AddUser from "./components/addUser/AddUser.vue";
+import EditUser from "./components/editUser/EditUser.vue";
+import Emitter from "@/share/plugins/mitt";
+import moduleEnum from "@/service/enumeration/moduleEnum";
 
 export default defineComponent({
   name: "UserList",
@@ -23,6 +26,7 @@ export default defineComponent({
     EditOutlined,
     DeleteOutlined,
     AddUser,
+    EditUser,
   },
   setup() {
     const columns = [
@@ -134,6 +138,7 @@ export default defineComponent({
       isAddModal.value = true;
     }
 
+    const isEditModal = ref(false);
     function edit() {
       if (tableSelectedRows.length <= 0) {
         message.error("请先选择，再进行此操作");
@@ -142,7 +147,8 @@ export default defineComponent({
         message.error("请选择一条数据进行编辑");
         return;
       }
-      message.success("还没做编辑");
+      Emitter.emit("loadInfo", tableSelectedRows[0].userId, moduleEnum.user);
+      isEditModal.value = true;
     }
 
     function deleted() {
@@ -183,6 +189,7 @@ export default defineComponent({
       edit,
       deleted,
       isAddModal,
+      isEditModal,
     };
   },
 });

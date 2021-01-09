@@ -61,6 +61,20 @@ class UserController extends ControllerBase {
   add(data: UserEntity) {
     return this.request.post("/system/user", data);
   }
+
+  /**
+   * 根据id获取用户信息
+   */
+  getUserById(id: bigint | number) {
+    return this.request.get("/system/user/" + id);
+  }
+
+  /**
+   * 编辑用户
+   */
+  edit(data: UserEntity) {
+    return this.request.put("/system/user", data);
+  }
 }
 
 export default UserController;

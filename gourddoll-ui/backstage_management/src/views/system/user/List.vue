@@ -43,6 +43,7 @@
   </a-table>
 
   <AddUser @saveComplete="loadData()" v-model:visible="isAddModal"></AddUser>
+  <EditUser @saveComplete="loadData()" v-model:visible="isEditModal"></EditUser>
 </template>
 
 <style lang="scss" src="./List.scss" scoped></style>

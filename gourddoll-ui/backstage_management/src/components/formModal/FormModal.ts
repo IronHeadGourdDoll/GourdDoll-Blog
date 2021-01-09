@@ -30,9 +30,13 @@ export default {
       type: String,
       required: true,
     },
+    isReset: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props: any, context: SetupContext) {
-    const { visible, modalWidth, title } = toRefs(props);
+    const { visible, modalWidth, title, isReset } = toRefs(props);
     const formWidth = modalWidth.value + 50;
 
     function onSubmit(e: Event) {
@@ -57,6 +61,7 @@ export default {
       modalWidth,
       formWidth,
       title,
+      isReset,
     };
   },
 };
