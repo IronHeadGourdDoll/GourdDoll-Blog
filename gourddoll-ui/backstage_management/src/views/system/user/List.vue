@@ -16,7 +16,7 @@
     <a-input-search
       v-model:value="searchText"
       placeholder="输入 姓名/用户名/邮箱/电话 搜索"
-      @search="loadData()"
+      @search="loadDataByQuickText"
       class="search-input right-float"
       :allowClear="true"
     >
