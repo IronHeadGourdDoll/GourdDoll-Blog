@@ -6,6 +6,7 @@
     @save="onSubmit"
     @reset="resetFields"
     @cancel="onCancel"
+    :isReset="false"
   >
     <a-form-item label="姓名" v-bind="validateInfos.nickName">
       <a-input v-model:value="modelRef.nickName" />

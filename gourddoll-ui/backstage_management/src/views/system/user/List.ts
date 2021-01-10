@@ -92,10 +92,11 @@ export default defineComponent({
       pageSize: defaultPageSize,
     });
 
-    function loadData(currentPage = 1) {
+    function loadDataByQuickText(quickText: string, currentPage: any) {
+      if (!Number.isFinite(currentPage)) currentPage = 1;
       userController
         .getList({
-          quickText: searchText.value,
+          quickText: quickText,
           pageNum: currentPage,
           pageSize: pagination.pageSize,
         })
@@ -107,6 +108,10 @@ export default defineComponent({
           tableSelectedRowKeys.splice(0, tableSelectedRowKeys.length);
         });
     }
+    function loadData(currentPage = 1) {
+      loadDataByQuickText(searchText.value, currentPage);
+    }
+
     loadData();
 
     function handleTableChange(
@@ -193,6 +198,7 @@ export default defineComponent({
       deleted,
       isAddModal,
       isEditModal,
+      loadDataByQuickText,
     };
   },
 });
