@@ -8,6 +8,8 @@ import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.system.api.domain.SysOperLog;
 import com.gourddoll.system.service.ISysOperLogService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.List;
  * 
  * @author gourddoll
  */
+@Api(tags={"操作日志接口"})
 @RestController
 @RequestMapping("/operlog")
 public class SysOperlogController extends BaseController
@@ -27,6 +30,7 @@ public class SysOperlogController extends BaseController
     @Autowired
     private ISysOperLogService operLogService;
 
+    @ApiOperation(value="获取所有操作日志", notes="详细描述")
     @PreAuthorize(hasPermi = "system:operlog:list")
     @GetMapping("/list")
     public AjaxResult list(SysOperLog operLog)
@@ -36,6 +40,7 @@ public class SysOperlogController extends BaseController
         return AjaxResult.success(getDataTable(list));
     }
 
+    @ApiOperation(value="导出操作日志", notes="详细描述")
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)
     @PreAuthorize(hasPermi = "system:operlog:export")
     @PostMapping("/export")
@@ -46,6 +51,7 @@ public class SysOperlogController extends BaseController
         util.exportExcel(response, list, "操作日志");
     }
 
+    @ApiOperation(value="根据操作日志编号获得详细信息", notes="详细描述")
     @PreAuthorize(hasPermi = "system:operlog:remove")
     @DeleteMapping("/{operIds}")
     public AjaxResult remove(@PathVariable Long[] operIds)
@@ -53,6 +59,7 @@ public class SysOperlogController extends BaseController
         return toAjax(operLogService.deleteOperLogByIds(operIds));
     }
 
+    @ApiOperation(value="清空操作日志", notes="详细描述")
     @PreAuthorize(hasPermi = "system:operlog:remove")
     @Log(title = "操作日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
@@ -62,6 +69,7 @@ public class SysOperlogController extends BaseController
         return AjaxResult.success();
     }
 
+    @ApiOperation(value="添加操作日志", notes="详细描述")
     @PostMapping
     public AjaxResult add(@RequestBody SysOperLog operLog)
     {

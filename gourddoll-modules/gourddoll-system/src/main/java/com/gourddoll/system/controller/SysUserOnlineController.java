@@ -11,6 +11,8 @@ import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.system.api.model.LoginUser;
 import com.gourddoll.system.domain.SysUserOnline;
 import com.gourddoll.system.service.ISysUserOnlineService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,7 @@ import java.util.List;
  * 
  * @author gourddoll
  */
+@Api(tags={"在线用户接口"})
 @RestController
 @RequestMapping("/online")
 public class SysUserOnlineController extends BaseController
@@ -34,6 +37,7 @@ public class SysUserOnlineController extends BaseController
     @Autowired
     private RedisService redisService;
 
+    @ApiOperation(value="获取所有在线用户", notes="详细描述")
     @PreAuthorize(hasPermi = "monitor:online:list")
     @GetMapping("/list")
     public AjaxResult list(String ipaddr, String userName)
@@ -77,6 +81,7 @@ public class SysUserOnlineController extends BaseController
     /**
      * 强退用户
      */
+    @ApiOperation(value="强退用户", notes="详细描述")
     @PreAuthorize(hasPermi = "monitor:online:forceLogout")
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")

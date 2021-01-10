@@ -24,7 +24,6 @@ public class IgnoreWhiteProperties
 
     public List<String> getWhites()
     {
-        whites.add("/blog/*/**");
         return whites;
     }
 

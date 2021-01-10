@@ -79,6 +79,7 @@ public class SysLoginService
             remoteLogService.saveLogininfor(username, Constants.LOGIN_FAIL, "用户已停用，请联系管理员");
             throw new BaseException("对不起，您的账号：" + username + " 已停用");
         }
+        // 输入密码与正确密码（加密后）对比
         if (!SecurityUtils.matchesPassword(password, user.getPassword()))
         {
             remoteLogService.saveLogininfor(username, Constants.LOGIN_FAIL, "用户密码错误");

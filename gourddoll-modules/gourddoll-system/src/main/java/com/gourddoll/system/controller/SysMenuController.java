@@ -11,6 +11,8 @@ import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.domain.SysMenu;
 import com.gourddoll.system.service.ISysMenuService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import java.util.List;
  * 
  * @author gourddoll
  */
+@Api(tags={"后台菜单接口"})
 @RestController
 @RequestMapping("/menu")
 public class SysMenuController extends BaseController
@@ -32,6 +35,7 @@ public class SysMenuController extends BaseController
     /**
      * 获取菜单列表
      */
+    @ApiOperation(value="获取所有菜单", notes="详细描述")
     @PreAuthorize(hasPermi = "system:menu:list")
     @GetMapping("/list")
     public AjaxResult list(SysMenu menu)
@@ -44,6 +48,7 @@ public class SysMenuController extends BaseController
     /**
      * 根据菜单编号获取详细信息
      */
+    @ApiOperation(value="根据菜单编号获取详细信息", notes="详细描述")
     @PreAuthorize(hasPermi = "system:menu:query")
     @GetMapping(value = "/{menuId}")
     public AjaxResult getInfo(@PathVariable Long menuId)
@@ -54,6 +59,7 @@ public class SysMenuController extends BaseController
     /**
      * 获取菜单下拉树列表
      */
+    @ApiOperation(value="获取菜单下拉树列表", notes="详细描述")
     @GetMapping("/treeselect")
     public AjaxResult treeselect(SysMenu menu)
     {
@@ -63,8 +69,21 @@ public class SysMenuController extends BaseController
     }
 
     /**
-     * 加载对应角色菜单列表树
+     * 获取菜单下拉树列表(左侧可见菜单)
      */
+    @ApiOperation(value="获取左侧可见菜单下拉树列表", notes="详细描述")
+    @GetMapping("/treeselect-lv")
+    public AjaxResult treeselectLV(SysMenu menu)
+    {
+        Long userId = SecurityUtils.getUserId();
+        List<SysMenu> menus = menuService.selectMenuListLV(menu, userId);
+        return AjaxResult.success(menuService.buildMenuTreeSelect(menus));
+    }
+
+    /**
+     * 获取对应角色菜单列表树
+     */
+    @ApiOperation(value="获取对应角色菜单列表树", notes="详细描述")
     @GetMapping(value = "/roleMenuTreeselect/{roleId}")
     public AjaxResult roleMenuTreeselect(@PathVariable("roleId") Long roleId)
     {
@@ -79,6 +98,7 @@ public class SysMenuController extends BaseController
     /**
      * 新增菜单
      */
+    @ApiOperation(value="新增菜单", notes="详细描述")
     @PreAuthorize(hasPermi = "system:menu:add")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -100,6 +120,7 @@ public class SysMenuController extends BaseController
     /**
      * 修改菜单
      */
+    @ApiOperation(value="修改菜单", notes="详细描述")
     @PreAuthorize(hasPermi = "system:menu:edit")
     @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -125,6 +146,7 @@ public class SysMenuController extends BaseController
     /**
      * 删除菜单
      */
+    @ApiOperation(value="删除菜单", notes="详细描述")
     @PreAuthorize(hasPermi = "system:menu:remove")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")
@@ -146,6 +168,7 @@ public class SysMenuController extends BaseController
      * 
      * @return 路由信息
      */
+    @ApiOperation(value="获取路由信息", notes="详细描述")
     @GetMapping("getRouters")
     public AjaxResult getRouters()
     {

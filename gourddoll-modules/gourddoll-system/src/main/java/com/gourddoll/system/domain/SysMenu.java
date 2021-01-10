@@ -33,6 +33,9 @@ public class SysMenu extends BaseEntity
     /** 显示顺序 */
     private String orderNum;
 
+    /** 路由唯一标识 */
+    private String pathCode;
+
     /** 路由地址 */
     private String path;
 
@@ -62,6 +65,9 @@ public class SysMenu extends BaseEntity
 
     /** 子菜单 */
     private List<SysMenu> children = new ArrayList<SysMenu>();
+
+    public SysMenu() {
+    }
 
     public Long getMenuId()
     {
@@ -114,6 +120,15 @@ public class SysMenu extends BaseEntity
     public void setOrderNum(String orderNum)
     {
         this.orderNum = orderNum;
+    }
+
+    @Size(min = 0, max = 200, message = "路由唯一标识不能超过200个字符")
+    public String getPathCode() {
+        return pathCode;
+    }
+
+    public void setPathCode(String pathCode) {
+        this.pathCode = pathCode;
     }
 
     @Size(min = 0, max = 200, message = "路由地址不能超过200个字符")

@@ -11,6 +11,8 @@ import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.system.domain.SysLogininfor;
 import com.gourddoll.system.service.ISysLogininforService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +21,11 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 系统访问记录
+ * 登录日志
  * 
  * @author gourddoll
  */
+@Api(tags={"登录日志接口"})
 @RestController
 @RequestMapping("/logininfor")
 public class SysLogininforController extends BaseController
@@ -30,6 +33,7 @@ public class SysLogininforController extends BaseController
     @Autowired
     private ISysLogininforService logininforService;
 
+    @ApiOperation(value="获取所有登录日志", notes="详细描述")
     @PreAuthorize(hasPermi = "system:logininfor:list")
     @GetMapping("/list")
     public AjaxResult list(SysLogininfor logininfor)
@@ -39,6 +43,7 @@ public class SysLogininforController extends BaseController
         return AjaxResult.success(getDataTable(list));
     }
 
+    @ApiOperation(value="导出登录日志", notes="详细描述")
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @PreAuthorize(hasPermi = "system:logininfor:export")
     @PostMapping("/export")
@@ -49,6 +54,7 @@ public class SysLogininforController extends BaseController
         util.exportExcel(response, list, "登录日志");
     }
 
+    @ApiOperation(value="根据登录编号删除登录日志", notes="详细描述")
     @PreAuthorize(hasPermi = "system:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
@@ -57,6 +63,7 @@ public class SysLogininforController extends BaseController
         return toAjax(logininforService.deleteLogininforByIds(infoIds));
     }
 
+    @ApiOperation(value="清空登录日志", notes="详细描述")
     @PreAuthorize(hasPermi = "system:logininfor:remove")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/clean")
@@ -66,6 +73,7 @@ public class SysLogininforController extends BaseController
         return AjaxResult.success();
     }
 
+    @ApiOperation(value="添加登录日志", notes="详细描述")
     @PostMapping
     public AjaxResult add(@RequestParam("username") String username, @RequestParam("status") String status,
                           @RequestParam("message") String message)

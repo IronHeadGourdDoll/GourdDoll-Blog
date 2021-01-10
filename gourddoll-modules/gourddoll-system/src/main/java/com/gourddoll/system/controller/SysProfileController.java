@@ -9,6 +9,8 @@ import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.api.domain.SysUser;
 import com.gourddoll.system.api.model.LoginUser;
 import com.gourddoll.system.service.ISysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.Map;
  * 
  * @author gourddoll
  */
+@Api(tags={"个人信息接口"})
 @RestController
 @RequestMapping("/user/profile")
 public class SysProfileController extends BaseController
@@ -31,8 +34,9 @@ public class SysProfileController extends BaseController
     private TokenService tokenService;
 
     /**
-     * 个人信息
+     * 获取个人信息
      */
+    @ApiOperation(value="获取个人信息", notes="详细描述")
     @GetMapping
     public AjaxResult profile()
     {
@@ -45,8 +49,9 @@ public class SysProfileController extends BaseController
     }
 
     /**
-     * 修改用户
+     * 修改个人信息
      */
+    @ApiOperation(value="修改个人信息", notes="详细描述")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult updateProfile(@RequestBody SysUser user)
@@ -66,8 +71,9 @@ public class SysProfileController extends BaseController
     }
 
     /**
-     * 重置密码
+     * 修改密码
      */
+    @ApiOperation(value="修改密码", notes="详细描述")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
     public AjaxResult updatePwd(String oldPassword, String newPassword)

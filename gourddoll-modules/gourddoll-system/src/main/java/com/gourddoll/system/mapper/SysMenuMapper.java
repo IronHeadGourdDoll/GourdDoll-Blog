@@ -21,23 +21,39 @@ public interface SysMenuMapper
     public List<SysMenu> selectMenuList(SysMenu menu);
 
     /**
+     * 查询系统菜单列表(左侧可见菜单)
+     *
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    public List<SysMenu> selectMenuListLV(SysMenu menu);
+
+    /**
      * 根据用户所有权限
-     * 
+     *
      * @return 权限列表
      */
     public List<String> selectMenuPerms();
 
     /**
      * 根据用户查询系统菜单列表
-     * 
+     *
      * @param menu 菜单信息
      * @return 菜单列表
      */
     public List<SysMenu> selectMenuListByUserId(SysMenu menu);
 
     /**
+     * 根据用户查询系统菜单列表
+     *
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    public List<SysMenu> selectMenuListByUserIdAndLV(SysMenu menu);
+
+    /**
      * 根据用户ID查询权限
-     * 
+     *
      * @param userId 用户ID
      * @return 权限列表
      */
@@ -45,7 +61,7 @@ public interface SysMenuMapper
 
     /**
      * 根据用户ID查询菜单
-     * 
+     *
      * @return 菜单列表
      */
     public List<SysMenu> selectMenuTreeAll();

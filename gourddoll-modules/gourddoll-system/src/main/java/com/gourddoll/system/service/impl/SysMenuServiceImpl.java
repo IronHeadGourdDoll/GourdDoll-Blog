@@ -6,6 +6,7 @@ import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.api.domain.SysRole;
 import com.gourddoll.system.api.domain.SysUser;
 import com.gourddoll.system.domain.SysMenu;
+import com.gourddoll.system.domain.vo.MenuTreeSelect;
 import com.gourddoll.system.domain.vo.MetaVo;
 import com.gourddoll.system.domain.vo.RouterVo;
 import com.gourddoll.system.domain.vo.TreeSelect;
@@ -69,6 +70,29 @@ public class SysMenuServiceImpl implements ISysMenuService
         {
             menu.getParams().put("userId", userId);
             menuList = menuMapper.selectMenuListByUserId(menu);
+        }
+        return menuList;
+    }
+
+    /**
+     * 查询系统菜单列表(左侧可见菜单)
+     *
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    @Override
+    public List<SysMenu> selectMenuListLV(SysMenu menu, Long userId)
+    {
+        List<SysMenu> menuList = null;
+        // 管理员显示所有菜单信息
+        if (SysUser.isAdmin(userId))
+        {
+            menuList = menuMapper.selectMenuListLV(menu);
+        }
+        else
+        {
+            menu.getParams().put("userId", userId);
+            menuList = menuMapper.selectMenuListByUserIdAndLV(menu);
         }
         return menuList;
     }
@@ -208,10 +232,10 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @return 下拉树结构列表
      */
     @Override
-    public List<TreeSelect> buildMenuTreeSelect(List<SysMenu> menus)
+    public List<MenuTreeSelect> buildMenuTreeSelect(List<SysMenu> menus)
     {
         List<SysMenu> menuTrees = buildMenuTree(menus);
-        return menuTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
+        return menuTrees.stream().map(MenuTreeSelect::new).collect(Collectors.toList());
     }
 
     /**

@@ -50,7 +50,7 @@ xxx
 com.gourddoll     
 ├── gourddoll-ui              // 前端
 	    └── front                                         // 前台前端 [80]
-	    └── rear-end                                      // 后台前端 [81]
+	    └── backstage_management                          // 后台前端 [81]
 ├── gourddoll-gateway         // 网关模块 [8080]
 ├── gourddoll-auth            // 认证中心 [9200]
 ├── gourddoll-api             // 接口模块
@@ -62,18 +62,43 @@ com.gourddoll
 │       └── gourddoll-common-redis                        // 缓存服务
 │       └── gourddoll-common-security                     // 安全模块
 │       └── gourddoll-common-swagger                      // 系统接口
+│       └── gourddoll-common-search                       // 搜索模块
 ├── gourddoll-modules         // 业务模块
 │       └── gourddoll-system                              // 系统模块 [9201]
 │       └── gourddoll-gen                                 // 代码生成 [9202]
 │       └── gourddoll-job                                 // 定时任务 [9203]
 │       └── gourddoll-blog                                // 博客模块 [9204]
-│       └── gourddoll-search                              // 搜索模块 [9205]
 ├── gourddoll-visual          // 图形化管理模块
 │       └── gourddoll-visual-monitor                      // 监控中心 [9100]
 ├──pom.xml                    // 公共依赖
 ```
 
 #### 前端结构
+
+```
+backstage_management     
+├── pulic
+├── src
+│     └── assets			// 主题 字体等静态资源
+│     └── components		// 全局公共组件
+│     └── router			// 路由
+│     └── service			// 后台实体与接口
+│     └── share				// 全局方法
+│     └── store				// 全局 store管理
+│     └── style				// 全局样式管理
+│     └── views				// 视图
+│     └── App.vue			// 入口界面
+│     └── main.ts			// 入口TS
+│     └── shims-vue.d.ts
+├── .env
+├── .env.development
+├── babel.config.js
+├── gourddoll-modules
+├── package.json
+├── tsconfig.json
+```
+
+
 
 ## 项目技术
 

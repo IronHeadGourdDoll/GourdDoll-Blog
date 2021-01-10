@@ -10,6 +10,8 @@ import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.domain.SysPost;
 import com.gourddoll.system.service.ISysPostService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.List;
  * 
  * @author gourddoll
  */
+@Api(tags={"岗位接口"})
 @RestController
 @RequestMapping("/post")
 public class SysPostController extends BaseController
@@ -33,6 +36,7 @@ public class SysPostController extends BaseController
     /**
      * 获取岗位列表
      */
+    @ApiOperation(value="获取所有操作日志", notes="详细描述")
     @PreAuthorize(hasPermi = "system:post:list")
     @GetMapping("/list")
     public AjaxResult list(SysPost post)
@@ -42,6 +46,7 @@ public class SysPostController extends BaseController
         return AjaxResult.success(getDataTable(list));
     }
 
+    @ApiOperation(value="导出操作日志", notes="详细描述")
     @Log(title = "岗位管理", businessType = BusinessType.EXPORT)
     @PreAuthorize(hasPermi = "system:post:export")
     @PostMapping("/export")
@@ -55,6 +60,7 @@ public class SysPostController extends BaseController
     /**
      * 根据岗位编号获取详细信息
      */
+    @ApiOperation(value="根据岗位编号获取详细信息", notes="详细描述")
     @PreAuthorize(hasPermi = "system:post:query")
     @GetMapping(value = "/{postId}")
     public AjaxResult getInfo(@PathVariable Long postId)
@@ -65,6 +71,7 @@ public class SysPostController extends BaseController
     /**
      * 新增岗位
      */
+    @ApiOperation(value="新增岗位", notes="详细描述")
     @PreAuthorize(hasPermi = "system:post:add")
     @Log(title = "岗位管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -85,6 +92,7 @@ public class SysPostController extends BaseController
     /**
      * 修改岗位
      */
+    @ApiOperation(value="修改岗位", notes="详细描述")
     @PreAuthorize(hasPermi = "system:post:edit")
     @Log(title = "岗位管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -105,6 +113,7 @@ public class SysPostController extends BaseController
     /**
      * 删除岗位
      */
+    @ApiOperation(value="删除岗位", notes="详细描述")
     @PreAuthorize(hasPermi = "system:post:remove")
     @Log(title = "岗位管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{postIds}")
@@ -116,6 +125,7 @@ public class SysPostController extends BaseController
     /**
      * 获取岗位选择框列表
      */
+    @ApiOperation(value="获取岗位选择框列表", notes="详细描述")
     @GetMapping("/optionselect")
     public AjaxResult optionselect()
     {

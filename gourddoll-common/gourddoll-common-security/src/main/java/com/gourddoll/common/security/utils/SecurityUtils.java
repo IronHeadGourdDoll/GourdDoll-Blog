@@ -54,8 +54,8 @@ public class SecurityUtils
     /**
      * 判断密码是否相同
      *
-     * @param rawPassword 真实密码
-     * @param encodedPassword 加密后字符
+     * @param rawPassword 用户输入密码
+     * @param encodedPassword 真实密码（加密后）
      * @return 结果
      */
     public static boolean matchesPassword(String rawPassword, String encodedPassword)

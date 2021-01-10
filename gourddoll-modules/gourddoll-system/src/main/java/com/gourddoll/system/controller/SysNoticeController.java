@@ -8,6 +8,8 @@ import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.domain.SysNotice;
 import com.gourddoll.system.service.ISysNoticeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import java.util.List;
  * 
  * @author gourddoll
  */
+@Api(tags={"公告接口"})
 @RestController
 @RequestMapping("/notice")
 public class SysNoticeController extends BaseController
@@ -27,8 +30,9 @@ public class SysNoticeController extends BaseController
     private ISysNoticeService noticeService;
 
     /**
-     * 获取通知公告列表
+     * 获取公告列表
      */
+    @ApiOperation(value="获取所有公告", notes="详细描述")
     @PreAuthorize(hasPermi = "system:notice:list")
     @GetMapping("/list")
     public AjaxResult list(SysNotice notice)
@@ -39,8 +43,9 @@ public class SysNoticeController extends BaseController
     }
 
     /**
-     * 根据通知公告编号获取详细信息
+     * 根据公告编号获取详细信息
      */
+    @ApiOperation(value="根据公告编号获取详细信息", notes="详细描述")
     @PreAuthorize(hasPermi = "system:notice:query")
     @GetMapping(value = "/{noticeId}")
     public AjaxResult getInfo(@PathVariable Long noticeId)
@@ -51,6 +56,7 @@ public class SysNoticeController extends BaseController
     /**
      * 新增通知公告
      */
+    @ApiOperation(value="新增通知公告", notes="详细描述")
     @PreAuthorize(hasPermi = "system:notice:add")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PostMapping
@@ -63,6 +69,7 @@ public class SysNoticeController extends BaseController
     /**
      * 修改通知公告
      */
+    @ApiOperation(value="修改通知公告", notes="详细描述")
     @PreAuthorize(hasPermi = "system:notice:edit")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -75,6 +82,7 @@ public class SysNoticeController extends BaseController
     /**
      * 删除通知公告
      */
+    @ApiOperation(value="删除通知公告", notes="详细描述")
     @PreAuthorize(hasPermi = "system:notice:remove")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")

@@ -17,6 +17,11 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 缓存请求过滤器
+ *
+ * @author gourddoll
+ */
 @Component
 public class CacheRequestFilter extends AbstractGatewayFilterFactory<CacheRequestFilter.Config>
 {

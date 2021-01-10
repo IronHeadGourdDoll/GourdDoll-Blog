@@ -17,6 +17,8 @@ import com.gourddoll.system.service.ISysPermissionService;
 import com.gourddoll.system.service.ISysPostService;
 import com.gourddoll.system.service.ISysRoleService;
 import com.gourddoll.system.service.ISysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,7 @@ import java.util.stream.Collectors;
  * 
  * @author gourddoll
  */
+@Api(tags={"用户接口"})
 @RestController
 @RequestMapping("/user")
 public class SysUserController extends BaseController
@@ -54,6 +57,7 @@ public class SysUserController extends BaseController
     /**
      * 获取用户列表
      */
+    @ApiOperation(value="获取所有用户", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:list")
     @GetMapping("/list")
     public AjaxResult list(SysUser user)
@@ -63,6 +67,7 @@ public class SysUserController extends BaseController
         return AjaxResult.success(getDataTable(list));
     }
 
+    @ApiOperation(value="导出用户", notes="详细描述")
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @PreAuthorize(hasPermi = "system:user:export")
     @PostMapping("/export")
@@ -73,6 +78,7 @@ public class SysUserController extends BaseController
         util.exportExcel(response, list, "用户数据");
     }
 
+    @ApiOperation(value="导入用户", notes="详细描述")
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
     @PreAuthorize(hasPermi = "system:user:import")
     @PostMapping("/importData")
@@ -85,6 +91,7 @@ public class SysUserController extends BaseController
         return AjaxResult.success(message);
     }
 
+    @ApiOperation(value="导入模板", notes="详细描述")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) throws IOException
     {
@@ -95,6 +102,7 @@ public class SysUserController extends BaseController
     /**
      * 获取当前用户信息
      */
+    @ApiOperation(value="获取当前用户信息", notes="详细描述")
     @GetMapping("/info/{username}")
     public R<LoginUser> info(@PathVariable("username") String username)
     {
@@ -119,6 +127,7 @@ public class SysUserController extends BaseController
      * 
      * @return 用户信息
      */
+    @ApiOperation(value="获取用户信息", notes="详细描述")
     @GetMapping("getInfo")
     public AjaxResult getInfo()
     {
@@ -137,6 +146,7 @@ public class SysUserController extends BaseController
     /**
      * 根据用户编号获取详细信息
      */
+    @ApiOperation(value="根据用户编号获取详细信息", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:query")
     @GetMapping(value = { "/", "/{userId}" })
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId)
@@ -157,6 +167,7 @@ public class SysUserController extends BaseController
     /**
      * 新增用户
      */
+    @ApiOperation(value="新增用户", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -182,6 +193,7 @@ public class SysUserController extends BaseController
     /**
      * 修改用户
      */
+    @ApiOperation(value="修改用户", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -203,6 +215,7 @@ public class SysUserController extends BaseController
     /**
      * 删除用户
      */
+    @ApiOperation(value="删除用户", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
@@ -212,8 +225,9 @@ public class SysUserController extends BaseController
     }
 
     /**
-     * 重置密码
+     * 修改密码
      */
+    @ApiOperation(value="修改密码", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
@@ -228,6 +242,7 @@ public class SysUserController extends BaseController
     /**
      * 状态修改
      */
+    @ApiOperation(value="状态修改", notes="详细描述")
     @PreAuthorize(hasPermi = "system:user:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")

@@ -1,6 +1,7 @@
 package com.gourddoll.system.service;
 
 import com.gourddoll.system.domain.SysMenu;
+import com.gourddoll.system.domain.vo.MenuTreeSelect;
 import com.gourddoll.system.domain.vo.RouterVo;
 import com.gourddoll.system.domain.vo.TreeSelect;
 
@@ -30,6 +31,15 @@ public interface ISysMenuService
      * @return 菜单列表
      */
     public List<SysMenu> selectMenuList(SysMenu menu, Long userId);
+
+    /**
+     * 根据用户查询系统菜单列表(左侧可见菜单)
+     *
+     * @param menu 菜单信息
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    public List<SysMenu> selectMenuListLV(SysMenu menu, Long userId);
 
     /**
      * 根据用户ID查询权限
@@ -77,7 +87,7 @@ public interface ISysMenuService
      * @param menus 菜单列表
      * @return 下拉树结构列表
      */
-    public List<TreeSelect> buildMenuTreeSelect(List<SysMenu> menus);
+    public List<MenuTreeSelect> buildMenuTreeSelect(List<SysMenu> menus);
 
     /**
      * 根据菜单ID查询信息

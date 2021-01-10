@@ -10,6 +10,7 @@ import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.domain.SysDictType;
 import com.gourddoll.system.service.ISysDictTypeService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,11 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 数据字典信息
+ * 字典类型信息
  * 
  * @author gourddoll
  */
+@Api(tags={"字典类型接口"})
 @RestController
 @RequestMapping("/dict/type")
 public class SysDictTypeController extends BaseController
