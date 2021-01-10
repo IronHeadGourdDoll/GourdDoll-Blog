@@ -75,6 +75,21 @@ class UserController extends ControllerBase {
   edit(data: UserEntity) {
     return this.request.put("/system/user", data);
   }
+
+  /**
+   * 根据id集合删除用户
+   */
+  deleteUserByIds(ids: Array<number | bigint>) {
+    let idsStr = "";
+    //去重
+    for (const id of new Set(ids).values()) {
+      idsStr += `${id},`;
+    }
+    //逗号连接
+    idsStr = idsStr.substr(0, idsStr.length - 1);
+    //转码传递
+    return this.request.delete("/system/user/" + encodeURIComponent(idsStr));
+  }
 }
 
 export default UserController;

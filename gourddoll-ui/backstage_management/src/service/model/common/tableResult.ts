@@ -5,7 +5,7 @@ export default interface TableResult<T = any> {
   /**
    * 总条数
    */
-  total: bigint;
+  total: bigint | number;
 
   /**
    * 行数据

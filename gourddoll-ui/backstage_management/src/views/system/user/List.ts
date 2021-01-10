@@ -73,7 +73,7 @@ export default defineComponent({
 
     let searchText = ref("");
 
-    let data: TableResult<UserEntity> = { total: 0n, rows: [] };
+    let data: TableResult<UserEntity> = { total: 0, rows: [] };
 
     let dataRows: Array<UserEntity> = reactive([]);
 
@@ -84,7 +84,7 @@ export default defineComponent({
       defaultPageSize: defaultPageSize,
       showQuickJumper: true,
       showSizeChanger: true,
-      total: Number.parseInt(data.total as any),
+      total: data.total,
       showTotal(total: any, range: any) {
         return `显示${range[0]}-${range[1]}条数据，共${total}条`;
       },
@@ -101,7 +101,7 @@ export default defineComponent({
         })
         .then((p) => {
           data = p;
-          pagination.total = Number.parseInt(data.total as any);
+          pagination.total = data.total;
           dataRows.splice(0, dataRows.length, ...data.rows);
           tableSelectedRows = [];
           tableSelectedRowKeys.splice(0, tableSelectedRowKeys.length);
@@ -170,7 +170,10 @@ export default defineComponent({
         okText: "确认",
         cancelText: "取消",
         onOk() {
-          message.success("还没做删除");
+          userController.deleteUserByIds(
+            tableSelectedRows.map((p) => p.userId)
+          );
+          loadData();
         },
       });
     }
