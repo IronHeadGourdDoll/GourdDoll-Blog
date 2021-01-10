@@ -11,14 +11,15 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "dashboard",
         component: () => import("@/views/dashboard/Dashboard.vue"),
-        name: "Dashboard"
-      }
-    ]
+        name: "Dashboard",
+      },
+    ],
   },
   {
     path: "/login",
     name: "Login",
-    component: () => import("@/views/login/Login.vue")
+    component: () => import("@/views/login/Login.vue"),
+    meta: { label: "登录" },
   },
   {
     path: "/about",
@@ -27,13 +28,14 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  }
+      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    meta: { label: "关于" },
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 });
 
 export default router;

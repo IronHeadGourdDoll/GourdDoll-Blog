@@ -85,7 +85,7 @@ export default {
     Nav,
     PageFoot,
     Content,
-    Header
+    Header,
   },
   setup() {
     const collapsed = ref(false);
@@ -95,6 +95,6 @@ export default {
     }
 
     return { collapsed, reverseCollapsed };
-  }
+  },
 };
 </script>

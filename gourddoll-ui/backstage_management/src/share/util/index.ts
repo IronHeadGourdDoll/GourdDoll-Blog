@@ -18,7 +18,7 @@ export function openWindow(url: any, target: any = "_blank") {
  * @param {any} saveName 文件保存的名字 可选参数
  */
 export function openDownloadFile(urlObj: any, saveName: any) {
-  const openDownload = function(href: any, fileName: any) {
+  const openDownload = function (href: any, fileName: any) {
     const downloadElement = document.createElement("a");
     downloadElement.target = "_blank";
     downloadElement.href = href;

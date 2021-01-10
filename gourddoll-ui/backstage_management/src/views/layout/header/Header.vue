@@ -36,7 +36,7 @@ import store from "@/store";
 export default defineComponent({
   name: "Header",
   components: {
-    UserOutlined
+    UserOutlined,
   },
   setup() {
     const userInfo = UserInfo.get();
@@ -66,11 +66,11 @@ export default defineComponent({
         content: "确定要退出吗？",
         okText: "确认",
         cancelText: "取消",
-        onOk: exitClear
+        onOk: exitClear,
       });
     }
 
     return { nickName, userExit };
-  }
+  },
 });
 </script>

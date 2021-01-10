@@ -1,6 +1,6 @@
 <template>
   <div class="container_longin">
-    <a-card title="登录" class="card_longin">
+    <a-card title="登录" class="card-longin">
       <a-form :model="formInline" @submit="handleSubmit">
         <a-form-item>
           <a-input

@@ -7,7 +7,7 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    user
+    user,
   },
-  getters
+  getters,
 });

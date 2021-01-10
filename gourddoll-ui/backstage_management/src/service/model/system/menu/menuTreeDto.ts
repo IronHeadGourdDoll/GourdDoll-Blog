@@ -57,5 +57,5 @@ export default class menuTreeDto {
   /**
    * 子集
    */
-  children?: Array<menuTreeDto>;
+  children!: Array<menuTreeDto>;
 }

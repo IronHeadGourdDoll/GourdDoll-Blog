@@ -1,4 +1,4 @@
-import BaseEntity from "./BaseEntity";
+import BaseEntity from "./baseEntity";
 
 class BaseTree extends BaseEntity {
   /**

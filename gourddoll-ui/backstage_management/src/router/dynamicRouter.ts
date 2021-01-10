@@ -1,15 +1,19 @@
 import router from "./constRouter";
-import Empty from "@/share/ExtensionMethod/empty";
-import store from "@/store";
-import MenuTreeDto from "@/service/model/menu/menuTreeDto";
+import Empty from "@/share/extensionMethod/empty";
+import MenuTreeDto from "@/service/model/system/menu/menuTreeDto";
 import { addMenuRoute } from "./operation";
+import store from "@/store";
 
 const title = process.env.VUE_APP_TITLE;
 
 const ignoreList = ["/login"]; //不需要跳转登录的路由
 
 router.beforeEach(async (to, from, next) => {
-  document.title = title;
+  if (to.meta.label) {
+    document.title = `${to.meta.label}-${title}`;
+  } else {
+    document.title = title;
+  }
 
   const token = await store.dispatch("user/getToken");
   const tokenIsNull = Empty.isStringNull(token);

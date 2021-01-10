@@ -43,7 +43,7 @@ class Empty {
    * 判断对象是否空数字。如果对象为null或者undefined或者Infinity或者NaN则返回true。
    */
   static isNumberNull(s: any): boolean {
-    return _isNull(s) || Number.isNaN(s) || Number.isFinite(s);
+    return _isNull(s) || Number.isNaN(s) || !Number.isFinite(s);
   }
 }
 

@@ -1,4 +1,7 @@
-class UserEntity {
+import SexEnum from "../../../enumeration/sexEnum";
+import BaseEntity from "../../common/baseEntity";
+
+class UserEntity extends BaseEntity {
   /**
    * 用户ID
    */
@@ -37,7 +40,7 @@ class UserEntity {
   /**
    * 用户性别
    */
-  sex?: string;
+  sex?: SexEnum;
 
   /**
    * 用户头像
@@ -73,6 +76,11 @@ class UserEntity {
    * 最后登录时间
    */
   loginDate?: string;
+
+  /**
+   * 是否管理员
+   */
+  admin?: boolean;
 }
 
 export default UserEntity;
