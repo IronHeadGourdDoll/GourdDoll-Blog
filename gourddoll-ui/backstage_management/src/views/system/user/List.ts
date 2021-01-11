@@ -1,4 +1,4 @@
-import { defineComponent, reactive, ref, createVNode } from "vue";
+import { defineComponent, reactive, ref, createVNode, nextTick } from "vue";
 import UserController from "@/service/controller/system/userController";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
 import { getSexText } from "@/service/enumeration/sexEnum";
@@ -106,6 +106,7 @@ export default defineComponent({
           dataRows.splice(0, dataRows.length, ...data.rows);
           tableSelectedRows = [];
           tableSelectedRowKeys.splice(0, tableSelectedRowKeys.length);
+          nextTick().then(() => loadTableWidth());
         });
     }
     function loadData(currentPage = 1) {
@@ -182,6 +183,20 @@ export default defineComponent({
         },
       });
     }
+
+    function loadTableWidth() {
+      const tablebody = document.querySelector(
+        ".ant-table-scroll > .ant-table-body"
+      ) as any;
+      tablebody.style["overflow-x"] = tablebody.style["overflow-y"] = "auto";
+      tablebody.style["max-height"] = tablebody.style["min-height"] =
+        (document.querySelector(".ant-layout-content.layout-content") as any)
+          .clientHeight -
+        180 +
+        "px"; //"120px";
+      // console.log(tablebody.style);
+    }
+    ((window as any).onresize as any) = loadTableWidth;
 
     return {
       dataRows,
