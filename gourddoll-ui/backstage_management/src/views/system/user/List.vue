@@ -18,7 +18,7 @@
         <a-input-search
           v-model:value="searchText"
           placeholder="输入 姓名/用户名/邮箱/电话 搜索"
-          @search="loadDataByQuickText"
+          @search="quickLoad"
           class="search-input"
           :allowClear="true"
         >
@@ -31,15 +31,14 @@
       </div>
     </div>
     <div class="content">
-      <a-table
-        class="data-table"
-        :scroll="{ x: true, y: true }"
+      <PagDataTable
         :columns="columns"
         :dataSource="dataRows"
-        :pagination="pagination"
-        @change="handleTableChange"
         rowKey="userId"
-        :row-selection="rowSelection"
+        :total="dataTotal"
+        v-model:selectedRowKeys="tableSelectedRowKeys"
+        v-model:selectedRows="tableSelectedRows"
+        @loadData="loadDataByPage"
       >
         <template #sex="{ text }">
           {{ getSexText(text) }}
@@ -47,7 +46,7 @@
         <template #admin="{ text }">
           {{ getYesNoText(text) }}
         </template>
-      </a-table>
+      </PagDataTable>
     </div>
   </div>
   <AddUser @saveComplete="loadData()" v-model:visible="isAddModal"></AddUser>

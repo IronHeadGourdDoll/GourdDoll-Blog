@@ -19,7 +19,4 @@
 .content {
   flex-grow: 1;
   flex-shrink: 1;
-  .data-table {
-    @include fill;
-  }
 }

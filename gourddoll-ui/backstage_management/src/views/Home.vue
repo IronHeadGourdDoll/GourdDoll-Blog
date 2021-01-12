@@ -22,7 +22,7 @@
           <Header></Header>
         </div>
       </a-layout-header>
-      <a-layout-content class="layout-content">
+      <a-layout-content class="layout-content" id="gourddoll-layout-content">
         <Content></Content>
       </a-layout-content>
       <a-layout-footer class="layout-footer">

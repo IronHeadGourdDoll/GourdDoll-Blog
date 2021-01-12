@@ -1,6 +1,5 @@
-import { defineComponent, reactive, ref, createVNode, nextTick } from "vue";
+import { defineComponent, reactive, ref, createVNode } from "vue";
 import UserController from "@/service/controller/system/userController";
-import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
 import { getSexText } from "@/service/enumeration/sexEnum";
 import { getYesNoText } from "@/service/enumeration/yesNoEnum";
 import {
@@ -74,70 +73,47 @@ export default defineComponent({
     let searchText = ref("");
 
     let data: TableResult<UserEntity> = { total: 0, rows: [] };
-
     let dataRows: Array<UserEntity> = reactive([]);
+    let dataTotal = ref<number | bigint>(0);
 
-    const defaultPageSize = pageSizeEnum.fifty;
+    let currentPageNum = 0;
+    let currentPageSize = 0;
 
-    const pagination = reactive({
-      pageSizeOptions: pageSizes,
-      defaultPageSize: defaultPageSize,
-      showQuickJumper: true,
-      showSizeChanger: true,
-      total: data.total,
-      showTotal(total: any, range: any) {
-        return `显示${range[0]}-${range[1]}条数据，共${total}条`;
-      },
-      current: 1,
-      pageSize: defaultPageSize,
-    });
 
-    function loadDataByQuickText(quickText: string, currentPage: any) {
-      if (!Number.isFinite(currentPage)) currentPage = 1;
+    function loadDataByCondition(currentPage: any, pageSize: any, quickText: string) {
+      currentPageNum = currentPage;
+      currentPageSize = pageSize;
       userController
         .getList({
           quickText: quickText,
           pageNum: currentPage,
-          pageSize: pagination.pageSize,
+          pageSize: pageSize,
         })
         .then((p) => {
           data = p;
-          pagination.total = data.total;
+          dataTotal.value = data.total;
           dataRows.splice(0, dataRows.length, ...data.rows);
           tableSelectedRows = [];
           tableSelectedRowKeys.splice(0, tableSelectedRowKeys.length);
-          nextTick().then(() => loadTableWidth());
         });
     }
-    function loadData(currentPage = 1) {
-      loadDataByQuickText(searchText.value, currentPage);
+
+    function quickLoad(quickText: string) {
+      loadDataByCondition(currentPageNum, currentPageSize, quickText);
     }
 
-    loadData();
-
-    function handleTableChange(
-      changePagination: any /*, filters: any, sorter: any, { currentDataSource }: any */
-    ) {
-      const { current, pageSize } = changePagination;
-      pagination.current = current;
-      pagination.pageSize = pageSize;
-      loadData(current);
+    function loadDataByPage(currentPage: any, pageSize: any) {
+      loadDataByCondition(currentPage, pageSize, searchText.value);
     }
+
+    function loadData() {
+      loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
+    }
+
 
     const tableSelectedRowKeys: Array<any> = reactive([]);
-    let tableSelectedRows: Array<any> = [];
-    const rowSelection = {
-      selectedRowKeys: tableSelectedRowKeys,
-      hideDefaultSelections: true,
-      onChange: (selectedRowKeys: any, selectedRows: any) => {
-        tableSelectedRows = selectedRows;
-        tableSelectedRowKeys.splice(
-          0,
-          tableSelectedRowKeys.length,
-          ...selectedRowKeys
-        );
-      },
-    };
+    let tableSelectedRows: Array<any> = reactive([]);
+
 
     const isAddModal = ref(false);
     function add() {
@@ -184,36 +160,23 @@ export default defineComponent({
       });
     }
 
-    function loadTableWidth() {
-      const tablebody = document.querySelector(
-        ".ant-table-scroll > .ant-table-body"
-      ) as any;
-      tablebody.style["overflow-x"] = tablebody.style["overflow-y"] = "auto";
-      tablebody.style["max-height"] = tablebody.style["min-height"] =
-        (document.querySelector(".ant-layout-content.layout-content") as any)
-          .clientHeight -
-        180 +
-        "px"; //"120px";
-      // console.log(tablebody.style);
-    }
-    ((window as any).onresize as any) = loadTableWidth;
-
     return {
       dataRows,
       columns,
-      pagination,
-      handleTableChange,
       getSexText,
       getYesNoText,
       searchText,
       loadData,
-      rowSelection,
       add,
       edit,
       deleted,
       isAddModal,
       isEditModal,
-      loadDataByQuickText,
+      quickLoad,
+      tableSelectedRowKeys,
+      tableSelectedRows,
+      dataTotal,
+      loadDataByPage,
     };
   },
 });
