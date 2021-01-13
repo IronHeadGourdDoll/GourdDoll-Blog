@@ -1,41 +1,34 @@
 <template>
-  <div class="flex-container">
-    <div class="head">
-      <div class="left-head">
-        <a-button-group>
-          <a-button @click="add">
-            <template #icon><PlusOutlined /></template>添加
-          </a-button>
-          <a-button @click="edit">
-            <template #icon><EditOutlined /></template>修改
-          </a-button>
-          <a-button @click="deleted">
-            <template #icon><DeleteOutlined /></template>删除
-          </a-button>
-        </a-button-group>
-      </div>
-      <div class="right-head">
-        <a-input-search
-          v-model:value="searchText"
-          placeholder="输入 姓名/用户名/邮箱/电话 搜索"
-          @search="quickLoad"
-          class="search-input"
-          :allowClear="true"
-        >
-          <template #enterButton>
-            <a-button type="primary">
-              <template #icon><SearchOutlined /></template>搜索
-            </a-button>
-          </template>
-        </a-input-search>
-      </div>
-    </div>
-    <div class="content">
+  <CurdLayout>
+    <template v-slot:headerLeft>
+      <a-button-group>
+        <a-button @click="add">
+          <template #icon><PlusOutlined /></template>添加
+        </a-button>
+        <a-button @click="edit">
+          <template #icon><EditOutlined /></template>修改
+        </a-button>
+        <a-button @click="deleted">
+          <template #icon><DeleteOutlined /></template>删除
+        </a-button>
+      </a-button-group>
+    </template>
+
+    <template v-slot:headerRight>
+      <SearchInputButton
+        v-model:text="searchText"
+        placeholder="输入 姓名/用户名/邮箱/电话 搜索"
+        @searchQuery="quickLoad"
+      />
+    </template>
+
+    <template v-slot:content>
       <PagDataTable
         :columns="columns"
         :dataSource="dataRows"
         rowKey="userId"
         :total="dataTotal"
+        :calcHeight="350"
         v-model:selectedRowKeys="tableSelectedRowKeys"
         v-model:selectedRows="tableSelectedRows"
         @loadData="loadDataByPage"
@@ -47,8 +40,9 @@
           {{ getYesNoText(text) }}
         </template>
       </PagDataTable>
-    </div>
-  </div>
+    </template>
+  </CurdLayout>
+
   <AddUser @saveComplete="loadData()" v-model:visible="isAddModal"></AddUser>
   <EditUser @saveComplete="loadData()" v-model:visible="isEditModal"></EditUser>
 </template>

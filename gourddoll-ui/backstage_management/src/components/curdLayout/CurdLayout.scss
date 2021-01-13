@@ -1,0 +1,19 @@
+@import "@/style/public_mixin.scss";
+
+.flex-container {
+  @include fill;
+  display: flex;
+  flex-direction: column;
+}
+
+.head {
+  flex-basis: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.content {
+  flex-grow: 1;
+  flex-shrink: 1;
+}

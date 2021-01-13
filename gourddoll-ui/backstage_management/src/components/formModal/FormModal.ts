@@ -1,4 +1,4 @@
-import { toRefs, SetupContext } from "vue";
+import { toRefs, SetupContext, computed } from "vue";
 
 /**
  * 保存完成事件
@@ -36,8 +36,8 @@ export default {
     },
   },
   setup(props: any, context: SetupContext) {
-    const { visible, modalWidth, title, isReset } = toRefs(props);
-    const formWidth = modalWidth.value + 50;
+    const { modalWidth } = toRefs(props);
+    const formWidth = computed(() => modalWidth.value + 50);
 
     function onSubmit(e: Event) {
       e.preventDefault();
@@ -55,13 +55,9 @@ export default {
 
     return {
       onSubmit,
-      visible,
       onCancel,
       onReset,
-      modalWidth,
       formWidth,
-      title,
-      isReset,
     };
   },
 };

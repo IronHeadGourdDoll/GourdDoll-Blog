@@ -3,7 +3,6 @@ import UserController from "@/service/controller/system/userController";
 import { getSexText } from "@/service/enumeration/sexEnum";
 import { getYesNoText } from "@/service/enumeration/yesNoEnum";
 import {
-  SearchOutlined,
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
@@ -20,7 +19,6 @@ import moduleEnum from "@/service/enumeration/moduleEnum";
 export default defineComponent({
   name: "UserList",
   components: {
-    SearchOutlined,
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
@@ -79,8 +77,11 @@ export default defineComponent({
     let currentPageNum = 0;
     let currentPageSize = 0;
 
-
-    function loadDataByCondition(currentPage: any, pageSize: any, quickText: string) {
+    function loadDataByCondition(
+      currentPage: any,
+      pageSize: any,
+      quickText: string
+    ) {
       currentPageNum = currentPage;
       currentPageSize = pageSize;
       userController
@@ -93,8 +94,6 @@ export default defineComponent({
           data = p;
           dataTotal.value = data.total;
           dataRows.splice(0, dataRows.length, ...data.rows);
-          tableSelectedRows = [];
-          tableSelectedRowKeys.splice(0, tableSelectedRowKeys.length);
         });
     }
 
@@ -110,10 +109,8 @@ export default defineComponent({
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
     }
 
-
     const tableSelectedRowKeys: Array<any> = reactive([]);
     let tableSelectedRows: Array<any> = reactive([]);
-
 
     const isAddModal = ref(false);
     function add() {

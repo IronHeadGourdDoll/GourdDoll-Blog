@@ -1,10 +1,4 @@
-import {
-  defineComponent,
-  reactive,
-  nextTick,
-  SetupContext,
-  toRefs,
-} from "vue";
+import { defineComponent, reactive, nextTick, SetupContext, toRefs } from "vue";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
 
 /**
@@ -26,7 +20,6 @@ const updateSelectedRows = "update:selectedRows";
 
 // const updatePageSize = "update:pageSize";
 
-
 export default defineComponent({
   name: "PagDataTable",
   props: {
@@ -39,14 +32,16 @@ export default defineComponent({
     heightAdaption: {
       type: Boolean,
       default: true,
-    }
+    },
+    calcHeight: {
+      type: Number,
+      default: 350,
+    },
   },
   setup(props: any, context: SetupContext) {
-    const { rowKey, total, heightAdaption, } = toRefs(props);
-    const dataSource = reactive(props.dataSource);
+    const { total, heightAdaption, calcHeight } = toRefs(props);
     const selectedRowKeys = reactive(props.selectedRowKeys);
     const selectedRows = reactive(props.selectedRows);
-    const columns = reactive(props.columns);
 
     const defaultPageSize = pageSizeEnum.fifty;
     const pagination = reactive({
@@ -70,10 +65,10 @@ export default defineComponent({
       context.emit(updateSelectedRowKeys, []);
       context.emit(updateSelectedRows, []);
       nextTick().then(() => loadTableWidth());
-    };
+    }
 
     //加载完成控件后执行一下
-    nextTick().then(p => {
+    nextTick().then(() => {
       loadData();
     });
 
@@ -96,39 +91,39 @@ export default defineComponent({
       },
     };
 
-
     function loadTableWidth() {
       if (heightAdaption) {
-        const tablebody = document.querySelector(".pag-data-table .ant-table-scroll > .ant-table-body") as any;
-        const height = (document.getElementById("gourddoll-layout-content") as any).clientHeight - 180 + "px";
+        const tablebody = document.querySelector(
+          ".pag-data-table .ant-table-scroll > .ant-table-body"
+        ) as any;
+        const height = document.body.offsetHeight - calcHeight.value + "px";
         tablebody.style["max-height"] = tablebody.style["min-height"] = height;
       }
     }
     ((window as any).onresize as any) = loadTableWidth;
-    ((function () {
+    (function () {
       if (heightAdaption) {
         const interval = setInterval(() => {
-          const tablebody = document.querySelector(".pag-data-table .ant-table-scroll > .ant-table-body") as any;
-          const calcNum = (document.getElementById("gourddoll-layout-content") as any).clientHeight - 180;
+          const tablebody = document.querySelector(
+            ".pag-data-table .ant-table-scroll > .ant-table-body"
+          ) as any;
+          const calcNum = document.body.offsetHeight - calcHeight.value;
           if (tablebody.outerHTML.includes("max-height")) {
             if (Number.parseInt(tablebody.style["max-height"]) === calcNum) {
               clearInterval(interval);
               return;
             }
           }
-          tablebody.style["max-height"] = tablebody.style["min-height"] = calcNum + "px";
+          tablebody.style["max-height"] = tablebody.style["min-height"] =
+            calcNum + "px";
         }, 100);
       }
-    })());
-
+    })();
 
     return {
-      dataSource,
-      rowKey,
       pagination,
       rowSelection,
-      columns,
       handlePaginationChange,
     };
-  }
+  },
 });
