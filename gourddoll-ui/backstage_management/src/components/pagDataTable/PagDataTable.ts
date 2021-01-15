@@ -1,4 +1,4 @@
-import { defineComponent, reactive, nextTick, SetupContext, toRefs } from "vue";
+import { defineComponent, reactive, SetupContext, toRefs, watch } from "vue";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
 
 /**
@@ -16,10 +16,6 @@ const updateSelectedRowKeys = "update:selectedRowKeys";
  */
 const updateSelectedRows = "update:selectedRows";
 
-// const updateCurrentPage = "update:currentPage";
-
-// const updatePageSize = "update:pageSize";
-
 export default defineComponent({
   name: "PagDataTable",
   props: {
@@ -29,19 +25,20 @@ export default defineComponent({
     total: [Number, BigInt],
     selectedRowKeys: Array,
     selectedRows: Array,
-    heightAdaption: {
+    calcHeight: {
+      type: Number,
+      default: 380,
+    },
+    adaptiveHeight: {
       type: Boolean,
       default: true,
     },
-    calcHeight: {
-      type: Number,
-      default: 350,
-    },
   },
   setup(props: any, context: SetupContext) {
-    const { total, heightAdaption, calcHeight } = toRefs(props);
+    const { total, calcHeight } = toRefs(props);
     const selectedRowKeys = reactive(props.selectedRowKeys);
     const selectedRows = reactive(props.selectedRows);
+    const dataSource = reactive(props.dataSource);
 
     const defaultPageSize = pageSizeEnum.fifty;
     const pagination = reactive({
@@ -58,18 +55,22 @@ export default defineComponent({
     });
 
     function loadData() {
+      clearSelected();
       context.emit(loadDataEvent, pagination.current, pagination.pageSize);
-      //执行加载数据后需要清空选中值
-      selectedRowKeys.splice(0, selectedRowKeys.length);
-      selectedRows.splice(0, selectedRows.length);
-      context.emit(updateSelectedRowKeys, []);
-      context.emit(updateSelectedRows, []);
-      nextTick().then(() => loadTableWidth());
     }
 
-    //加载完成控件后执行一下
-    nextTick().then(() => {
-      loadData();
+    /**
+     * 清空选中值
+     */
+    function clearSelected() {
+      selectedRowKeys.splice(0, selectedRowKeys.length);
+      selectedRows.splice(0, selectedRows.length);
+      context.emit(updateSelectedRowKeys, selectedRowKeys);
+      context.emit(updateSelectedRows, selectedRows);
+    }
+
+    watch(dataSource, () => {
+      clearSelected();
     });
 
     function handlePaginationChange(changePagination: any) {
@@ -87,38 +88,38 @@ export default defineComponent({
         selectedRows.splice(0, selectedRows.length, ...rows);
         context.emit(updateSelectedRowKeys, selectedRowKeys);
         context.emit(updateSelectedRows, selectedRows);
-        nextTick().then(() => loadTableWidth());
       },
     };
 
-    function loadTableWidth() {
-      if (heightAdaption) {
-        const tablebody = document.querySelector(
-          ".pag-data-table .ant-table-scroll > .ant-table-body"
-        ) as any;
-        const height = document.body.offsetHeight - calcHeight.value + "px";
-        tablebody.style["max-height"] = tablebody.style["min-height"] = height;
-      }
-    }
-    ((window as any).onresize as any) = loadTableWidth;
-    (function () {
-      if (heightAdaption) {
-        const interval = setInterval(() => {
-          const tablebody = document.querySelector(
+    if (props.adaptiveHeight) {
+      //高度自适应
+      const getTableDom = () => {
+        let dom = undefined as any;
+        if (dom) return dom;
+        const getDom = () =>
+          (dom = document.querySelector(
             ".pag-data-table .ant-table-scroll > .ant-table-body"
-          ) as any;
-          const calcNum = document.body.offsetHeight - calcHeight.value;
-          if (tablebody.outerHTML.includes("max-height")) {
-            if (Number.parseInt(tablebody.style["max-height"]) === calcNum) {
-              clearInterval(interval);
-              return;
-            }
-          }
-          tablebody.style["max-height"] = tablebody.style["min-height"] =
-            calcNum + "px";
-        }, 100);
-      }
-    })();
+          ));
+        return getDom();
+      };
+      const loadTableWidth = () => {
+        const tableHeight = document.body.offsetHeight - calcHeight.value;
+        const dom = getTableDom();
+        dom.style["height"] = dom.style["min-height"] = dom.style[
+          "max-height"
+        ] = tableHeight + "px";
+      };
+      window.onresize = loadTableWidth;
+      const interval = setInterval(() => {
+        const rowsLength = document.querySelectorAll(".pag-data-table table tr")
+          .length;
+        if (rowsLength && rowsLength > 0) {
+          loadTableWidth();
+          clearInterval(interval);
+        }
+      }, 200);
+      loadData();
+    }
 
     return {
       pagination,

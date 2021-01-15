@@ -28,7 +28,7 @@
         :dataSource="dataRows"
         rowKey="userId"
         :total="dataTotal"
-        :calcHeight="350"
+        :calcHeight="335"
         v-model:selectedRowKeys="tableSelectedRowKeys"
         v-model:selectedRows="tableSelectedRows"
         @loadData="loadDataByPage"
