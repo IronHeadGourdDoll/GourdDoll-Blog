@@ -118,8 +118,9 @@ export default defineComponent({
           clearInterval(interval);
         }
       }, 200);
-      loadData();
     }
+
+    loadData();
 
     return {
       pagination,

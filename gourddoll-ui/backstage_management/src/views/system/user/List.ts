@@ -11,10 +11,10 @@ import {
 import TableResult from "@/service/model/common/tableResult";
 import UserEntity from "@/service/model/system/user/userEntity";
 import { Modal, message } from "ant-design-vue";
-import AddUser from "./components/addUser/AddUser.vue";
-import EditUser from "./components/editUser/EditUser.vue";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
+import Operation from "./components/operation/Operation.vue";
+import operationTypeEnum from "@/service/enumeration/operationTypeEnum";
 
 export default defineComponent({
   name: "UserList",
@@ -22,8 +22,7 @@ export default defineComponent({
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
-    AddUser,
-    EditUser,
+    Operation,
   },
   setup() {
     const columns = [
@@ -112,12 +111,16 @@ export default defineComponent({
     const tableSelectedRowKeys: Array<any> = reactive([]);
     let tableSelectedRows: Array<any> = reactive([]);
 
-    const isAddModal = ref(false);
+    const isShowOperation = ref(false);
     function add() {
-      isAddModal.value = true;
+      Emitter.emit(
+        "changeOperation",
+        { type: operationTypeEnum.add },
+        moduleEnum.user
+      );
+      isShowOperation.value = true;
     }
 
-    const isEditModal = ref(false);
     function edit() {
       if (tableSelectedRows.length <= 0) {
         message.error("请先选择，再进行此操作");
@@ -126,8 +129,12 @@ export default defineComponent({
         message.error("请选择一条数据进行编辑");
         return;
       }
-      Emitter.emit("loadInfo", tableSelectedRows[0].userId, moduleEnum.user);
-      isEditModal.value = true;
+      Emitter.emit(
+        "changeOperation",
+        { type: operationTypeEnum.edit, id: tableSelectedRows[0].userId },
+        moduleEnum.user
+      );
+      isShowOperation.value = true;
     }
 
     function deleted() {
@@ -167,8 +174,7 @@ export default defineComponent({
       add,
       edit,
       deleted,
-      isAddModal,
-      isEditModal,
+      isShowOperation,
       quickLoad,
       tableSelectedRowKeys,
       tableSelectedRows,

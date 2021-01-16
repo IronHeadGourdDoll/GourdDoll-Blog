@@ -20,5 +20,10 @@ npm run build
 npm run lint
 ```
 
+### Pass the verification
+```
+npm run lint --fix
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

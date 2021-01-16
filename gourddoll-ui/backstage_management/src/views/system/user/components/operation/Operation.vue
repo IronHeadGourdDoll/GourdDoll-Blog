@@ -1,20 +1,34 @@
 <template>
   <FormModal
     :modalWidth="580"
-    title="添加用户"
+    :title="title"
     :visible="visible"
     @save="onSubmit"
     @reset="resetFields"
     @cancel="onCancel"
+    :isReset="isShowReset"
   >
     <a-form-item label="姓名" v-bind="validateInfos.nickName">
       <a-input v-model:value="modelRef.nickName" />
     </a-form-item>
     <a-form-item label="用户名" v-bind="validateInfos.userName">
-      <a-input v-model:value="modelRef.userName" />
+      <a-input
+        :disabled="isDisabledUserName"
+        v-model:value="modelRef.userName"
+      />
     </a-form-item>
-    <a-form-item label="密码" v-bind="validateInfos.password">
+    <a-form-item
+      v-if="isValidatePwd"
+      label="密码"
+      v-bind="validateInfos.password"
+    >
       <a-input-password v-model:value="modelRef.password" />
+    </a-form-item>
+    <a-form-item v-else label="密码">
+      <a-input-password
+        placeholder="为空则不会修改密码"
+        v-model:value="modelRef.password"
+      />
     </a-form-item>
     <a-form-item label="性别">
       <a-select v-model:value="modelRef.sex" placeholder="请选择性别">
@@ -46,4 +60,4 @@
   </FormModal>
 </template>
 
-<script lang="ts" src="./AddUser.ts"></script>
+<script lang="ts" src="./Operation.ts"></script>

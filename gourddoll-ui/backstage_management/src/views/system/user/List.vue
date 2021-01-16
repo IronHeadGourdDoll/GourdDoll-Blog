@@ -43,8 +43,10 @@
     </template>
   </CurdLayout>
 
-  <AddUser @saveComplete="loadData()" v-model:visible="isAddModal"></AddUser>
-  <EditUser @saveComplete="loadData()" v-model:visible="isEditModal"></EditUser>
+  <Operation
+    @saveComplete="loadData()"
+    v-model:visible="isShowOperation"
+  ></Operation>
 </template>
 
 <style lang="scss" src="./List.scss" scoped></style>

@@ -1,5 +1,4 @@
 import { reactive } from "vue";
-import { useForm } from "@ant-design-vue/use";
 import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
 
 const modelRef: any = reactive({
@@ -46,6 +45,4 @@ const rulesRef: any = reactive({
   ],
 });
 
-const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef);
-
-export { modelRef, resetFields, validate, validateInfos, getSexMap };
+export { modelRef, rulesRef, getSexMap };
