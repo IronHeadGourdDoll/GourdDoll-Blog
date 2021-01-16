@@ -47,5 +47,13 @@
   </div>
 </template>
 
+<style lang="scss">
+.card-longin {
+  .ant-card-head-title {
+    font-weight: 800;
+    font-size: 22px;
+  }
+}
+</style>
 <style lang="scss" src="./Login.scss" scoped></style>
 <script lang="ts" src="./Login.ts"></script>

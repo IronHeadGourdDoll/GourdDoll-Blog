@@ -16,13 +16,6 @@ body {
     font: 12px/1.5 arial, "Hiragino Sans GB", sans-serif;
 }
 
-.card-longin {
-    .ant-card-head-title {
-        font-weight: 800;
-        font-size: 22px;
-    }
-}
-
 .fill {
     @include fill;
 }
@@ -33,8 +26,4 @@ body {
 
 .right-float {
     float: right;
-}
-
-.ant-table-pagination {
-    float: left !important;
 }

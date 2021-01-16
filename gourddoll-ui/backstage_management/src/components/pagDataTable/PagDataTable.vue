@@ -14,9 +14,14 @@
 </template>
 
 <style lang="scss">
-.pag-data-table .ant-table-scroll > .ant-table-body {
-  overflow-x: auto !important;
-  overflow-y: auto !important;
+.pag-data-table {
+  .ant-table-scroll > .ant-table-body {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+  }
+  .ant-table-pagination {
+    float: left !important;
+  }
 }
 </style>
 <style lang="scss" scoped>
