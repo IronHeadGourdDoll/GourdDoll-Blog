@@ -1,0 +1,34 @@
+@import "@/style/public_mixin.scss";
+
+.flex-container {
+  display: flex;
+  @include fill;
+}
+
+.left-side {
+  height: 100%;
+  flex-basis: 320px;
+  width: 320px;
+  border-width: 1px;
+  border-style: solid;
+  overflow: auto;
+}
+
+.right-side {
+  height: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  .head {
+    flex-basis: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .content {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+}

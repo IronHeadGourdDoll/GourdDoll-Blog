@@ -1,6 +1,7 @@
 import { defineComponent, reactive, SetupContext, toRefs, watch } from "vue";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
 import { throttle } from "@/share/util";
+import calcTableHeight from "./calcTableHeight";
 
 /**
  * 加载数据事件
@@ -21,11 +22,26 @@ export default defineComponent({
   name: "PagDataTable",
   props: {
     rowKey: String,
-    dataSource: Array,
-    columns: Array,
-    total: [Number, BigInt],
-    selectedRowKeys: Array,
-    selectedRows: Array,
+    dataSource: {
+      type: Array,
+      default: () => [],
+    },
+    columns: {
+      type: Array,
+      default: () => [],
+    },
+    total: {
+      type: [Number, BigInt],
+      default: 0,
+    },
+    selectedRowKeys: {
+      type: Array,
+      default: () => [],
+    },
+    selectedRows: {
+      type: Array,
+      default: () => [],
+    },
     calcHeight: {
       type: Number,
       default: 380,
@@ -94,31 +110,10 @@ export default defineComponent({
 
     if (props.adaptiveHeight) {
       //高度自适应
-      const getTableDom = () => {
-        let dom = undefined as any;
-        if (dom) return dom;
-        const getDom = () =>
-        (dom = document.querySelector(
-          ".pag-data-table .ant-table-scroll > .ant-table-body"
-        ));
-        return getDom();
-      };
       const loadTableWidth = () => {
-        const tableHeight = document.body.offsetHeight - calcHeight.value;
-        const dom = getTableDom();
-        dom.style["height"] = dom.style["min-height"] = dom.style[
-          "max-height"
-        ] = tableHeight + "px";
+        calcTableHeight(calcHeight.value);
       };
       window.onresize = throttle(loadTableWidth, 300);
-      const interval = setInterval(() => {
-        const rowsLength = document.querySelectorAll(".pag-data-table table tr")
-          .length;
-        if (rowsLength && rowsLength > 0) {
-          loadTableWidth();
-          clearInterval(interval);
-        }
-      }, 200);
     }
 
     loadData();

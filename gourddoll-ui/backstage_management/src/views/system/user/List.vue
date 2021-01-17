@@ -1,6 +1,6 @@
 <template>
   <CurdLayout>
-    <template v-slot:headerLeft>
+    <template #headerLeft>
       <a-button-group>
         <a-button @click="add">
           <template #icon><PlusOutlined /></template>添加
@@ -14,7 +14,7 @@
       </a-button-group>
     </template>
 
-    <template v-slot:headerRight>
+    <template #headerRight>
       <SearchInputButton
         v-model:text="searchText"
         placeholder="输入 姓名/用户名/邮箱/电话 搜索"
@@ -22,13 +22,13 @@
       />
     </template>
 
-    <template v-slot:content>
+    <template #content>
       <PagDataTable
         :columns="columns"
         :dataSource="dataRows"
         rowKey="userId"
         :total="dataTotal"
-        :calcHeight="335"
+        :calcHeight="calcHeight"
         v-model:selectedRowKeys="tableSelectedRowKeys"
         v-model:selectedRows="tableSelectedRows"
         @loadData="loadDataByPage"

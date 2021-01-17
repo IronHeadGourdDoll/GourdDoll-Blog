@@ -8,6 +8,9 @@ module.exports = {
   publicPath: "/",
   outputDir: "dist",
   assetsDir: "static",
+  devServer: {
+    port: 1999,
+  },
   configureWebpack: {
     resolve: {
       alias: {

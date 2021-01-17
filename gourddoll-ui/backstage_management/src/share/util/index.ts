@@ -54,7 +54,6 @@ export function isUrl(url: any) {
   return false;
 }
 
-
 /**
  * 防抖
  * @param fn 需要执行的函数
@@ -63,13 +62,14 @@ export function isUrl(url: any) {
 export function debounce(fn: any, delay: number) {
   let valid = false;
   let timer: any;
-  return function () {
+  return function (...args: any) {
     if (valid) {
       clearTimeout(timer);
     }
-    timer = setTimeout(fn, delay);
+    const exeFun = () => fn.apply(this, args);
+    timer = setTimeout(exeFun, delay);
     valid = true;
-  }
+  };
 }
 
 /**
@@ -79,15 +79,15 @@ export function debounce(fn: any, delay: number) {
  */
 export function throttle(fn: any, delay: number) {
   let valid = false;
-  return function () {
+  return function (...args: any) {
     if (valid) {
       return;
     }
     valid = true;
     const exeFun = () => {
-      fn();
+      fn.apply(this, args);
       valid = false;
     };
     setTimeout(exeFun, delay);
-  }
+  };
 }
