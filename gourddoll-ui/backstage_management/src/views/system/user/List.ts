@@ -30,33 +30,43 @@ export default defineComponent({
         title: "姓名",
         dataIndex: "nickName",
         key: "nickName",
+        width: 140,
       },
       {
         title: "用户名",
         dataIndex: "userName",
         key: "userName",
+        width: 140,
       },
       {
         title: "性别",
         dataIndex: "sex",
         key: "sex",
-        slots: { customRender: "sex" },
+        customRender: ({ text }: any) => {
+          return getSexText(text);
+        },
+        width: 80,
       },
       {
         title: "邮箱",
         dataIndex: "email",
         key: "email",
+        width: 160,
       },
       {
         title: "电话",
         dataIndex: "phonenumber",
         key: "phonenumber",
+        width: 140,
       },
       {
-        title: "是否管理员",
+        title: "管理员",
         dataIndex: "admin",
         key: "admin",
-        slots: { customRender: "admin" },
+        customRender: ({ text }: any) => {
+          return getYesNoText(text);
+        },
+        width: 80,
       },
       {
         title: "备注",

@@ -33,12 +33,6 @@
         v-model:selectedRows="tableSelectedRows"
         @loadData="loadDataByPage"
       >
-        <template #sex="{ text }">
-          {{ getSexText(text) }}
-        </template>
-        <template #admin="{ text }">
-          {{ getYesNoText(text) }}
-        </template>
       </PagDataTable>
     </template>
   </CurdLayout>

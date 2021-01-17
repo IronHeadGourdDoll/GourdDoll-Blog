@@ -53,3 +53,41 @@ export function isUrl(url: any) {
   }
   return false;
 }
+
+
+/**
+ * 防抖
+ * @param fn 需要执行的函数
+ * @param delay 间隔毫秒
+ */
+export function debounce(fn: any, delay: number) {
+  let valid = false;
+  let timer: any;
+  return function () {
+    if (valid) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(fn, delay);
+    valid = true;
+  }
+}
+
+/**
+ * 节流
+ * @param fn 需要执行的函数
+ * @param delay 间隔毫秒
+ */
+export function throttle(fn: any, delay: number) {
+  let valid = false;
+  return function () {
+    if (valid) {
+      return;
+    }
+    valid = true;
+    const exeFun = () => {
+      fn();
+      valid = false;
+    };
+    setTimeout(exeFun, delay);
+  }
+}

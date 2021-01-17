@@ -1,5 +1,6 @@
 import { defineComponent, reactive, SetupContext, toRefs, watch } from "vue";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
+import { throttle } from "@/share/util";
 
 /**
  * 加载数据事件
@@ -97,9 +98,9 @@ export default defineComponent({
         let dom = undefined as any;
         if (dom) return dom;
         const getDom = () =>
-          (dom = document.querySelector(
-            ".pag-data-table .ant-table-scroll > .ant-table-body"
-          ));
+        (dom = document.querySelector(
+          ".pag-data-table .ant-table-scroll > .ant-table-body"
+        ));
         return getDom();
       };
       const loadTableWidth = () => {
@@ -109,7 +110,7 @@ export default defineComponent({
           "max-height"
         ] = tableHeight + "px";
       };
-      window.onresize = loadTableWidth;
+      window.onresize = throttle(loadTableWidth, 300);
       const interval = setInterval(() => {
         const rowsLength = document.querySelectorAll(".pag-data-table table tr")
           .length;
