@@ -114,6 +114,7 @@ export default defineComponent({
         calcTableHeight(calcHeight.value);
       };
       window.onresize = throttle(loadTableWidth, 300);
+      watch(dataSource, loadTableWidth, { immediate: true });
     }
 
     loadData();

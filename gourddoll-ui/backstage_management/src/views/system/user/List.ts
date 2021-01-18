@@ -15,7 +15,6 @@ import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
 import Operation from "./components/operation/Operation.vue";
 import operationTypeEnum from "@/service/enumeration/operationTypeEnum";
-import calcTableHeight from "@/components/pagDataTable/calcTableHeight";
 
 export default defineComponent({
   name: "UserList",
@@ -87,8 +86,6 @@ export default defineComponent({
     let currentPageNum = 0;
     let currentPageSize = 0;
 
-    const calcHeight = 335;
-
     function loadDataByCondition(
       currentPage: any,
       pageSize: any,
@@ -106,7 +103,6 @@ export default defineComponent({
           data = p;
           dataTotal.value = data.total;
           dataRows.splice(0, dataRows.length, ...data.rows);
-          calcTableHeight(calcHeight);
         });
     }
 
@@ -181,8 +177,6 @@ export default defineComponent({
     return {
       dataRows,
       columns,
-      getSexText,
-      getYesNoText,
       searchText,
       loadData,
       add,
@@ -194,7 +188,6 @@ export default defineComponent({
       tableSelectedRows,
       dataTotal,
       loadDataByPage,
-      calcHeight,
     };
   },
 });
