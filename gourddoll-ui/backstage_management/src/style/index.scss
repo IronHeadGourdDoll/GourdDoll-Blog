@@ -27,3 +27,15 @@ body {
 .right-float {
     float: right;
 }
+
+.clear-float {
+    clear: both;
+}
+
+.text-ellipsis {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+}

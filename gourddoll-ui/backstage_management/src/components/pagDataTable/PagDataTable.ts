@@ -52,10 +52,7 @@ export default defineComponent({
     },
   },
   setup(props: any, context: SetupContext) {
-    const { total, calcHeight } = toRefs(props);
-    const selectedRowKeys = reactive(props.selectedRowKeys);
-    const selectedRows = reactive(props.selectedRows);
-    const dataSource = reactive(props.dataSource);
+    const { total, calcHeight, dataSource } = toRefs(props);
 
     const defaultPageSize = pageSizeEnum.fifty;
     const pagination = reactive({
@@ -80,10 +77,8 @@ export default defineComponent({
      * 清空选中值
      */
     function clearSelected() {
-      selectedRowKeys.splice(0, selectedRowKeys.length);
-      selectedRows.splice(0, selectedRows.length);
-      context.emit(updateSelectedRowKeys, selectedRowKeys);
-      context.emit(updateSelectedRows, selectedRows);
+      context.emit(updateSelectedRowKeys, []);
+      context.emit(updateSelectedRows, []);
     }
 
     watch(dataSource, () => {
@@ -97,14 +92,13 @@ export default defineComponent({
       loadData();
     }
 
+    const sonSelectedRowKeys = reactive([]);
     const rowSelection = {
-      selectedRowKeys: selectedRowKeys,
+      selectedRowKeys: sonSelectedRowKeys,
       hideDefaultSelections: true,
       onChange: (keys: any, rows: any) => {
-        selectedRowKeys.splice(0, selectedRowKeys.length, ...keys);
-        selectedRows.splice(0, selectedRows.length, ...rows);
-        context.emit(updateSelectedRowKeys, selectedRowKeys);
-        context.emit(updateSelectedRows, selectedRows);
+        context.emit(updateSelectedRowKeys, keys);
+        context.emit(updateSelectedRows, rows);
       },
     };
 

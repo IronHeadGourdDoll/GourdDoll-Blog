@@ -1,4 +1,4 @@
-import { defineComponent, reactive, ref, createVNode } from "vue";
+import { defineComponent, ref, createVNode } from "vue";
 import UserController from "@/service/controller/system/userController";
 import { getSexText } from "@/service/enumeration/sexEnum";
 import { getYesNoText } from "@/service/enumeration/yesNoEnum";
@@ -8,7 +8,6 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons-vue";
-import TableResult from "@/service/model/common/tableResult";
 import UserEntity from "@/service/model/system/user/userEntity";
 import { Modal, message } from "ant-design-vue";
 import Emitter from "@/share/plugins/mitt";
@@ -79,8 +78,7 @@ export default defineComponent({
 
     let searchText = ref("");
 
-    let data: TableResult<UserEntity> = { total: 0, rows: [] };
-    let dataRows: Array<UserEntity> = reactive([]);
+    let dataRows = ref<Array<UserEntity>>([]);
     let dataTotal = ref<number | bigint>(0);
 
     let currentPageNum = 0;
@@ -99,10 +97,9 @@ export default defineComponent({
           pageNum: currentPage,
           pageSize: pageSize,
         })
-        .then((p) => {
-          data = p;
+        .then((data) => {
           dataTotal.value = data.total;
-          dataRows.splice(0, dataRows.length, ...data.rows);
+          dataRows.value = data.rows;
         });
     }
 
@@ -118,8 +115,8 @@ export default defineComponent({
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
     }
 
-    const tableSelectedRowKeys: Array<any> = reactive([]);
-    let tableSelectedRows: Array<any> = reactive([]);
+    const tableSelectedRowKeys = ref<Array<any>>([]);
+    let tableSelectedRows = ref<Array<any>>([]);
 
     const isShowOperation = ref(false);
     function add() {
@@ -132,16 +129,17 @@ export default defineComponent({
     }
 
     function edit() {
-      if (tableSelectedRows.length <= 0) {
+      const selectedRows = tableSelectedRows.value;
+      if (selectedRows.length <= 0) {
         message.error("请先选择，再进行此操作");
         return;
-      } else if (tableSelectedRows.length > 1) {
+      } else if (selectedRows.length > 1) {
         message.error("请选择一条数据进行编辑");
         return;
       }
       Emitter.emit(
         "changeOperation",
-        { type: operationTypeEnum.edit, id: tableSelectedRows[0].userId },
+        { type: operationTypeEnum.edit, id: selectedRows[0].userId },
         moduleEnum.user
       );
       isShowOperation.value = true;
@@ -149,14 +147,15 @@ export default defineComponent({
 
     function deleted() {
       let msg: string;
-      if (tableSelectedRows.length <= 0) {
+      const selectedRows = tableSelectedRows.value;
+      if (selectedRows.length <= 0) {
         message.error("请先选择，再进行此操作");
         return;
-      } else if (tableSelectedRows.length == 1) {
-        const name = tableSelectedRows[0].nickName;
+      } else if (selectedRows.length == 1) {
+        const name = selectedRows[0].nickName;
         msg = `确认要删除「${name}」吗？`;
       } else {
-        msg = `您选择了${tableSelectedRows.length}条数据，确认要删除吗？`;
+        msg = `您选择了${selectedRows.length}条数据，确认要删除吗？`;
       }
 
       Modal.confirm({
@@ -166,9 +165,7 @@ export default defineComponent({
         okText: "确认",
         cancelText: "取消",
         onOk() {
-          userController.deleteUserByIds(
-            tableSelectedRows.map((p) => p.userId)
-          );
+          userController.deleteUserByIds(selectedRows.map((p) => p.userId));
           loadData();
         },
       });

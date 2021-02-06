@@ -2,14 +2,13 @@
   <LeftRightLayout>
     <template #contentLeft>
       <a-tree
-        v-model:checkedKeys="checkedKeys"
-        checkable
-        :expanded-keys="expandedKeys"
-        :auto-expand-parent="autoExpandParent"
-        :selected-keys="selectedKeys"
+        :checkable="false"
         :tree-data="treeData"
-        @expand="onExpand"
-        @select="onSelect"
+        :autoExpandParent="true"
+        :defaultExpandAll="true"
+        :defaultExpandParent="true"
+        :replaceFields="{ children: 'children', title: 'label', key: 'id' }"
+        @select="treeSelected"
       />
     </template>
 
@@ -28,11 +27,23 @@
     </template>
 
     <template #headerRight>
-      <SearchInputButton placeholder="输入 菜单名称 搜索" />
+      <SearchInputButton
+        v-model:text="searchText"
+        placeholder="输入 菜单名称/地址 搜索"
+      />
     </template>
 
     <template #contentRight>
-      <PagDataTable :total="100" :calcHeight="335"></PagDataTable>
+      <PagDataTable
+        :columns="columns"
+        :dataSource="dataRows"
+        rowKey="menuId"
+        :total="dataTotal"
+        :calcHeight="335"
+        v-model:selectedRowKeys="tableSelectedRowKeys"
+        v-model:selectedRows="tableSelectedRows"
+        @loadData="loadDataByPage"
+      ></PagDataTable>
     </template>
   </LeftRightLayout>
 </template>

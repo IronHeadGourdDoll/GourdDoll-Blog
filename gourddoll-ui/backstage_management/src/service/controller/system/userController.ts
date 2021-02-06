@@ -41,7 +41,7 @@ class UserController extends ControllerBase {
    */
   getList(data: TableSearch) {
     const { pageNum, pageSize, quickText } = data;
-    const userSearch = {
+    const searchWhere = {
       pageNum,
       pageSize,
       userName: quickText,
@@ -51,7 +51,7 @@ class UserController extends ControllerBase {
     };
     return this.request.get<TableResult<UserEntity>>(
       "/system/user/list",
-      userSearch
+      searchWhere
     );
   }
 

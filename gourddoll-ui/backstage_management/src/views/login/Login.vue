@@ -21,12 +21,12 @@
             <template #prefix><LockOutlined /></template>
           </a-input>
         </a-form-item>
-        <div>
-          <div class="verification_img" @click="loadCodeImg">
+        <div class="verification_div">
+          <div class="verification_img left-float" @click="loadCodeImg">
             <img class="fill" :src="formInline.img" alt="验证码图片" />
           </div>
           <a-input
-            class="verification_code"
+            class="verification_code left-float"
             placeholder="输入验证码"
             type="number"
             v-model:value="formInline.code"

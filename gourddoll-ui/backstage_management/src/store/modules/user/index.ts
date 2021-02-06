@@ -46,7 +46,7 @@ obj.actions = {
         commit(Mutation.setUserInfo, d);
         userInfoHelp.set(state.userInfo);
       });
-      const p2 = menuService.GetUserMenu().then((d) => {
+      const p2 = menuService.getUserMenu().then((d) => {
         commit(Mutation.setMenu, d);
         menuHelp.set(state.menu);
         addMenuRoute(state.menu);
@@ -108,7 +108,7 @@ obj.actions = {
       menu = menuHelp.get();
       if (Empty.isArrayNull(menu)) {
         //如果内存和缓存中都没有则去后端取
-        menu = await menuService.GetUserMenu();
+        menu = await menuService.getUserMenu();
       }
       commit(Mutation.setMenu, menu);
     }

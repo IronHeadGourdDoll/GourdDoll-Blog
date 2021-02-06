@@ -38,3 +38,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [ ] 其他基础页面增删改查
 - [ ] 前台展示博客和新增博客
 - [ ] 还有很多，后续补充...
+
+### Waiting for the back end to cooperate
+- [ ] 前端查询条件无效或者少字段
+- [ ] DTO的支持
+- [ ] 强类型化：某些字段需要返回布尔或者数值类型，而不是全部返回字符串
+- [ ] 是否管理员字段特殊处理
+- [ ] 等待补充...
