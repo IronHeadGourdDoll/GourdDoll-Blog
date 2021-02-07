@@ -2,11 +2,17 @@ import {
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons-vue";
-import { defineComponent, ref, reactive, watch } from "vue";
+import { defineComponent, ref, reactive, watch, createVNode } from "vue";
 import MenuController from "@/service/controller/system/menuController";
 import MenuEntity from "@/service/model/system/menu/menuEntity";
 import { createTableEllipsisCell } from "@/components/ellipsisTooltip/help";
+import operationTypeEnum from "@/service/enumeration/operationTypeEnum";
+import moduleEnum from "@/service/enumeration/moduleEnum";
+import Emitter from "@/share/plugins/mitt";
+import { Modal, message } from "ant-design-vue";
+import Operation from "./components/operation/Operation.vue";
 
 export default defineComponent({
   name: "MenuList",
@@ -14,11 +20,12 @@ export default defineComponent({
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
+    Operation,
   },
   setup() {
     const columns = [
       {
-        title: "菜单名称",
+        title: "名称",
         dataIndex: "menuName",
         key: "menuName",
         width: 140,
@@ -77,8 +84,8 @@ export default defineComponent({
 
     const menuController = new MenuController();
 
-    // let treeSelectedId = "";
-    // let treeSelectedMenu: any = {};
+    let treeSelectedId = "";
+    let treeSelectedMenu: any = {};
     let searchText = ref("");
 
     let dataRows = ref<Array<MenuEntity>>([]);
@@ -122,11 +129,11 @@ export default defineComponent({
     }
 
     const treeSearchText = ref("");
-    let treeData: Array<any> = [];
+    const treeData = ref<Array<any>>([]);
     const treeSearchData = ref<Array<any>>([]);
 
     menuController.getTreeMenu().then((data) => {
-      treeData = data;
+      treeData.value = data;
 
       watch(
         treeSearchText,
@@ -165,8 +172,8 @@ export default defineComponent({
     }
 
     function onTreeSearch(text: string) {
-      if (text.length === 0) return treeData;
-      const datas = onTreeDataChanged(treeData);
+      if (text.length === 0) return treeData.value;
+      const datas = onTreeDataChanged(treeData.value);
       const searchData = datas.filter((p) => p.label.includes(text));
       let notNestData: Array<any> = [];
       const addParent = (item: any) => {
@@ -198,12 +205,65 @@ export default defineComponent({
 
     function treeSelected(expandedKeys: any, expanded: any) {
       if (expanded.selected === true) {
-        // treeSelectedId = expandedKeys[0];
-        // treeSelectedMenu = expanded.selectedNodes[0].props;
+        treeSelectedId = expandedKeys[0];
+        treeSelectedMenu = expanded.selectedNodes[0].props;
       } else {
-        // treeSelectedId = "";
-        // treeSelectedMenu = {};
+        treeSelectedId = "";
+        treeSelectedMenu = {};
       }
+    }
+
+    const isShowOperation = ref(false);
+    function add() {
+      Emitter.emit(
+        "changeOperation",
+        { type: operationTypeEnum.add },
+        moduleEnum.menu
+      );
+      isShowOperation.value = true;
+    }
+
+    function edit() {
+      const selectedRows = tableSelectedRows;
+      if (selectedRows.length <= 0) {
+        message.error("请先选择，再进行此操作");
+        return;
+      } else if (selectedRows.length > 1) {
+        message.error("请选择一条数据进行编辑");
+        return;
+      }
+      Emitter.emit(
+        "changeOperation",
+        { type: operationTypeEnum.edit, id: selectedRows[0].menuId },
+        moduleEnum.menu
+      );
+      isShowOperation.value = true;
+    }
+
+    function deleted() {
+      let msg: string;
+      const selectedRows = tableSelectedRows;
+      if (selectedRows.length <= 0) {
+        message.error("请先选择，再进行此操作");
+        return;
+      } else if (selectedRows.length == 1) {
+        const name = selectedRows[0].nickName;
+        msg = `确认要删除「${name}」吗？`;
+      } else {
+        msg = `您选择了${selectedRows.length}条数据，确认要删除吗？`;
+      }
+
+      Modal.confirm({
+        title: "删除确认",
+        icon: createVNode(ExclamationCircleOutlined),
+        content: msg,
+        okText: "确认",
+        cancelText: "取消",
+        onOk() {
+          menuController.delete(selectedRows.map((p) => p.userId));
+          loadData();
+        },
+      });
     }
 
     return {
@@ -219,6 +279,11 @@ export default defineComponent({
       dataRows,
       dataTotal,
       treeSearchText,
+      treeData,
+      add,
+      edit,
+      deleted,
+      isShowOperation,
     };
   },
 });

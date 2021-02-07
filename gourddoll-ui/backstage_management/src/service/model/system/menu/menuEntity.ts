@@ -7,12 +7,12 @@ class MenuEntity extends BaseEntity {
   menuId!: bigint | number;
 
   /**
-   * 菜单名称
+   * 名称
    */
   menuName!: string;
 
   /**
-   * 菜单跳转路径
+   * 菜单跳转地址
    */
   path!: string;
 
@@ -32,12 +32,12 @@ class MenuEntity extends BaseEntity {
   remark?: string;
 
   /**
-   * 父级菜单名称
+   * 父级名称
    */
   parentName?: string;
 
   /**
-   * 父级菜单名称
+   * 父级名称
    */
   parentId?: bigint | number;
 

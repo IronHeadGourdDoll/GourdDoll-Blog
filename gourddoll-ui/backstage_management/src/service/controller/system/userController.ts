@@ -44,10 +44,7 @@ class UserController extends ControllerBase {
     const searchWhere = {
       pageNum,
       pageSize,
-      userName: quickText,
-      nickName: quickText,
-      email: quickText,
-      phonenumber: quickText,
+      searchValue: quickText,
     };
     return this.request.get<TableResult<UserEntity>>(
       "/system/user/list",

@@ -19,13 +19,13 @@
 
     <template #headerLeft>
       <a-button-group>
-        <a-button>
+        <a-button @click="add">
           <template #icon><PlusOutlined /></template>添加
         </a-button>
-        <a-button>
+        <a-button @click="edit">
           <template #icon><EditOutlined /></template>修改
         </a-button>
-        <a-button>
+        <a-button @click="deleted">
           <template #icon><DeleteOutlined /></template>删除
         </a-button>
       </a-button-group>
@@ -34,7 +34,7 @@
     <template #headerRight>
       <SearchInputButton
         v-model:text="searchText"
-        placeholder="输入 菜单名称/地址 搜索"
+        placeholder="输入 名称/编码/地址 搜索"
         @searchQuery="quickLoad"
       />
     </template>
@@ -52,6 +52,12 @@
       ></PagDataTable>
     </template>
   </LeftRightLayout>
+
+  <Operation
+    @saveComplete="loadData()"
+    v-model:visible="isShowOperation"
+    :treeData="treeData"
+  ></Operation>
 </template>
 
 <style lang="scss" src="./List.scss" scoped></style>

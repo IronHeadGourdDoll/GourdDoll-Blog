@@ -27,8 +27,7 @@ class MenuController extends ControllerBase {
     const searchWhere = {
       pageNum,
       pageSize,
-      menuName: quickText,
-      path: quickText,
+      searchValue: quickText,
     };
     return this.request.get<TableResult<MenuEntity>>(
       "/system/menu/list",
@@ -40,7 +39,7 @@ class MenuController extends ControllerBase {
    * 添加菜单
    * @param entity 菜单实体
    */
-  addMenu(entity: MenuEntity) {
+  add(entity: MenuEntity) {
     return this.request.post("/system/menu", entity);
   }
 
@@ -48,7 +47,7 @@ class MenuController extends ControllerBase {
    * 添加菜单
    * @param entity 菜单实体
    */
-  editMenu(entity: MenuEntity) {
+  edit(entity: MenuEntity) {
     return this.request.put("/system/menu", entity);
   }
 
@@ -56,9 +55,26 @@ class MenuController extends ControllerBase {
    * 删除菜单
    * @param id 菜单标识
    */
-  delete(id: number | bigint) {
-    return this.request.delete("/system/menu", { menuId: id });
+  delete(ids: Array<number | bigint>) {
+    let idsStr = "";
+    //去重
+    for (const id of new Set(ids).values()) {
+      idsStr += `${id},`;
+    }
+    //逗号连接
+    idsStr = idsStr.substr(0, idsStr.length - 1);
+    //转码传递
+    return this.request.delete("/system/menu/" + encodeURIComponent(idsStr));
   }
+
+  /**
+   * 根据id获取菜单信息
+   */
+  getMenuById(id: bigint | number) {
+    return this.request.get("/system/menu/" + id);
+  }
+
+
 }
 
 export default MenuController;
