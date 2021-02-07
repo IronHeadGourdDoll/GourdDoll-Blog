@@ -39,7 +39,7 @@
         :dataSource="dataRows"
         rowKey="menuId"
         :total="dataTotal"
-        :calcHeight="335"
+        :calcHeight="365"
         v-model:selectedRowKeys="tableSelectedRowKeys"
         v-model:selectedRows="tableSelectedRows"
         @loadData="loadDataByPage"

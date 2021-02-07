@@ -1,4 +1,4 @@
-import { defineComponent, ref, createVNode } from "vue";
+import { defineComponent, ref, createVNode, reactive } from "vue";
 import UserController from "@/service/controller/system/userController";
 import { getSexText } from "@/service/enumeration/sexEnum";
 import { getYesNoText } from "@/service/enumeration/yesNoEnum";
@@ -115,8 +115,8 @@ export default defineComponent({
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
     }
 
-    const tableSelectedRowKeys = ref<Array<any>>([]);
-    let tableSelectedRows = ref<Array<any>>([]);
+    const tableSelectedRowKeys: Array<any> = reactive([]);
+    let tableSelectedRows: Array<any> = reactive([]);
 
     const isShowOperation = ref(false);
     function add() {
@@ -129,7 +129,7 @@ export default defineComponent({
     }
 
     function edit() {
-      const selectedRows = tableSelectedRows.value;
+      const selectedRows = tableSelectedRows;
       if (selectedRows.length <= 0) {
         message.error("请先选择，再进行此操作");
         return;
@@ -147,7 +147,7 @@ export default defineComponent({
 
     function deleted() {
       let msg: string;
-      const selectedRows = tableSelectedRows.value;
+      const selectedRows = tableSelectedRows;
       if (selectedRows.length <= 0) {
         message.error("请先选择，再进行此操作");
         return;

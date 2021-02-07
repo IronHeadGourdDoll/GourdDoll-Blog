@@ -3,9 +3,10 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons-vue";
-import { defineComponent, ref, h } from "vue";
+import { defineComponent, ref, reactive } from "vue";
 import MenuController from "@/service/controller/system/menuController";
 import MenuEntity from "@/service/model/system/menu/menuEntity";
+import { createTableEllipsisCell } from "@/components/ellipsisTooltip/help";
 
 export default defineComponent({
   name: "MenuList",
@@ -28,11 +29,7 @@ export default defineComponent({
         key: "pathCode",
         width: 140,
         customRender: ({ text }: any) => {
-          return h(
-            "span",
-            { style: "width:110px", class: "text-ellipsis", title: text },
-            text
-          );
+          return createTableEllipsisCell(140, text);
         },
       },
       {
@@ -41,11 +38,7 @@ export default defineComponent({
         key: "path",
         width: 80,
         customRender: ({ text }: any) => {
-          return h(
-            "span",
-            { style: "width:50px", class: "text-ellipsis", title: text },
-            text
-          );
+          return createTableEllipsisCell(80, text);
         },
       },
       {
@@ -65,7 +58,7 @@ export default defineComponent({
         dataIndex: "visible",
         key: "visible",
         customRender: ({ text }: any) => {
-          return text == "1" ? "是" : "否";
+          return text == "0" ? "是" : "否";
         },
         width: 80,
       },
@@ -94,8 +87,8 @@ export default defineComponent({
     let currentPageNum = 0;
     let currentPageSize = 0;
 
-    const tableSelectedRowKeys = ref<Array<any>>([]);
-    let tableSelectedRows = ref<Array<any>>([]);
+    const tableSelectedRowKeys: Array<any> = reactive([]);
+    let tableSelectedRows: Array<any> = reactive([]);
 
     function loadDataByCondition(
       currentPage: any,
