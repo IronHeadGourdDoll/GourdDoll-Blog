@@ -1,9 +1,14 @@
 <template>
   <LeftRightLayout>
     <template #contentLeft>
+      <a-input-search
+        placeholder="输入文本即时搜索"
+        :allowClear="true"
+        v-model:value="treeSearchText"
+      />
       <a-tree
         :checkable="false"
-        :tree-data="treeData"
+        :tree-data="treeSearchData"
         :autoExpandParent="true"
         :defaultExpandAll="true"
         :defaultExpandParent="true"
@@ -30,6 +35,7 @@
       <SearchInputButton
         v-model:text="searchText"
         placeholder="输入 菜单名称/地址 搜索"
+        @searchQuery="quickLoad"
       />
     </template>
 

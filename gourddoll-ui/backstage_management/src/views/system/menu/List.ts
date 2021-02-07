@@ -3,7 +3,7 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons-vue";
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, watch } from "vue";
 import MenuController from "@/service/controller/system/menuController";
 import MenuEntity from "@/service/model/system/menu/menuEntity";
 import { createTableEllipsisCell } from "@/components/ellipsisTooltip/help";
@@ -36,9 +36,9 @@ export default defineComponent({
         title: "地址",
         dataIndex: "path",
         key: "path",
-        width: 80,
+        width: 140,
         customRender: ({ text }: any) => {
-          return createTableEllipsisCell(80, text);
+          return createTableEllipsisCell(140, text);
         },
       },
       {
@@ -60,7 +60,7 @@ export default defineComponent({
         customRender: ({ text }: any) => {
           return text == "0" ? "是" : "否";
         },
-        width: 80,
+        width: 90,
       },
       {
         title: "状态",
@@ -121,6 +121,81 @@ export default defineComponent({
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
     }
 
+    const treeSearchText = ref("");
+    let treeData: Array<any> = [];
+    const treeSearchData = ref<Array<any>>([]);
+
+    menuController.getTreeMenu().then((data) => {
+      treeData = data;
+
+      watch(
+        treeSearchText,
+        (newVal) => {
+          const searchData = onTreeSearch(newVal);
+          treeSearchData.value = searchData;
+        },
+        { immediate: true }
+      );
+    });
+
+    function onTreeDataChanged(val: Array<any>) {
+      const datas: Array<any> = [];
+      const childrenKey = "children";
+      const addList = (data: Array<any>) => {
+        for (const one of data) {
+          const children = one[childrenKey];
+          if (children === undefined || children.length < 1) {
+            datas.push(one);
+            continue;
+          }
+          const parentOne: any = {};
+          for (const key of Object.keys(one)) {
+            if (key === childrenKey) {
+              parentOne[childrenKey] = [];
+            } else {
+              parentOne[key] = one[key];
+            }
+          }
+          datas.push(parentOne);
+          addList(one.children);
+        }
+      };
+      addList(val);
+      return datas;
+    }
+
+    function onTreeSearch(text: string) {
+      if (text.length === 0) return treeData;
+      const datas = onTreeDataChanged(treeData);
+      const searchData = datas.filter((p) => p.label.includes(text));
+      let notNestData: Array<any> = [];
+      const addParent = (item: any) => {
+        notNestData.push(item);
+        const index = datas.findIndex((p) => p.id === item.parentId);
+        if (index != -1) {
+          addParent(datas[index]);
+        }
+      };
+      for (const item of searchData) {
+        addParent(item);
+      }
+      const map = new Map();
+      notNestData = notNestData.filter(
+        (p) => !map.has(p.id) && map.set(p.id, 1)
+      );
+      const result = notNestData.filter((p) => p.parentId === 0);
+      const generateResult = (items: Array<any>) => {
+        for (const item of items) {
+          item.children = notNestData.filter((p) => p.parentId === item.id);
+          if (item.children.length > 0) {
+            generateResult(item.children);
+          }
+        }
+      };
+      generateResult(result);
+      return result;
+    }
+
     function treeSelected(expandedKeys: any, expanded: any) {
       if (expanded.selected === true) {
         // treeSelectedId = expandedKeys[0];
@@ -131,14 +206,9 @@ export default defineComponent({
       }
     }
 
-    let treeData = ref<Array<any>>([]);
-    menuController.getTreeMenu().then((data) => {
-      treeData.value = data;
-    });
-
     return {
       treeSelected,
-      treeData,
+      treeSearchData,
       searchText,
       tableSelectedRowKeys,
       tableSelectedRows,
@@ -148,6 +218,7 @@ export default defineComponent({
       loadData,
       dataRows,
       dataTotal,
+      treeSearchText,
     };
   },
 });
