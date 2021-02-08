@@ -57,6 +57,7 @@
     @saveComplete="loadData()"
     v-model:visible="isShowOperation"
     :treeData="treeData"
+    :treeSelectedId="treeSelectedId"
   ></Operation>
 </template>
 

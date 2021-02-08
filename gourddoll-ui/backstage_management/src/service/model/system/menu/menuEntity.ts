@@ -64,7 +64,7 @@ class MenuEntity extends BaseEntity {
   /**
    * 是否显示
    */
-  visible?: string;
+  visible?: boolean;
 
   /**
    * 菜单状态

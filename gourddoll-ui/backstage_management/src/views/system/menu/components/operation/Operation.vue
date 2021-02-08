@@ -45,8 +45,8 @@
     </a-form-item>
     <a-form-item label="是否显示">
       <a-select v-model:value="modelRef.visible" placeholder="请选择">
-        <a-select-option value="0" key="0">是</a-select-option>
-        <a-select-option value="1" key="1">否</a-select-option>
+        <a-select-option value="true" key="true">是</a-select-option>
+        <a-select-option value="false" key="false">否</a-select-option>
       </a-select>
     </a-form-item>
     <a-form-item label="状态">

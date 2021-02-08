@@ -5,6 +5,8 @@
     :footer="null"
     :width="modalWidth"
     :title="title"
+    :keyboard="false"
+    :maskClosable="false"
   >
     <a-form
       :label-col="{ span: 4 }"

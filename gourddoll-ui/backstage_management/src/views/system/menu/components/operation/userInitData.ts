@@ -6,7 +6,7 @@ const modelRef: any = reactive({
   path: "",
   component: "",
   menuType: "C",
-  visible: "0",
+  visible: "true",
   status: "0",
   parentId: "",
   remark: "",

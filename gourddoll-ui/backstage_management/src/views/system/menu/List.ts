@@ -65,7 +65,7 @@ export default defineComponent({
         dataIndex: "visible",
         key: "visible",
         customRender: ({ text }: any) => {
-          return text == "0" ? "是" : "否";
+          return text ? "是" : "否";
         },
         width: 90,
       },
@@ -84,7 +84,7 @@ export default defineComponent({
 
     const menuController = new MenuController();
 
-    let treeSelectedId = "";
+    let treeSelectedId = ref<number | string>("");
     let treeSelectedMenu: any = {};
     let searchText = ref("");
 
@@ -109,7 +109,7 @@ export default defineComponent({
           quickText: quickText,
           pageNum: currentPage,
           pageSize: pageSize,
-        })
+        }, treeSelectedId.value)
         .then((data) => {
           dataTotal.value = data.total;
           dataRows.value = data.rows;
@@ -126,6 +126,7 @@ export default defineComponent({
 
     function loadData() {
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
+      menuController.getTreeMenu().then((data) => { treeData.value = data; });
     }
 
     const treeSearchText = ref("");
@@ -136,9 +137,9 @@ export default defineComponent({
       treeData.value = data;
 
       watch(
-        treeSearchText,
-        (newVal) => {
-          const searchData = onTreeSearch(newVal);
+        [treeSearchText, treeData],
+        () => {
+          const searchData = onTreeSearch(treeSearchText.value);
           treeSearchData.value = searchData;
         },
         { immediate: true }
@@ -205,12 +206,14 @@ export default defineComponent({
 
     function treeSelected(expandedKeys: any, expanded: any) {
       if (expanded.selected === true) {
-        treeSelectedId = expandedKeys[0];
+        treeSelectedId.value = expandedKeys[0];
         treeSelectedMenu = expanded.selectedNodes[0].props;
       } else {
-        treeSelectedId = "";
+        treeSelectedId.value = "";
         treeSelectedMenu = {};
       }
+      //点击树加载右侧表格
+      loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
     }
 
     const isShowOperation = ref(false);
@@ -247,7 +250,7 @@ export default defineComponent({
         message.error("请先选择，再进行此操作");
         return;
       } else if (selectedRows.length == 1) {
-        const name = selectedRows[0].nickName;
+        const name = selectedRows[0].menuName;
         msg = `确认要删除「${name}」吗？`;
       } else {
         msg = `您选择了${selectedRows.length}条数据，确认要删除吗？`;
@@ -260,7 +263,7 @@ export default defineComponent({
         okText: "确认",
         cancelText: "取消",
         onOk() {
-          menuController.delete(selectedRows.map((p) => p.userId));
+          menuController.delete(selectedRows.map((p) => p.menuId));
           loadData();
         },
       });
@@ -284,6 +287,7 @@ export default defineComponent({
       edit,
       deleted,
       isShowOperation,
+      treeSelectedId,
     };
   },
 });

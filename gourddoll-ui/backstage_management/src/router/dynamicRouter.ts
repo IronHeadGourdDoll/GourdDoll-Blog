@@ -27,6 +27,10 @@ router.beforeEach(async (to, from, next) => {
     const { menu } = store.getters;
     if (Empty.isArrayNull(menu)) {
       const menus = await store.dispatch("user/getMenu");
+      if (menus.length == 0) {
+        next(false);
+        return;
+      }
       addMenuRoute(menus as Array<MenuTreeDto>);
       next({ ...to, replace: true });
       return;

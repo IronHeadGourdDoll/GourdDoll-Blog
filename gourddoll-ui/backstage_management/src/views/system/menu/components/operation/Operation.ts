@@ -1,4 +1,4 @@
-import { toRaw, SetupContext, ref, watch, reactive } from "vue";
+import { toRaw, SetupContext, ref, watch, reactive, toRefs } from "vue";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
 import operationTypeEnum, {
@@ -13,9 +13,11 @@ export default {
   props: {
     visible: Boolean,
     treeData: Array,
+    treeSelectedId: [String, Number]
   },
   setup(props: any, context: SetupContext) {
     let currentOperation = ref(operationTypeEnum.add);
+    const { treeSelectedId } = toRefs(props);
 
     const menuController = new MenuController();
 
@@ -23,8 +25,11 @@ export default {
       currentOperation.value = type;
       if (currentOperation.value == operationTypeEnum.edit) {
         menuController.getMenuById(id).then((data) => {
+          if (data.parentId === 0) data.parentId = "";
           Object.assign(modelRef, data);
         });
+      } else if (currentOperation.value == operationTypeEnum.add) {
+        modelRef.parentId = treeSelectedId.value;
       }
     }
     Emitter.on("changeOperation", load, moduleEnum.menu);

@@ -22,12 +22,13 @@ class MenuController extends ControllerBase {
   /**
    * 获取菜单列表
    */
-  getMenuList(data: TableSearch) {
+  getMenuList(data: TableSearch, parentId?: string | number) {
     const { pageNum, pageSize, quickText } = data;
     const searchWhere = {
       pageNum,
       pageSize,
       searchValue: quickText,
+      parentId: parentId ?? 0,
     };
     return this.request.get<TableResult<MenuEntity>>(
       "/system/menu/list",
