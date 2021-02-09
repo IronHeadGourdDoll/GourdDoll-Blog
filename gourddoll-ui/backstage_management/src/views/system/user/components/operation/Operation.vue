@@ -4,7 +4,7 @@
     :title="title"
     :visible="visible"
     @save="onSubmit"
-    @reset="resetFields"
+    @reset="resetForm"
     @cancel="onCancel"
     :isReset="isShowReset"
   >

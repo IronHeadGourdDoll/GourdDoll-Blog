@@ -5,7 +5,7 @@ import moduleEnum from "@/service/enumeration/moduleEnum";
 import operationTypeEnum, {
   getTitle,
 } from "@/service/enumeration/operationTypeEnum";
-import { modelRef, rulesRef, getSexMap } from "./userInitData";
+import { modelRef, rulesRef, getSexMap, resetFields } from "./userInitData";
 import { useForm } from "@ant-design-vue/use";
 
 export default {
@@ -48,8 +48,7 @@ export default {
       context.emit("update:visible", false);
     }
 
-    let resetFields = reactive<any>({});
-    let validate = reactive<any>({});
+    let validate: any;
     let validateInfos = reactive<any>({});
 
     const title = ref("");
@@ -70,27 +69,32 @@ export default {
               message: "请输入密码",
             },
           ];
-          const antForm = useForm(modelRef, rulesRef);
-          resetFields = antForm.resetFields;
-          validate = antForm.validate;
-          validateInfos = antForm.validateInfos;
+          resetValidate();
         } else if (v == operationTypeEnum.edit) {
           isShowReset.value = false;
           isDisabledUserName.value = true;
           isValidatePwd.value = false;
           rulesRef.password = [];
-          const antForm = useForm(modelRef, rulesRef);
-          resetFields = antForm.resetFields;
-          validate = antForm.validate;
-          validateInfos = antForm.validateInfos;
+          resetValidate();
         }
       },
       { immediate: true }
     );
 
+    function resetValidate() {
+      const antForm = useForm(modelRef, rulesRef);
+      Object.assign(validateInfos, antForm.validateInfos);
+      validate = antForm.validate;
+    }
+
+    function resetForm() {
+      resetFields();
+      resetValidate();
+    }
+
     return {
       validateInfos,
-      resetFields,
+      resetForm,
       modelRef,
       onSubmit,
       sexMap: getSexMap(),

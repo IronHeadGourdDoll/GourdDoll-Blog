@@ -4,7 +4,7 @@ import moduleEnum from "@/service/enumeration/moduleEnum";
 import operationTypeEnum, {
   getTitle,
 } from "@/service/enumeration/operationTypeEnum";
-import { modelRef, rulesRef } from "./userInitData";
+import { modelRef, rulesRef, resetFields } from "./userInitData";
 import { useForm } from "@ant-design-vue/use";
 import MenuController from "@/service/controller/system/menuController";
 
@@ -54,8 +54,7 @@ export default {
       context.emit("update:visible", false);
     }
 
-    let resetFields = reactive<any>({});
-    let validate = reactive<any>({});
+    let validate: any;
     let validateInfos = reactive<any>({});
 
     const title = ref("");
@@ -73,33 +72,50 @@ export default {
       { immediate: true }
     );
 
-    watch(modelRef, function (newVal: any) {
-      if (newVal.menuType !== 'F') {
-        const antForm = useForm(modelRef, rulesRef);
+    watch(() => modelRef.menuType, function (newVal: any) {
+      if (newVal !== 'F') {
         rulesRef.path = [
           {
             required: true,
-            message: "请输入名称",
+            message: "请输入地址",
           },
         ];
-        resetFields = antForm.resetFields;
-        validate = antForm.validate;
-        validateInfos = antForm.validateInfos;
+        rulesRef.parentId = [];
+        resetValidate();
       } else {
         rulesRef.path = [];
-        const antForm = useForm(modelRef, rulesRef);
-        resetFields = antForm.resetFields;
-        validate = antForm.validate;
-        validateInfos = antForm.validateInfos;
+        rulesRef.parentId = [
+          {
+            required: true,
+            message: "请选择上级",
+          },
+          {
+            validator: function (rule: any, value: any) {
+              if (value == 0) return Promise.reject("请选择上级");
+              return Promise.resolve();
+            }
+          }
+        ];
+        resetValidate();
       }
     },
       { immediate: true });
 
+    function resetValidate() {
+      const antForm = useForm(modelRef, rulesRef);
+      Object.assign(validateInfos, antForm.validateInfos);
+      validate = antForm.validate;
+    }
+
+    function resetForm() {
+      resetFields();
+      resetValidate();
+    }
 
 
     return {
       validateInfos,
-      resetFields,
+      resetForm,
       modelRef,
       onSubmit,
       onCancel,

@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
+import { useForm } from "@ant-design-vue/use";
 
 const modelRef: any = reactive({
   nickName: "",
@@ -44,5 +45,6 @@ const rulesRef: any = reactive({
     },
   ],
 });
+const { resetFields } = useForm(modelRef, rulesRef);
 
-export { modelRef, rulesRef, getSexMap };
+export { modelRef, rulesRef, getSexMap, resetFields };

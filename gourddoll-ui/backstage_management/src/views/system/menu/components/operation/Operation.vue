@@ -4,11 +4,11 @@
     :title="title"
     :visible="visible"
     @save="onSubmit"
-    @reset="resetFields"
+    @reset="resetForm"
     @cancel="onCancel"
     :isReset="isShowReset"
   >
-    <a-form-item label="上级菜单">
+    <a-form-item label="上级菜单" v-bind="validateInfos.parentId">
       <a-tree-select
         v-model:value="modelRef.parentId"
         :tree-data="treeData"
