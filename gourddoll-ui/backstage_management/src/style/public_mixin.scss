@@ -1,6 +1,12 @@
-@mixin fill {
+@mixin widthFill {
   width: 100%;
+}
+
+@mixin heightFill {
   height: 100%;
-  width: 100vw;
-  height: 100vh;
+}
+
+@mixin fill {
+  @include widthFill;
+  @include heightFill;
 }

@@ -6,7 +6,7 @@
 }
 
 .left-side {
-  height: 100%;
+  @include heightFill;
   flex-basis: 320px;
   width: 320px;
   border-width: 1px;
@@ -15,7 +15,7 @@
 }
 
 .right-side {
-  height: 100%;
+  @include heightFill;
   display: flex;
   flex: 1;
   flex-direction: column;

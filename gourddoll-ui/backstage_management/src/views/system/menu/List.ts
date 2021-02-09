@@ -94,7 +94,6 @@ export default defineComponent({
     const menuController = new MenuController();
 
     let treeSelectedId = ref<number | string>("");
-    let treeSelectedMenu: any = {};
     let searchText = ref("");
 
     let dataRows = ref<Array<MenuEntity>>([]);
@@ -135,92 +134,23 @@ export default defineComponent({
 
     function loadData() {
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
-      menuController.getTreeMenu().then((data) => { treeData.value = data; });
+      LoadTreeMenu();
     }
 
     const treeSearchText = ref("");
+
     const treeData = ref<Array<any>>([]);
-    const treeSearchData = ref<Array<any>>([]);
 
-    menuController.getTreeMenu().then((data) => {
-      treeData.value = data;
-
-      watch(
-        [treeSearchText, treeData],
-        () => {
-          const searchData = onTreeSearch(treeSearchText.value);
-          treeSearchData.value = searchData;
-        },
-        { immediate: true }
-      );
-    });
-
-    function onTreeDataChanged(val: Array<any>) {
-      const datas: Array<any> = [];
-      const childrenKey = "children";
-      const addList = (data: Array<any>) => {
-        for (const one of data) {
-          const children = one[childrenKey];
-          if (children === undefined || children.length < 1) {
-            datas.push(one);
-            continue;
-          }
-          const parentOne: any = {};
-          for (const key of Object.keys(one)) {
-            if (key === childrenKey) {
-              parentOne[childrenKey] = [];
-            } else {
-              parentOne[key] = one[key];
-            }
-          }
-          datas.push(parentOne);
-          addList(one.children);
-        }
-      };
-      addList(val);
-      return datas;
+    function LoadTreeMenu() {
+      menuController.getTreeMenu().then((data) => {
+        treeData.value = data;
+      });
     }
+    LoadTreeMenu();
 
-    function onTreeSearch(text: string) {
-      if (text.length === 0) return treeData.value;
-      const datas = onTreeDataChanged(treeData.value);
-      const searchData = datas.filter((p) => p.label.includes(text));
-      let notNestData: Array<any> = [];
-      const addParent = (item: any) => {
-        notNestData.push(item);
-        const index = datas.findIndex((p) => p.id === item.parentId);
-        if (index != -1) {
-          addParent(datas[index]);
-        }
-      };
-      for (const item of searchData) {
-        addParent(item);
-      }
-      const map = new Map();
-      notNestData = notNestData.filter(
-        (p) => !map.has(p.id) && map.set(p.id, 1)
-      );
-      const result = notNestData.filter((p) => p.parentId === 0);
-      const generateResult = (items: Array<any>) => {
-        for (const item of items) {
-          item.children = notNestData.filter((p) => p.parentId === item.id);
-          if (item.children.length > 0) {
-            generateResult(item.children);
-          }
-        }
-      };
-      generateResult(result);
-      return result;
-    }
 
-    function treeSelected(expandedKeys: any, expanded: any) {
-      if (expanded.selected === true) {
-        treeSelectedId.value = expandedKeys[0];
-        treeSelectedMenu = expanded.selectedNodes[0].props;
-      } else {
-        treeSelectedId.value = "";
-        treeSelectedMenu = {};
-      }
+    function treeSelected(id: any) {
+      treeSelectedId.value = id;
       //点击树加载右侧表格
       loadDataByCondition(currentPageNum, currentPageSize, searchText.value);
     }
@@ -280,7 +210,6 @@ export default defineComponent({
 
     return {
       treeSelected,
-      treeSearchData,
       searchText,
       tableSelectedRowKeys,
       tableSelectedRows,

@@ -1,6 +1,6 @@
 <template>
   <a-table
-    class="pag-data-table"
+    class="pag-data-table fill"
     :scroll="{ x: true, y: true }"
     :columns="columns"
     :dataSource="dataSource"
@@ -22,12 +22,6 @@
   .ant-table-pagination {
     float: left !important;
   }
-}
-</style>
-<style lang="scss" scoped>
-.pag-data-table {
-  width: 100%;
-  height: 100%;
 }
 </style>
 

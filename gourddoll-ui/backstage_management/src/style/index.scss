@@ -41,6 +41,9 @@ body {
 }
 
 .width-fill {
-    width: 100%;
-    width: 100vw;
+    @include widthFill;
+}
+
+.height-fill {
+    @include heightFill;
 }

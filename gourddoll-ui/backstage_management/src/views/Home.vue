@@ -1,5 +1,5 @@
 <template>
-  <a-layout id="components-layout-custom-trigger">
+  <a-layout id="components-layout-custom-trigger" class="fill">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo" />
       <Nav></Nav>
@@ -34,7 +34,6 @@
 
 <style lang="scss" scoped>
 #components-layout-custom-trigger {
-  height: 100%;
   .logo {
     height: 32px;
     background: rgba(255, 255, 255, 0.2);

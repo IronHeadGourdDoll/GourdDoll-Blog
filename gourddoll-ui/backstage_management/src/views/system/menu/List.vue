@@ -1,20 +1,11 @@
 <template>
   <LeftRightLayout>
     <template #contentLeft>
-      <a-input-search
-        placeholder="输入文本即时搜索"
-        :allowClear="true"
-        v-model:value="treeSearchText"
-      />
-      <a-tree
-        :checkable="false"
-        :tree-data="treeSearchData"
-        :autoExpandParent="true"
-        :defaultExpandAll="true"
-        :defaultExpandParent="true"
-        :replaceFields="{ children: 'children', title: 'label', key: 'id' }"
+      <SearchTree
+        v-model:text="treeSearchText"
         @select="treeSelected"
-      />
+        :treeData="treeData"
+      ></SearchTree>
     </template>
 
     <template #headerLeft>
