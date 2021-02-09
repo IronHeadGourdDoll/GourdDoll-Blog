@@ -13,6 +13,9 @@ import moduleEnum from "@/service/enumeration/moduleEnum";
 import Emitter from "@/share/plugins/mitt";
 import { Modal, message } from "ant-design-vue";
 import Operation from "./components/operation/Operation.vue";
+import { getYesNoText } from "@/service/enumeration/yesNoEnum";
+import { getMenuTypeText } from "@/service/enumeration/menuTypeEnum";
+import { getMenuStatusText } from "@/service/enumeration/menuStatusEnum";
 
 export default defineComponent({
   name: "MenuList",
@@ -58,6 +61,9 @@ export default defineComponent({
         title: "类型",
         dataIndex: "menuType",
         key: "menuType",
+        customRender: ({ text }: any) => {
+          return getMenuTypeText(text);
+        },
         width: 140,
       },
       {
@@ -65,7 +71,7 @@ export default defineComponent({
         dataIndex: "visible",
         key: "visible",
         customRender: ({ text }: any) => {
-          return text ? "是" : "否";
+          return getYesNoText(text);
         },
         width: 90,
       },
@@ -73,6 +79,9 @@ export default defineComponent({
         title: "状态",
         dataIndex: "status",
         key: "status",
+        customRender: ({ text }: any) => {
+          return getMenuStatusText(text);
+        },
         width: 80,
       },
       {

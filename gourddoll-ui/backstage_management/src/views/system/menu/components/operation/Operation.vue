@@ -8,12 +8,13 @@
     @cancel="onCancel"
     :isReset="isShowReset"
   >
-    <a-form-item label="上级菜单" v-bind="validateInfos.parentId">
+    <a-form-item label="上级节点" v-bind="validateInfos.parentId">
       <a-tree-select
         v-model:value="modelRef.parentId"
         :tree-data="treeData"
         placeholder="请选择"
         :allowClear="true"
+        treeNodeFilterProp="label"
         :replaceFields="{
           children: 'children',
           title: 'label',
@@ -29,7 +30,7 @@
     <a-form-item label="编码">
       <a-input v-model:value="modelRef.pathCode" />
     </a-form-item>
-    <div v-if="modelRef.menuType !== 'F'">
+    <div v-if="modelRef.menuType !== menuTypeBtn">
       <a-form-item label="地址" v-bind="validateInfos.path">
         <a-input v-model:value="modelRef.path" />
       </a-form-item>
@@ -39,27 +40,38 @@
     </div>
     <a-form-item label="类型">
       <a-select v-model:value="modelRef.menuType" placeholder="请选择">
-        <a-select-option value="C" key="C">菜单</a-select-option>
-        <a-select-option value="F" key="F">按钮</a-select-option>
+        <a-select-option
+          v-for="([key, value], index) in menuTypeMap.entries()"
+          :value="key"
+          :key="index"
+        >
+          {{ value }}
+        </a-select-option>
       </a-select>
     </a-form-item>
     <a-form-item label="是否显示">
-      <a-select v-model:value="modelRef.visible" placeholder="请选择">
-        <a-select-option value="true" key="true">是</a-select-option>
-        <a-select-option value="false" key="false">否</a-select-option>
-      </a-select>
+      <a-switch
+        checked-children="是"
+        un-checked-children="否"
+        v-model:checked="modelRef.visible"
+      />
     </a-form-item>
     <a-form-item label="状态">
       <a-select v-model:value="modelRef.status" placeholder="请选择">
-        <a-select-option value="0" key="0">正常</a-select-option>
-        <a-select-option value="1" key="1">停用</a-select-option>
+        <a-select-option
+          v-for="([key, value], index) in menuStatusMap.entries()"
+          :value="key"
+          :key="index"
+        >
+          {{ value }}
+        </a-select-option>
       </a-select>
     </a-form-item>
     <a-form-item label="备注" name="desc">
       <a-textarea v-model:value="modelRef.remark" />
     </a-form-item>
     <a-form-item label="排序号">
-      <a-input v-model:value="modelRef.orderNum" />
+      <a-input-number v-model:value="modelRef.orderNum" />
     </a-form-item>
   </FormModal>
 </template>

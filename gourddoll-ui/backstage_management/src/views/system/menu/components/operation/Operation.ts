@@ -1,10 +1,9 @@
 import { toRaw, SetupContext, ref, watch, reactive, toRefs } from "vue";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
-import operationTypeEnum, {
-  getTitle,
-} from "@/service/enumeration/operationTypeEnum";
-import { modelRef, rulesRef, resetFields } from "./userInitData";
+import operationTypeEnum,
+{ getTitle, } from "@/service/enumeration/operationTypeEnum";
+import { modelRef, rulesRef, resetFields, getMenuTypeMap, getMenuStatusMap, MenuTypeEnum } from "./userInitData";
 import { useForm } from "@ant-design-vue/use";
 import MenuController from "@/service/controller/system/menuController";
 
@@ -72,8 +71,9 @@ export default {
       { immediate: true }
     );
 
+    const menuTypeBtn = MenuTypeEnum.button;
     watch(() => modelRef.menuType, function (newVal: any) {
-      if (newVal !== 'F') {
+      if (newVal !== menuTypeBtn) {
         rulesRef.path = [
           {
             required: true,
@@ -122,6 +122,9 @@ export default {
       currentOperation,
       title,
       isShowReset,
+      menuTypeMap: getMenuTypeMap(),
+      menuStatusMap: getMenuStatusMap(),
+      menuTypeBtn,
     };
   },
 };

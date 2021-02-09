@@ -1,14 +1,16 @@
 import { reactive } from "vue";
 import { useForm } from "@ant-design-vue/use";
+import MenuTypeEnum, { getMenuTypeMap } from "@/service/enumeration/menuTypeEnum";
+import MenuStatusEnum, { getMenuStatusMap } from "@/service/enumeration/menuStatusEnum";
 
 const modelRef: any = reactive({
   menuName: "",
   pathCode: "",
   path: "",
   component: "",
-  menuType: "C",
-  visible: "true",
-  status: "0",
+  menuType: MenuTypeEnum.menu,
+  visible: true,
+  status: MenuStatusEnum.enable,
   parentId: "",
   remark: "",
   orderNum: "",
@@ -42,4 +44,4 @@ const rulesRef: any = reactive({
 });
 const { resetFields } = useForm(modelRef, rulesRef);
 
-export { modelRef, rulesRef, resetFields };
+export { modelRef, rulesRef, resetFields, getMenuTypeMap, getMenuStatusMap, MenuTypeEnum };

@@ -2,9 +2,8 @@ import { toRaw, SetupContext, ref, watch, reactive } from "vue";
 import UserController from "@/service/controller/system/userController";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
-import operationTypeEnum, {
-  getTitle,
-} from "@/service/enumeration/operationTypeEnum";
+import operationTypeEnum,
+{ getTitle, } from "@/service/enumeration/operationTypeEnum";
 import { modelRef, rulesRef, getSexMap, resetFields } from "./userInitData";
 import { useForm } from "@ant-design-vue/use";
 
