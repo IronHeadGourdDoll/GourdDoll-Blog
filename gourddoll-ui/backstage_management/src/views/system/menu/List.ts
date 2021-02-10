@@ -4,7 +4,7 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons-vue";
-import { defineComponent, ref, reactive, watch, createVNode } from "vue";
+import { defineComponent, ref, reactive, createVNode } from "vue";
 import MenuController from "@/service/controller/system/menuController";
 import MenuEntity from "@/service/model/system/menu/menuEntity";
 import { createTableEllipsisCell } from "@/components/ellipsisTooltip/help";
@@ -113,11 +113,14 @@ export default defineComponent({
       currentPageNum = currentPage;
       currentPageSize = pageSize;
       menuController
-        .getMenuList({
-          quickText: quickText,
-          pageNum: currentPage,
-          pageSize: pageSize,
-        }, treeSelectedId.value)
+        .getMenuList(
+          {
+            quickText: quickText,
+            pageNum: currentPage,
+            pageSize: pageSize,
+          },
+          treeSelectedId.value
+        )
         .then((data) => {
           dataTotal.value = data.total;
           dataRows.value = data.rows;
@@ -147,7 +150,6 @@ export default defineComponent({
       });
     }
     LoadTreeMenu();
-
 
     function treeSelected(id: any) {
       treeSelectedId.value = id;
@@ -202,8 +204,9 @@ export default defineComponent({
         okText: "确认",
         cancelText: "取消",
         onOk() {
-          menuController.delete(selectedRows.map((p) => p.menuId));
-          loadData();
+          menuController.delete(selectedRows.map((p) => p.menuId)).then(() => {
+            loadData();
+          });
         },
       });
     }

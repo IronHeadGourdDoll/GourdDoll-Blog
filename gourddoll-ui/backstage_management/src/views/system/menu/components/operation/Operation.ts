@@ -1,9 +1,17 @@
 import { toRaw, SetupContext, ref, watch, reactive, toRefs } from "vue";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
-import operationTypeEnum,
-{ getTitle, } from "@/service/enumeration/operationTypeEnum";
-import { modelRef, rulesRef, resetFields, getMenuTypeMap, getMenuStatusMap, MenuTypeEnum } from "./userInitData";
+import operationTypeEnum, {
+  getTitle,
+} from "@/service/enumeration/operationTypeEnum";
+import {
+  modelRef,
+  rulesRef,
+  resetFields,
+  getMenuTypeMap,
+  getMenuStatusMap,
+  MenuTypeEnum,
+} from "./userInitData";
 import { useForm } from "@ant-design-vue/use";
 import MenuController from "@/service/controller/system/menuController";
 
@@ -12,7 +20,7 @@ export default {
   props: {
     visible: Boolean,
     treeData: Array,
-    treeSelectedId: [String, Number]
+    treeSelectedId: [String, Number],
   },
   setup(props: any, context: SetupContext) {
     let currentOperation = ref(operationTypeEnum.add);
@@ -32,7 +40,6 @@ export default {
       }
     }
     Emitter.on("changeOperation", load, moduleEnum.menu);
-
 
     function onSubmit() {
       validate().then(() => {
@@ -72,34 +79,37 @@ export default {
     );
 
     const menuTypeBtn = MenuTypeEnum.button;
-    watch(() => modelRef.menuType, function (newVal: any) {
-      if (newVal !== menuTypeBtn) {
-        rulesRef.path = [
-          {
-            required: true,
-            message: "请输入地址",
-          },
-        ];
-        rulesRef.parentId = [];
-        resetValidate();
-      } else {
-        rulesRef.path = [];
-        rulesRef.parentId = [
-          {
-            required: true,
-            message: "请选择上级",
-          },
-          {
-            validator: function (rule: any, value: any) {
-              if (value == 0) return Promise.reject("请选择上级");
-              return Promise.resolve();
-            }
-          }
-        ];
-        resetValidate();
-      }
-    },
-      { immediate: true });
+    watch(
+      () => modelRef.menuType,
+      function (newVal: any) {
+        if (newVal !== menuTypeBtn) {
+          rulesRef.path = [
+            {
+              required: true,
+              message: "请输入地址",
+            },
+          ];
+          rulesRef.parentId = [];
+          resetValidate();
+        } else {
+          rulesRef.path = [];
+          rulesRef.parentId = [
+            {
+              required: true,
+              message: "请选择上级",
+            },
+            {
+              validator: function (rule: any, value: any) {
+                if (value == 0) return Promise.reject("请选择上级");
+                return Promise.resolve();
+              },
+            },
+          ];
+          resetValidate();
+        }
+      },
+      { immediate: true }
+    );
 
     function resetValidate() {
       const antForm = useForm(modelRef, rulesRef);
@@ -111,7 +121,6 @@ export default {
       resetFields();
       resetValidate();
     }
-
 
     return {
       validateInfos,

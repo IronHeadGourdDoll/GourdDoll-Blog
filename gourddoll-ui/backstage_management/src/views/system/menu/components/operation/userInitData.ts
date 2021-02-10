@@ -1,9 +1,14 @@
 import { reactive } from "vue";
 import { useForm } from "@ant-design-vue/use";
-import MenuTypeEnum, { getMenuTypeMap } from "@/service/enumeration/menuTypeEnum";
-import MenuStatusEnum, { getMenuStatusMap } from "@/service/enumeration/menuStatusEnum";
+import MenuTypeEnum, {
+  getMenuTypeMap,
+} from "@/service/enumeration/menuTypeEnum";
+import MenuStatusEnum, {
+  getMenuStatusMap,
+} from "@/service/enumeration/menuStatusEnum";
 
 const modelRef: any = reactive({
+  menuId: null,
   menuName: "",
   pathCode: "",
   path: "",
@@ -13,7 +18,7 @@ const modelRef: any = reactive({
   status: MenuStatusEnum.enable,
   parentId: "",
   remark: "",
-  orderNum: "",
+  orderNum: null,
 });
 
 const rulesRef: any = reactive({
@@ -38,10 +43,17 @@ const rulesRef: any = reactive({
       validator: function (rule: any, value: any) {
         if (value == 0) return Promise.reject("请选择上级");
         return Promise.resolve();
-      }
-    }
-  ]
+      },
+    },
+  ],
 });
 const { resetFields } = useForm(modelRef, rulesRef);
 
-export { modelRef, rulesRef, resetFields, getMenuTypeMap, getMenuStatusMap, MenuTypeEnum };
+export {
+  modelRef,
+  rulesRef,
+  resetFields,
+  getMenuTypeMap,
+  getMenuStatusMap,
+  MenuTypeEnum,
+};

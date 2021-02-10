@@ -3,6 +3,7 @@ import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
 import { useForm } from "@ant-design-vue/use";
 
 const modelRef: any = reactive({
+  userId: null,
   nickName: "",
   userName: "",
   sex: SexEnum.none,

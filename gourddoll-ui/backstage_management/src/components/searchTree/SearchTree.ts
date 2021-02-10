@@ -29,14 +29,22 @@ export default defineComponent({
     const searchData = ref<Array<any>>([]);
     let allNodeData: Array<any> = [];
 
-
-    watch(treeData, function (newVal: any) {
-      allNodeData = getTreeAllNode(newVal);
-    }, { immediate: true });
+    watch(
+      treeData,
+      function (newVal: any) {
+        allNodeData = getTreeAllNode(newVal);
+      },
+      { immediate: true }
+    );
 
     watch(
       [text, treeData],
-      () => searchData.value = getSearchData(text.value, treeData.value, allNodeData),
+      () =>
+        (searchData.value = getSearchData(
+          text.value,
+          treeData.value,
+          allNodeData
+        )),
       { immediate: true }
     );
 
@@ -98,7 +106,11 @@ function getTreeAllNode(val: Array<any>) {
  * @param treeData 原始树数据
  * @param allNodeData 所有树节点
  */
-function getSearchData(text: string, treeData: Array<any>, allNodeData: Array<any>) {
+function getSearchData(
+  text: string,
+  treeData: Array<any>,
+  allNodeData: Array<any>
+) {
   if (text.length === 0) return treeData;
   const datas = allNodeData;
   const searchData = datas.filter((p) => p.label.includes(text));
@@ -114,9 +126,7 @@ function getSearchData(text: string, treeData: Array<any>, allNodeData: Array<an
     addParent(item);
   }
   const map = new Map();
-  notNestData = notNestData.filter(
-    (p) => !map.has(p.id) && map.set(p.id, 1)
-  );
+  notNestData = notNestData.filter((p) => !map.has(p.id) && map.set(p.id, 1));
   const result = notNestData.filter((p) => p.parentId === 0);
   const generateResult = (items: Array<any>) => {
     for (const item of items) {

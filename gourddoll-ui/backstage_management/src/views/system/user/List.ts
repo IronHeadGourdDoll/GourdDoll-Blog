@@ -165,8 +165,11 @@ export default defineComponent({
         okText: "确认",
         cancelText: "取消",
         onOk() {
-          userController.deleteUserByIds(selectedRows.map((p) => p.userId));
-          loadData();
+          userController
+            .deleteUserByIds(selectedRows.map((p) => p.userId))
+            .then(() => {
+              loadData();
+            });
         },
       });
     }

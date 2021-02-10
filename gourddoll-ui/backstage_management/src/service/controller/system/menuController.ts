@@ -74,8 +74,6 @@ class MenuController extends ControllerBase {
   getMenuById(id: bigint | number) {
     return this.request.get("/system/menu/" + id);
   }
-
-
 }
 
 export default MenuController;
