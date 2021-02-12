@@ -1,10 +1,6 @@
 import { defineComponent, ref, useAsync, useContext } from "@nuxtjs/composition-api";
 
 export default defineComponent({
-  // asyncData: async function (context) {
-  //   const data = await context.$axios.get("http://39.99.195.107:8080/code");
-  //   msg = ref(JSON.stringify(data.data));
-  // },
   setup: function (props: any, context: any) {
 
     const msg = ref(useAsync(() => {
@@ -18,15 +14,6 @@ export default defineComponent({
       msg.value = "内容改变了";
     }
 
-    function refresh() {
-      // context.$nuxt.refresh();
-      // useMeta().
-      // useAsync().value.
-      // console.log(context2.nuxt);
-      // useContext().ssrContext.r
-    }
-
-
-    return { msg, change, refresh };
+    return { msg, change, };
   },
 });
