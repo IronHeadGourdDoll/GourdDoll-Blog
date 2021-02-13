@@ -17,7 +17,7 @@ export default {
   css: ['ant-design-vue/dist/antd.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/antd-ui'],
+  plugins: ['@/plugins/antd-ui.ts'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -39,5 +39,16 @@ export default {
   axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: ['ant-design-vue'],
+    babel: {
+      plugins: [
+        ['import', {
+          libraryName: 'ant-design-vue',
+          libraryDirectory: 'es',
+          style: 'css'
+        }, 'ant-design-vue']
+      ]
+    }
+  }
 }
