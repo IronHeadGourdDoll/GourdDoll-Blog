@@ -6,8 +6,14 @@ import VerificationCodeDto from "../../model/system/user/verificationCodeDto";
 import TableSearch from "../../model/common/tableSearch";
 import TableResult from "../../model/common/tableResult";
 import UserEntity from "../../model/system/user/userEntity";
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
 
 class UserController extends ControllerBase {
+
+  constructor(i: NuxtAxiosInstance) {
+    super(i);
+  }
+
   /**
    * 获取验证码
    */

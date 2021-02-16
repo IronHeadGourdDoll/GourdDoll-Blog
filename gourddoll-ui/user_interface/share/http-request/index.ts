@@ -1,5 +1,5 @@
-import instance from "./axios";
 import { AjaxResult } from "@/service/model/common/ajaxResult";
+import { NuxtAxiosInstance } from "@nuxtjs/axios";
 
 enum HttpRequestMethod {
   get = "GET",
@@ -9,8 +9,22 @@ enum HttpRequestMethod {
 }
 
 class HttpRequest {
-  static async get<T = any>(url: string, params?: any) {
-    const result = await instance.request({
+
+  /**
+   * axios实例
+   */
+  private instance: NuxtAxiosInstance;
+
+  /**
+   * 初始化请求对象
+   * @param instance 必须传入axios实例
+   */
+  constructor(instance: NuxtAxiosInstance) {
+    this.instance = instance;
+  }
+
+  async get<T = any>(url: string, params?: any) {
+    const result = await this.instance.request({
       url: url,
       method: HttpRequestMethod.get,
       params: params,
@@ -19,8 +33,8 @@ class HttpRequest {
     return d.data;
   }
 
-  static async post<T = any>(url: string, data?: any, params?: any) {
-    const result = await instance.request({
+  async post<T = any>(url: string, data?: any, params?: any) {
+    const result = await this.instance.request({
       url: url,
       method: HttpRequestMethod.post,
       params: params,
@@ -30,8 +44,8 @@ class HttpRequest {
     return d.data;
   }
 
-  static async put<T = any>(url: string, data?: any, params?: any) {
-    const result = await instance.request({
+  async put<T = any>(url: string, data?: any, params?: any) {
+    const result = await this.instance.request({
       url: url,
       method: HttpRequestMethod.put,
       params: params,
@@ -41,8 +55,8 @@ class HttpRequest {
     return d.data;
   }
 
-  static async delete<T = any>(url: string, data?: any, params?: any) {
-    const result = await instance.request({
+  async delete<T = any>(url: string, data?: any, params?: any) {
+    const result = await this.instance.request({
       url: url,
       method: HttpRequestMethod.delete,
       params: params,
