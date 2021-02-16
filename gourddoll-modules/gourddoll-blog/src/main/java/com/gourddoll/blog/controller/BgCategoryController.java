@@ -8,6 +8,8 @@ import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
  * @author gourddoll
  * @date 2020-11-28
  */
+@Api(tags={"博客分类接口"})
 @RestController
 @RequestMapping("/category")
 public class BgCategoryController extends BaseController
@@ -31,6 +34,7 @@ public class BgCategoryController extends BaseController
     /**
      * 查询分类管理列表
      */
+    @ApiOperation(value="获取所有博客分类", notes="详细描述")
     @GetMapping("/list")
     public AjaxResult list(BgCategory bgCategory)
     {
@@ -42,6 +46,7 @@ public class BgCategoryController extends BaseController
     /**
      * 导出分类管理列表
      */
+    @ApiOperation(value="导出博客分类", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:category:export")
     @Log(title = "分类管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -55,6 +60,7 @@ public class BgCategoryController extends BaseController
     /**
      * 获取分类管理详细信息
      */
+    @ApiOperation(value="根据id获取博客分类", notes="详细描述")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -64,6 +70,7 @@ public class BgCategoryController extends BaseController
     /**
      * 新增分类管理
      */
+    @ApiOperation(value="新增博客分类", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:category:add")
     @Log(title = "分类管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -75,6 +82,7 @@ public class BgCategoryController extends BaseController
     /**
      * 修改分类管理
      */
+    @ApiOperation(value="修改博客分类", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:category:edit")
     @Log(title = "分类管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -86,6 +94,7 @@ public class BgCategoryController extends BaseController
     /**
      * 删除分类管理
      */
+    @ApiOperation(value="删除博客分类", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:category:remove")
     @Log(title = "分类管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")

@@ -42,6 +42,7 @@ public class SysUserOnlineController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(String ipaddr, String userName)
     {
+        startPage();
         Collection<String> keys = redisService.keys(CacheConstants.LOGIN_TOKEN_KEY + "*");
         List<SysUserOnline> userOnlineList = new ArrayList<SysUserOnline>();
         for (String key : keys)

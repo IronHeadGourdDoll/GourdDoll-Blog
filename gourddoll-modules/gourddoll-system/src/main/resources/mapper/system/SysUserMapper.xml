@@ -59,24 +59,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select u.user_id, u.dept_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name, d.leader from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
 		where u.del_flag = '0'
-		<if test="userName != null and userName != ''">
-			AND u.user_name like concat('%', #{userName}, '%')
-		</if>
-		<if test="status != null and status != ''">
-			AND u.status = #{status}
-		</if>
-		<if test="phonenumber != null and phonenumber != ''">
-			AND u.phonenumber like concat('%', #{phonenumber}, '%')
-		</if>
-		<if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-			AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
-		</if>
-		<if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-			AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
-		</if>
-		<if test="deptId != null and deptId != 0">
-			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
-		</if>
+		<choose>
+			<when test="searchValue != null and searchValue != ''"><!-- 快速搜索 -->
+				and u.user_name like concat('%', #{searchValue}, '%')
+				or u.nick_name like concat('%', #{searchValue}, '%')
+				or u.status = #{searchValue}
+				or u.phonenumber like concat('%', #{searchValue}, '%')
+			</when>
+			<otherwise>
+				<if test="userName != null and userName != ''">
+					and u.user_name like concat('%', #{userName}, '%')
+				</if>
+				<if test="status != null and status != ''">
+					and u.status = #{status}
+				</if>
+				<if test="phonenumber != null and phonenumber != ''">
+					and u.phonenumber like concat('%', #{phonenumber}, '%')
+				</if>
+				<if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+					and date_format(u.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+				</if>
+				<if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+					and date_format(u.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+				</if>
+				<if test="deptId != null and deptId != 0">
+					and (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
+				</if>
+			</otherwise>
+		</choose>
+
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
 	</select>

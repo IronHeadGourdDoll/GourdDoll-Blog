@@ -153,47 +153,6 @@ public class SysMenuServiceImpl implements ISysMenuService
     }
 
     /**
-     * 构建前端路由所需要的菜单
-     * 
-     * @param menus 菜单列表
-     * @return 路由列表
-     */
-    @Override
-    public List<RouterVo> buildMenus(List<SysMenu> menus)
-    {
-        List<RouterVo> routers = new LinkedList<RouterVo>();
-        for (SysMenu menu : menus)
-        {
-            RouterVo router = new RouterVo();
-            router.setHidden("1".equals(menu.getVisible()));
-            router.setName(getRouteName(menu));
-            router.setPath(getRouterPath(menu));
-            router.setComponent(getComponent(menu));
-            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache())));
-            List<SysMenu> cMenus = menu.getChildren();
-            if (!cMenus.isEmpty() && cMenus.size() > 0 && UserConstants.TYPE_DIR.equals(menu.getMenuType()))
-            {
-                router.setAlwaysShow(true);
-                router.setRedirect("noRedirect");
-                router.setChildren(buildMenus(cMenus));
-            }
-            else if (isMeunFrame(menu))
-            {
-                List<RouterVo> childrenList = new ArrayList<RouterVo>();
-                RouterVo children = new RouterVo();
-                children.setPath(menu.getPath());
-                children.setComponent(menu.getComponent());
-                children.setName(StringUtils.capitalize(menu.getPath()));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache())));
-                childrenList.add(children);
-                router.setChildren(childrenList);
-            }
-            routers.add(router);
-        }
-        return routers;
-    }
-
-    /**
      * 构建前端所需要树结构
      * 
      * @param menus 菜单列表
@@ -285,6 +244,9 @@ public class SysMenuServiceImpl implements ISysMenuService
     @Override
     public int insertMenu(SysMenu menu)
     {
+        if(null == menu.getParentId()){
+            menu.setParentId(0L);
+        }
         return menuMapper.insertMenu(menu);
     }
 
@@ -297,6 +259,9 @@ public class SysMenuServiceImpl implements ISysMenuService
     @Override
     public int updateMenu(SysMenu menu)
     {
+        if("".equals(menu.getParentId())){
+            menu.setParentId(0L);
+        }
         return menuMapper.updateMenu(menu);
     }
 

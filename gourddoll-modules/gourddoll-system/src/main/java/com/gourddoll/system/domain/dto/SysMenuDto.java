@@ -1,4 +1,4 @@
-package com.gourddoll.system.domain;
+package com.gourddoll.system.domain.dto;
 
 import com.gourddoll.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * 
  * @author gourddoll
  */
-public class SysMenu extends BaseEntity
+public class SysMenuDto implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -64,9 +65,12 @@ public class SysMenu extends BaseEntity
     private String icon;
 
     /** 子菜单 */
-    private List<SysMenu> children = new ArrayList<SysMenu>();
+    private List<SysMenuDto> children = new ArrayList<SysMenuDto>();
 
-    public SysMenu() {
+    /** 备注 */
+    private String remark;
+
+    public SysMenuDto() {
     }
 
     public Long getMenuId()
@@ -225,16 +229,26 @@ public class SysMenu extends BaseEntity
         this.icon = icon;
     }
 
-    public List<SysMenu> getChildren()
+    public List<SysMenuDto> getChildren()
     {
         return children;
     }
 
-    public void setChildren(List<SysMenu> children)
+    public void setChildren(List<SysMenuDto> children)
     {
         this.children = children;
     }
-    
+
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -251,10 +265,6 @@ public class SysMenu extends BaseEntity
             .append("status ", getStatus())
             .append("perms", getPerms())
             .append("icon", getIcon())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
             .toString();
     }

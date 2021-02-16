@@ -41,8 +41,9 @@ public class SysDeptController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(SysDept dept)
     {
+        startPage();
         List<SysDept> depts = deptService.selectDeptList(dept);
-        return AjaxResult.success(depts);
+        return AjaxResult.success(getDataTable(depts));
     }
 
     /**
