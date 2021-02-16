@@ -36,10 +36,10 @@ public class MenuTreeSelect implements Serializable
     private String component;
 
     /** 是否外链 */
-    private String isFrame;
+    private Boolean isFrame;
 
     /** 是否缓存 */
-    private String isCache;
+    private Boolean isCache;
 
     /** 菜单类型 */
     private String menuType;
@@ -132,19 +132,19 @@ public class MenuTreeSelect implements Serializable
         this.component = component;
     }
 
-    public String getIsFrame() {
+    public Boolean getIsFrame() {
         return isFrame;
     }
 
-    public void setIsFrame(String isFrame) {
+    public void setIsFrame(Boolean isFrame) {
         this.isFrame = isFrame;
     }
 
-    public String getIsCache() {
+    public Boolean getIsCache() {
         return isCache;
     }
 
-    public void setIsCache(String isCache) {
+    public void setIsCache(Boolean isCache) {
         this.isCache = isCache;
     }
 

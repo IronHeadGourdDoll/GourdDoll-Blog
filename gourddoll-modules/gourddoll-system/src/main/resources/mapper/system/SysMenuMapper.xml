@@ -10,7 +10,7 @@
 		<result property="parentName"     column="parent_name"    />
 		<result property="parentId"       column="parent_id"      />
 		<result property="orderNum"       column="order_num"      />
-		<result property="pathCode"       column="path_code"           />
+		<result property="pathCode"       column="path_code"      />
 		<result property="path"           column="path"           />
 		<result property="component"      column="component"      />
 		<result property="isFrame"        column="is_frame"       />
@@ -28,23 +28,35 @@
 	</resultMap>
 
 	<sql id="selectMenuVo">
-        select menu_id, menu_name, parent_id, order_num, path_code, path, component, is_frame, is_cache, menu_type, visible, status, ifnull(perms,'') as perms, icon, create_time
-		from sys_menu
+        select menu_id, menu_name, parent_id, order_num, path_code, path, component, is_frame, is_cache, menu_type, visible, status, ifnull(perms,'') as perms, icon, create_time, remark
+		from sys_menu m
     </sql>
     
     <select id="selectMenuList" parameterType="SysMenu" resultMap="SysMenuResult">
 		<include refid="selectMenuVo"/>
-		<where>
-			<if test="menuName != null and menuName != ''">
-				AND menu_name like concat('%', #{menuName}, '%')
-			</if>
-			<if test="visible != null and visible != ''">
-				AND visible = #{visible}
-			</if>
-			<if test="status != null and status != ''">
-				AND status = #{status}
-			</if>
-		</where>
+		where 1=1
+		<choose>
+			<when test="searchValue != null and searchValue != ''"><!-- 快速搜索 -->
+				and m.menu_id = #{searchValue}
+				or m.menu_name like concat('%', #{searchValue}, '%')
+				or m.path like concat('%', #{searchValue}, '%')
+			</when>
+			<otherwise>
+				<if test="menuName != null and menuName != ''">
+					AND m.menu_name like concat('%', #{menuName}, '%')
+				</if>
+				<if test="visible != null and visible != ''">
+					AND m.visible = #{visible}
+				</if>
+				<if test="status != null and status != ''">
+					AND m.status = #{status}
+				</if>
+				<if test="parentId != null and parentId != ''">
+					AND m.parent_id = #{parentId}
+					OR m.menu_id = #{parentId}
+				</if>
+			</otherwise>
+		</choose>
 		order by parent_id, order_num
 	</select>
 
@@ -52,12 +64,12 @@
 		<include refid="selectMenuVo"/>
 		<where>
 			<if test="menuName != null and menuName != ''">
-				AND menu_name like concat('%', #{menuName}, '%')
+				AND m.menu_name like concat('%', #{menuName}, '%')
 			</if>
-				AND menu_type != 'F'
-				AND visible = '0'
+				AND m.menu_type != 'F'
+				AND m.visible = true
 		</where>
-		order by parent_id, order_num
+		order by m.parent_id, m.order_num
 	</select>
 
 	<select id="selectMenuTreeAll" resultMap="SysMenuResult">
@@ -74,13 +86,17 @@
 		left join sys_role ro on ur.role_id = ro.role_id
 		where ur.user_id = #{params.userId}
 		<if test="menuName != null and menuName != ''">
-            AND menu_name like concat('%', #{menuName}, '%')
+            AND m.menu_name like concat('%', #{menuName}, '%')
 		</if>
 		<if test="visible != null and visible != ''">
-            AND visible = #{visible}
+            AND m.visible = #{visible}
 		</if>
 		<if test="status != null and status != ''">
-            AND status = #{status}
+            AND m.status = #{status}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND m.parent_id = #{parentId}
+			OR m.menu_id = #{parentId}
 		</if>
 		order by m.parent_id, m.order_num
 	</select>
@@ -95,8 +111,8 @@
 		<if test="menuName != null and menuName != ''">
 			AND menu_name like concat('%', #{menuName}, '%')
 		</if>
-			AND menu_type != 'F'
-			AND visible = '0'
+			AND m.menu_type != 'F'
+			AND m.visible = true
 		order by m.parent_id, m.order_num
 	</select>
     
@@ -142,22 +158,77 @@
 		<include refid="selectMenuVo"/>
 		where menu_id = #{menuId}
 	</select>
-	
+
+	<insert id="insertMenu" parameterType="SysMenu">
+		insert into sys_menu(
+		order_num,
+		<if test="menuId != null and menuId != 0">menu_id,</if>
+		<if test="parentId != null and parentId != 0">parent_id,</if>
+		<if test="menuName != null and menuName != ''">menu_name,</if>
+		<if test="pathCode != null and pathCode != ''">path_code,</if>
+		<if test="path != null and path != ''">path,</if>
+		<if test="component != null and component != ''">component,</if>
+		<if test="isFrame != null and isFrame != ''">is_frame,</if>
+		<if test="isCache != null and isCache != ''">is_cache,</if>
+		<if test="menuType != null and menuType != ''">menu_type,</if>
+		<if test="visible != null">visible,</if>
+		<if test="status != null">status,</if>
+		<if test="perms !=null and perms != ''">perms,</if>
+		<if test="icon != null and icon != ''">icon,</if>
+		<if test="remark != null and remark != ''">remark,</if>
+		<if test="createBy != null and createBy != ''">create_by,</if>
+		create_time
+		)values(
+		<choose>
+			<when test="orderNum != null">
+				#{orderNum},
+			</when>
+			<otherwise>
+				(select max(m.order_num)+10 from sys_menu m where m.parent_id = #{parentId}),
+			</otherwise>
+		</choose>
+		<if test="menuId != null and menuId != 0">#{menuId},</if>
+		<if test="parentId != null and parentId != 0">#{parentId},</if><!-- 非空 -->
+		<if test="menuName != null and menuName != ''">#{menuName},</if>
+		<if test="pathCode != null and pathCode != ''">#{pathCode},</if>
+		<if test="path != null and path != ''">#{path},</if>
+		<if test="component != null and component != ''">#{component},</if>
+		<if test="isFrame != null and isFrame != ''">#{isFrame},</if>
+		<if test="isCache != null and isCache != ''">#{isCache},</if>
+		<if test="menuType != null and menuType != ''">#{menuType},</if>
+		<if test="visible != null">#{visible},</if>
+		<if test="status != null">#{status},</if>
+		<if test="perms !=null and perms != ''">#{perms},</if>
+		<if test="icon != null and icon != ''">#{icon},</if>
+		<if test="remark != null and remark != ''">#{remark},</if>
+		<if test="createBy != null and createBy != ''">#{createBy},</if>
+		sysdate()
+		)
+	</insert>
+
 	<select id="hasChildByMenuId" resultType="Integer">
-	    select count(1) from sys_menu where parent_id = #{menuId}  
+	    select count(1) from sys_menu m where m.parent_id = #{menuId}
 	</select>
-	
+
 	<select id="checkMenuNameUnique" parameterType="SysMenu" resultMap="SysMenuResult">
 		<include refid="selectMenuVo"/>
-		where menu_name=#{menuName} and parent_id = #{parentId} limit 1
+		where m.menu_name=#{menuName} and m.parent_id = #{parentId} limit 1
 	</select>
-	
+
 	<update id="updateMenu" parameterType="SysMenu">
 		update sys_menu
 		<set>
 			<if test="menuName != null and menuName != ''">menu_name = #{menuName},</if>
 			<if test="parentId != null">parent_id = #{parentId},</if>
-			<if test="orderNum != null and orderNum != ''">order_num = #{orderNum},</if>
+			<choose>
+				<when test="orderNum != null and orderNum != ''">
+					order_num = #{orderNum},
+				</when>
+				<otherwise>
+					order_num = (select max(m.order_num)+10 from sys_menu m where m.parent_id = #{parentId}),
+				</otherwise>
+			</choose>
+			<if test="orderNum != null">order_num = #{orderNum},</if>
 			<if test="pathCode != null and pathCode != ''">path_code = #{pathCode},</if>
 			<if test="path != null and path != ''">path = #{path},</if>
 			<if test="component != null and component != ''">component = #{component},</if>
@@ -175,46 +246,6 @@
 		where menu_id = #{menuId}
 	</update>
 
-	<insert id="insertMenu" parameterType="SysMenu">
-		insert into sys_menu(
-		<if test="menuId != null and menuId != 0">menu_id,</if>
-		<if test="parentId != null and parentId != 0">parent_id,</if>
-		<if test="menuName != null and menuName != ''">menu_name,</if>
-		<if test="orderNum != null and orderNum != ''">order_num,</if>
-		<if test="pathCode != null and pathCode != ''">path_code,</if>
-		<if test="path != null and path != ''">path,</if>
-		<if test="component != null and component != ''">component,</if>
-		<if test="isFrame != null and isFrame != ''">is_frame,</if>
-		<if test="isCache != null and isCache != ''">is_cache,</if>
-		<if test="menuType != null and menuType != ''">menu_type,</if>
-		<if test="visible != null">visible,</if>
-		<if test="status != null">status,</if>
-		<if test="perms !=null and perms != ''">perms,</if>
-		<if test="icon != null and icon != ''">icon,</if>
-		<if test="remark != null and remark != ''">remark,</if>
-		<if test="createBy != null and createBy != ''">create_by,</if>
-		create_time
-		)values(
-		<if test="menuId != null and menuId != 0">#{menuId},</if>
-		<if test="parentId != null and parentId != 0">#{parentId},</if>
-		<if test="menuName != null and menuName != ''">#{menuName},</if>
-		<if test="orderNum != null and orderNum != ''">#{orderNum},</if>
-		<if test="pathCode != null and pathCode != ''">#{pathCode},</if>
-		<if test="path != null and path != ''">#{path},</if>
-		<if test="component != null and component != ''">#{component},</if>
-		<if test="isFrame != null and isFrame != ''">#{isFrame},</if>
-		<if test="isCache != null and isCache != ''">#{isCache},</if>
-		<if test="menuType != null and menuType != ''">#{menuType},</if>
-		<if test="visible != null">#{visible},</if>
-		<if test="status != null">#{status},</if>
-		<if test="perms !=null and perms != ''">#{perms},</if>
-		<if test="icon != null and icon != ''">#{icon},</if>
-		<if test="remark != null and remark != ''">#{remark},</if>
-		<if test="createBy != null and createBy != ''">#{createBy},</if>
-		sysdate()
-		)
-	</insert>
-	
 	<delete id="deleteMenuById" parameterType="Long">
 	    delete from sys_menu where menu_id = #{menuId}
 	</delete>

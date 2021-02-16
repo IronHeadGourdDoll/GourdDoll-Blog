@@ -2,8 +2,6 @@ package com.gourddoll.system.service;
 
 import com.gourddoll.system.domain.SysMenu;
 import com.gourddoll.system.domain.vo.MenuTreeSelect;
-import com.gourddoll.system.domain.vo.RouterVo;
-import com.gourddoll.system.domain.vo.TreeSelect;
 
 import java.util.List;
 import java.util.Set;
@@ -64,14 +62,6 @@ public interface ISysMenuService
      * @return 选中菜单列表
      */
     public List<Integer> selectMenuListByRoleId(Long roleId);
-
-    /**
-     * 构建前端路由所需要的菜单
-     * 
-     * @param menus 菜单列表
-     * @return 路由列表
-     */
-    public List<RouterVo> buildMenus(List<SysMenu> menus);
 
     /**
      * 构建前端所需要树结构

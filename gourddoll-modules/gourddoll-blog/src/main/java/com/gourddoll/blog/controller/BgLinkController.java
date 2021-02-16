@@ -8,6 +8,8 @@ import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
  * @author gourddoll
  * @date 2020-11-28
  */
+@Api(tags={"友情链接接口"})
 @RestController
 @RequestMapping("/link")
 public class BgLinkController extends BaseController
@@ -31,6 +34,7 @@ public class BgLinkController extends BaseController
     /**
      * 查询友链管理列表
      */
+    @ApiOperation(value="查询友链列表", notes="详细描述")
     @GetMapping("/list")
     public AjaxResult list(BgLink bgLink)
     {
@@ -42,6 +46,7 @@ public class BgLinkController extends BaseController
     /**
      * 导出友链管理列表
      */
+    @ApiOperation(value="导出友链列表", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:link:export")
     @Log(title = "友链管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -55,6 +60,7 @@ public class BgLinkController extends BaseController
     /**
      * 获取友链管理详细信息
      */
+    @ApiOperation(value="获取友链详细信息", notes="详细描述")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -64,6 +70,7 @@ public class BgLinkController extends BaseController
     /**
      * 新增友链管理
      */
+    @ApiOperation(value="新增友链", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:link:add")
     @Log(title = "友链管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -75,6 +82,7 @@ public class BgLinkController extends BaseController
     /**
      * 修改友链管理
      */
+    @ApiOperation(value="修改友链", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:link:edit")
     @Log(title = "友链管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -86,6 +94,7 @@ public class BgLinkController extends BaseController
     /**
      * 删除友链管理
      */
+    @ApiOperation(value="删除友链", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:link:remove")
     @Log(title = "友链管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")

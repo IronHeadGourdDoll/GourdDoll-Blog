@@ -3,6 +3,7 @@ package com.gourddoll.system.controller;
 import com.gourddoll.common.core.constant.Constants;
 import com.gourddoll.common.core.constant.UserConstants;
 import com.gourddoll.common.core.utils.StringUtils;
+import com.gourddoll.common.core.utils.bean.TransUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
@@ -10,6 +11,7 @@ import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.domain.SysMenu;
+import com.gourddoll.system.domain.dto.SysMenuDto;
 import com.gourddoll.system.service.ISysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,9 +43,17 @@ public class SysMenuController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(SysMenu menu)
     {
+        startPage();
         Long userId = SecurityUtils.getUserId();
         List<SysMenu> menus = menuService.selectMenuList(menu, userId);
-        return AjaxResult.success(menus);
+        List<SysMenuDto> menusDto = new ArrayList<>();
+        for(SysMenu m : menus){
+            m.setChildren(null);
+            SysMenuDto mDto = new SysMenuDto();
+            TransUtil.po2dto(m,mDto);
+            menusDto.add(mDto);
+        }
+        return AjaxResult.success(getDataTable(menusDto));
     }
 
     /**
@@ -149,31 +160,21 @@ public class SysMenuController extends BaseController
     @ApiOperation(value="删除菜单", notes="详细描述")
     @PreAuthorize(hasPermi = "system:menu:remove")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{menuId}")
-    public AjaxResult remove(@PathVariable("menuId") Long menuId)
+    @DeleteMapping("/{menuIds}")
+    public AjaxResult remove(@PathVariable Long[] menuIds)
     {
-        if (menuService.hasChildByMenuId(menuId))
-        {
-            return AjaxResult.error("存在子菜单,不允许删除");
+        int flag = 1;
+        for(Long menuId : menuIds){
+            if (menuService.hasChildByMenuId(menuId))
+            {
+                return AjaxResult.error(menuId+"存在子菜单,不允许删除");
+            }
+            if (menuService.checkMenuExistRole(menuId))
+            {
+                return AjaxResult.error(menuId+"菜单已分配,不允许删除");
+            }
+            flag = flag*menuService.deleteMenuById(menuId);
         }
-        if (menuService.checkMenuExistRole(menuId))
-        {
-            return AjaxResult.error("菜单已分配,不允许删除");
-        }
-        return toAjax(menuService.deleteMenuById(menuId));
-    }
-
-    /**
-     * 获取路由信息
-     * 
-     * @return 路由信息
-     */
-    @ApiOperation(value="获取路由信息", notes="详细描述")
-    @GetMapping("getRouters")
-    public AjaxResult getRouters()
-    {
-        Long userId = SecurityUtils.getUserId();
-        List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
-        return AjaxResult.success(menuService.buildMenus(menus));
+        return toAjax(flag);
     }
 }

@@ -8,6 +8,8 @@ import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
  * @author gourddoll
  * @date 2020-11-28
  */
+@Api(tags={"博客接口"})
 @RestController
 @RequestMapping("/blog")
 public class BgBlogController extends BaseController
@@ -31,6 +34,7 @@ public class BgBlogController extends BaseController
     /**
      * 查询博客管理列表
      */
+    @ApiOperation(value="查询博客列表", notes="详细描述")
     @GetMapping("/list")
     public AjaxResult list(BgBlog bgBlog)
     {
@@ -43,6 +47,7 @@ public class BgBlogController extends BaseController
     /**
      * 导出博客管理列表
      */
+    @ApiOperation(value="导出博客", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:blog:export")
     @Log(title = "博客管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -56,6 +61,7 @@ public class BgBlogController extends BaseController
     /**
      * 获取博客管理详细信息
      */
+    @ApiOperation(value="根据id获取博客", notes="详细描述")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -65,6 +71,7 @@ public class BgBlogController extends BaseController
     /**
      * 新增博客管理
      */
+    @ApiOperation(value="新增博客", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:blog:add")
     @Log(title = "博客管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -76,6 +83,7 @@ public class BgBlogController extends BaseController
     /**
      * 修改博客管理
      */
+    @ApiOperation(value="修改博客", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:blog:edit")
     @Log(title = "博客管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -87,6 +95,7 @@ public class BgBlogController extends BaseController
     /**
      * 删除博客管理
      */
+    @ApiOperation(value="删除博客", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:blog:remove")
     @Log(title = "博客管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")

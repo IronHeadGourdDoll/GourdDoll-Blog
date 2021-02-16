@@ -8,6 +8,8 @@ import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
  * @author gourddoll
  * @date 2020-11-28
  */
+@Api(tags={"点赞接口"})
 @RestController
 @RequestMapping("/like")
 public class BgLikeController extends BaseController
@@ -31,6 +34,7 @@ public class BgLikeController extends BaseController
     /**
      * 查询点赞管理列表
      */
+    @ApiOperation(value="查询点赞列表", notes="详细描述")
     @GetMapping("/list")
     public AjaxResult list(BgLike bgLike)
     {
@@ -42,6 +46,7 @@ public class BgLikeController extends BaseController
     /**
      * 导出点赞管理列表
      */
+    @ApiOperation(value="导出点赞列表", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:like:export")
     @Log(title = "点赞管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
@@ -55,6 +60,7 @@ public class BgLikeController extends BaseController
     /**
      * 获取点赞管理详细信息
      */
+    @ApiOperation(value="获取点赞详细信息", notes="详细描述")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -64,6 +70,7 @@ public class BgLikeController extends BaseController
     /**
      * 新增点赞管理
      */
+    @ApiOperation(value="新增点赞", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:like:add")
     @Log(title = "点赞管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -75,6 +82,7 @@ public class BgLikeController extends BaseController
     /**
      * 修改点赞管理
      */
+    @ApiOperation(value="修改点赞", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:like:edit")
     @Log(title = "点赞管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -86,6 +94,7 @@ public class BgLikeController extends BaseController
     /**
      * 删除点赞管理
      */
+    @ApiOperation(value="删除点赞", notes="详细描述")
     @PreAuthorize(hasPermi = "blog:like:remove")
     @Log(title = "点赞管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")

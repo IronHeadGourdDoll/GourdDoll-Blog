@@ -210,6 +210,14 @@ public class SysUserServiceImpl implements ISysUserService
     {
         // 新增用户信息
         int rows = userMapper.insertUser(user);
+        //临时添加 -- 是否管理员
+        if(user.isAdmin()){
+
+        }
+        //密码加密
+        if(!"".equals(user.getPassword())){
+            user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
+        }
         // 新增用户岗位关联
         insertUserPost(user);
         // 新增用户与角色管理

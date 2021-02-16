@@ -8,6 +8,7 @@ import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * @author gourddoll
  * @date 2020-11-28
  */
+@Api(tags={"博客统计接口"})
 @RestController
 @RequestMapping("/statistics")
 public class BgBlogStatisticsController extends BaseController
