@@ -1,4 +1,6 @@
-class RoleEntity {
+import BaseEntity from "../../common/baseEntity";
+
+class RoleEntity extends BaseEntity {
   /**
    * 角色ID
    */
@@ -49,3 +51,5 @@ class RoleEntity {
    */
   flag?: boolean;
 }
+
+export default RoleEntity;

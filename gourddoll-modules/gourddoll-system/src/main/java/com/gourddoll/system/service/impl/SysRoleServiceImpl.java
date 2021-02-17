@@ -239,6 +239,10 @@ public class SysRoleServiceImpl implements ISysRoleService
      */
     public int insertRoleMenu(SysRole role)
     {
+
+        if(null == role.getMenuIds()){
+            return 1;
+        }
         int rows = 1;
         // 新增用户与角色管理
         List<SysRoleMenu> list = new ArrayList<SysRoleMenu>();
