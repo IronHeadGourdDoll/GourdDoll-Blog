@@ -60,7 +60,7 @@ obj.actions = {
    * 退出登录
    */
   logout({ commit }) {
-    const logout = new UserController().logout();
+    const logout = userService.logout();
     return logout.then(() => {
       commit(Mutation.setToken, "");
       commit(Mutation.setUserInfo, {});

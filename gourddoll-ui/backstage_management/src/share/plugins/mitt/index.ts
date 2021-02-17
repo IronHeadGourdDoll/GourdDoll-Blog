@@ -3,8 +3,6 @@ import moduleEnum from "@/service/enumeration/moduleEnum";
 
 const emitter: IEmitter = mitt();
 
-const subscribe: Array<string> = []; //订阅者
-
 /**
  * 事件处理者
  */
@@ -22,9 +20,10 @@ class Emitter {
   ) {
     const eventName = `${moduleName}/${event}`;
     //防止事件被重复监听
-    if (subscribe.includes(eventName)) return;
+    if (emitter.all.has(eventName)) {
+      emitter.off(eventName, emitter.all.get(eventName) as any);
+    }
     emitter.on(eventName, callback);
-    subscribe.unshift(eventName);
   }
 
   /**
