@@ -48,8 +48,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: process.env.VUE_APP_API,
-    browserBaseURL: process.env.VUE_APP_API,
+    baseURL: "http://39.99.195.107:8080",
+    browserBaseURL: "http://39.99.195.107:8080",
   },
   publicRuntimeConfig: {
     axios: {

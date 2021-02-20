@@ -1,6 +1,7 @@
 import { message } from "ant-design-vue";
-import { tokenKey } from "@/share/token";
 import { AjaxResult, HttpStatus } from "@/service/model/common/ajaxResult";
+
+const tokenKey = process.env.VUE_APP_TOKEN!;
 
 export default function ({ $axios, redirect, store, req }: any) {
 
@@ -8,6 +9,7 @@ export default function ({ $axios, redirect, store, req }: any) {
     //判断客户端或者服务端：process.client/process.server
     const token = await store.dispatch("user/getToken");
     config.headers[tokenKey] = token;
+    return config;
   });
 
 
@@ -28,6 +30,7 @@ export default function ({ $axios, redirect, store, req }: any) {
       return Promise.reject(data);
     }
   });
+
 
   $axios.onError((error: any) => {
     return Promise.reject(error);

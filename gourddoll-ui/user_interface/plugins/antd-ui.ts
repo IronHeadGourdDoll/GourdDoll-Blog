@@ -6,6 +6,9 @@ import {
   , Tooltip
   , Avatar
   , Icon
+  , Card
+  , Form
+  , Input
 } from "ant-design-vue";
 
 [
@@ -15,4 +18,7 @@ import {
   , Tooltip
   , Avatar
   , Icon
+  , Card
+  , Form
+  , Input
 ].forEach(c => Vue.use(c));

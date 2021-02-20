@@ -1,0 +1,49 @@
+@import "./public_mixin.scss";
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    @include fill;
+}
+#app {
+    @include fill;
+    color: #3c3c3c;
+    -webkit-font-smoothing: antialiased;
+    background-color: #f4f4f4;
+    overflow-x: hidden;
+    font: 12px/1.5 arial, "Hiragino Sans GB", sans-serif;
+}
+
+.fill {
+    @include fill;
+}
+
+.left-float {
+    float: left;
+}
+
+.right-float {
+    float: right;
+}
+
+.clear-float {
+    clear: both;
+}
+
+.text-ellipsis {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+}
+
+.width-fill {
+    @include widthFill;
+}
+
+.height-fill {
+    @include heightFill;
+}
