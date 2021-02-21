@@ -2,6 +2,7 @@ import Mutation from "./mutation-types";
 import LoginBodyDto from "@/service/model/system/user/loginBodyDto";
 import UserController from "@/service/controller/system/userController";
 import Empty from "@/share/extensionMethod/empty";
+import { setToken, removeToken } from "@/share/token";
 
 export const state = () => ({
   token: "",
@@ -19,6 +20,7 @@ export const mutations = {
 };
 
 export const actions = {
+
   /**
    * 登录
    */
@@ -26,6 +28,7 @@ export const actions = {
     const userService = new UserController(this.$axios);
     const result = userService.login(userInfo).then((data: any) => {
       commit(Mutation.setToken, data.access_token);
+      setToken(state.token);
       return userService.getInfo().then((d: any) => {
         commit(Mutation.setUserInfo, d);
       });
@@ -41,6 +44,7 @@ export const actions = {
     const logout = userService.logout();
     return logout.then(() => {
       commit(Mutation.setToken, "");
+      removeToken();
       commit(Mutation.setUserInfo, {});
     });
   },

@@ -1,7 +1,7 @@
 import { message } from "ant-design-vue";
 import { AjaxResult, HttpStatus } from "@/service/model/common/ajaxResult";
+import { tokenKey } from "@/share/token";
 
-const tokenKey = process.env.VUE_APP_TOKEN!;
 
 export default function ({ $axios, redirect, store, req }: any) {
 
