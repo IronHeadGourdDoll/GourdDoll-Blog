@@ -2,7 +2,7 @@ import Mutation from "./mutation-types";
 import LoginBodyDto from "@/service/model/system/user/loginBodyDto";
 import UserController from "@/service/controller/system/userController";
 import Empty from "@/share/extensionMethod/empty";
-import { setToken, removeToken } from "@/share/token";
+import { setToken, removeToken, getCookieValue, tokenKey } from "@/share/token";
 
 export const state = () => ({
   token: "",
@@ -53,7 +53,18 @@ export const actions = {
    * 获取token
    */
   getToken({ state }: any) {
-    let token = state.token;
+    const token = state.token;
+    return token;
+  },
+
+  /**
+   * 返回并设置cookie中的token
+   */
+  putToken({ state, commit }: any, cookie: string) {
+    const token = getCookieValue(tokenKey, cookie);
+    if (token !== state.token) {
+      commit(Mutation.setToken, token);
+    }
     return token;
   },
 

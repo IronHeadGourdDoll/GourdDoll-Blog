@@ -1,10 +1,7 @@
-import Mutation from "./user/mutation-types";
-import { getCookieValue, tokenKey } from "@/share/token";
 
 export const actions = {
-  nuxtServerInit({ commit }: any, { req }: any) {
-    const cookie = req.headers.cookie;
-    const token = getCookieValue(tokenKey, cookie);
-    commit(`user/${Mutation.setToken}`, token);
+  nuxtServerInit({ dispatch }: any, { req }: any) {
+    //持久化token
+    dispatch("user/putToken", req.headers.cookie);
   }
 };

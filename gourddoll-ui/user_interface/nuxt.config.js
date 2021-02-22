@@ -25,9 +25,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    "@/plugins/antd-ui.ts",
-    "@/plugins/router.ts",
-    "@/plugins/axios.ts",
+    { src: "@/plugins/router.ts", mode: 'server', ssr: true },
+    { src: "@/plugins/antd-ui.ts" },
+    { src: "@/plugins/axios.ts" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
