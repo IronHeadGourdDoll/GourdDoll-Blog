@@ -5,15 +5,17 @@ body {
     margin: 0;
     padding: 0;
     border-width: 0;
-    @include fill;
+    width: 100vw;
+    height: 100vh;
 }
-#app {
-    @include fill;
-    color: #3c3c3c;
-    -webkit-font-smoothing: antialiased;
-    background-color: #f4f4f4;
-    overflow-x: hidden;
-    font: 12px/1.5 arial, "Hiragino Sans GB", sans-serif;
+
+@font-face {
+    font-family: "思源宋体";
+    src: url("~/assets/source-han-serif.ttf");
+}
+
+body {
+    font: 12px/1.5 tahoma, arial, "思源宋体";
 }
 
 .fill {
