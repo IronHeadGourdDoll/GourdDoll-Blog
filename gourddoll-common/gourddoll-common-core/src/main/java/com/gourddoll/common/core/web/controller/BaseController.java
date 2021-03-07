@@ -73,6 +73,18 @@ public class BaseController
     }
 
     /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list1, List<?> list2)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setRows(list2);
+        rspData.setTotal(new PageInfo(list1).getTotal());
+        return rspData;
+    }
+
+    /**
      * 响应返回结果
      * 
      * @param rows 影响行数

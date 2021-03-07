@@ -210,10 +210,6 @@ public class SysUserServiceImpl implements ISysUserService
     {
         // 新增用户信息
         int rows = userMapper.insertUser(user);
-        //临时添加 -- 是否管理员
-        if(user.isAdmin()){
-
-        }
         //密码加密
         if(!"".equals(user.getPassword())){
             user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
@@ -236,6 +232,10 @@ public class SysUserServiceImpl implements ISysUserService
     public int updateUser(SysUser user)
     {
         Long userId = user.getUserId();
+        //密码加密
+        if(!"".equals(user.getPassword())){
+            user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
+        }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(userId);
         // 新增用户与角色管理

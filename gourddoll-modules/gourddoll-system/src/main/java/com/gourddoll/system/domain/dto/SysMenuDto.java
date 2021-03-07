@@ -64,9 +64,6 @@ public class SysMenuDto implements Serializable
     /** 菜单图标 */
     private String icon;
 
-    /** 子菜单 */
-    private List<SysMenuDto> children = new ArrayList<SysMenuDto>();
-
     /** 备注 */
     private String remark;
 
@@ -227,16 +224,6 @@ public class SysMenuDto implements Serializable
     public void setIcon(String icon)
     {
         this.icon = icon;
-    }
-
-    public List<SysMenuDto> getChildren()
-    {
-        return children;
-    }
-
-    public void setChildren(List<SysMenuDto> children)
-    {
-        this.children = children;
     }
 
     public String getRemark()

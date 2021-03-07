@@ -2,6 +2,7 @@ package com.gourddoll.system.controller;
 
 import com.gourddoll.common.core.constant.UserConstants;
 import com.gourddoll.common.core.utils.StringUtils;
+import com.gourddoll.common.core.utils.bean.TransUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
@@ -9,6 +10,7 @@ import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
 import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.api.domain.SysDept;
+import com.gourddoll.system.api.domain.dto.SysDeptDto;
 import com.gourddoll.system.service.ISysDeptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +46,13 @@ public class SysDeptController extends BaseController
     {
         startPage();
         List<SysDept> depts = deptService.selectDeptList(dept);
-        return AjaxResult.success(getDataTable(depts));
+        List<SysDeptDto> deptsDto = new ArrayList<>();
+        for (SysDept d : depts){
+            SysDeptDto dDto = new SysDeptDto();
+            TransUtil.po2dto(d,dDto);
+            deptsDto.add(dDto);
+        }
+        return AjaxResult.success(getDataTable(depts,deptsDto));
     }
 
     /**

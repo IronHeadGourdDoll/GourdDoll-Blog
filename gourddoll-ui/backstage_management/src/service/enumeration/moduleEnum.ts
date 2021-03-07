@@ -3,6 +3,7 @@ enum moduleEnum {
   user = "user",
   menu = "menu",
   role = "role",
+  dept = "dept",
 }
 
 export default moduleEnum;

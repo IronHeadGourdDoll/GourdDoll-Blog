@@ -48,12 +48,11 @@ public class SysMenuController extends BaseController
         List<SysMenu> menus = menuService.selectMenuList(menu, userId);
         List<SysMenuDto> menusDto = new ArrayList<>();
         for(SysMenu m : menus){
-            m.setChildren(null);
             SysMenuDto mDto = new SysMenuDto();
             TransUtil.po2dto(m,mDto);
             menusDto.add(mDto);
         }
-        return AjaxResult.success(getDataTable(menusDto));
+        return AjaxResult.success(getDataTable(menus,menusDto));
     }
 
     /**

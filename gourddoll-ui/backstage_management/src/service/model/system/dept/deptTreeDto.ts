@@ -1,6 +1,4 @@
-import BaseEntity from "../../common/baseEntity";
-
-class DeptEntity extends BaseEntity {
+export default class DeptTreeDto {
   /**
    * 部门ID
    */
@@ -59,7 +57,5 @@ class DeptEntity extends BaseEntity {
   /**
    * 子部门
    */
-  children: Array<DeptEntity> = [];
+  children: Array<DeptTreeDto> = [];
 }
-
-export default DeptEntity;
