@@ -25,9 +25,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    "@/plugins/antd-ui.ts",
-    "@/plugins/router.ts",
-    "@/plugins/axios.ts",
+    { src: "@/plugins/router.ts", mode: 'server', ssr: true },
+    { src: "@/plugins/antd-ui.ts" },
+    { src: "@/plugins/axios.ts" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,8 +48,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: process.env.VUE_APP_API,
-    browserBaseURL: process.env.VUE_APP_API,
+    baseURL: "http://39.99.195.107:8080",
+    browserBaseURL: "http://39.99.195.107:8080",
   },
   publicRuntimeConfig: {
     axios: {

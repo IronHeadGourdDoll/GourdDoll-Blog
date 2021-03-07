@@ -25,3 +25,21 @@ export function removeToken() {
 }
 
 export { tokenKey };
+
+
+/**
+ * 获取Cookie值
+ * @param key 键
+ * @param cookies 键值对字符串(等号成对，分号分隔)
+ */
+export function getCookieValue(key: string, cookies: string) {
+  if (cookies) {
+    const arrCookie = cookies.split(";");
+    const length = arrCookie.length;
+    for (let i = 0; i < length; i++) {
+      const arr = arrCookie[i].split("=");
+      if (arr[0] === key) return arr[1];
+    }
+  }
+  return "";
+}

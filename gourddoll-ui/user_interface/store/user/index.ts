@@ -1,17 +1,13 @@
-import userInfoHelp from "@/share/cache/userInfo";
-import { setToken, getToken } from "@/share/token";
 import Mutation from "./mutation-types";
 import LoginBodyDto from "@/service/model/system/user/loginBodyDto";
 import UserController from "@/service/controller/system/userController";
 import Empty from "@/share/extensionMethod/empty";
-import cookie from "cookiejs";
+import { setToken, removeToken, getCookieValue, tokenKey } from "@/share/token";
 
-const userService = new UserController();
-
-export const state = {
+export const state = () => ({
   token: "",
   userInfo: {},
-};
+});
 
 export const mutations = {
   [Mutation.setToken](state: any, token: any) {
@@ -24,16 +20,17 @@ export const mutations = {
 };
 
 export const actions = {
+
   /**
    * 登录
    */
   login({ commit, state }: any, userInfo: LoginBodyDto) {
+    const userService = new UserController(this.$axios);
     const result = userService.login(userInfo).then((data: any) => {
       commit(Mutation.setToken, data.access_token);
       setToken(state.token);
       return userService.getInfo().then((d: any) => {
         commit(Mutation.setUserInfo, d);
-        userInfoHelp.set(state.userInfo);
       });
     });
     return result;
@@ -43,23 +40,29 @@ export const actions = {
    * 退出登录
    */
   logout({ commit }: any) {
-    const logout = new UserController().logout();
+    const userService = new UserController(this.$axios);
+    const logout = userService.logout();
     return logout.then(() => {
       commit(Mutation.setToken, "");
+      removeToken();
       commit(Mutation.setUserInfo, {});
-      localStorage.clear();
-      sessionStorage.clear();
-      cookie.clear();
     });
   },
 
   /**
    * 获取token
    */
-  getToken({ state, commit }: any) {
-    let token = state.token;
-    if (Empty.isStringNull(token)) {
-      token = getToken();
+  getToken({ state }: any) {
+    const token = state.token;
+    return token;
+  },
+
+  /**
+   * 返回并设置cookie中的token
+   */
+  putToken({ state, commit }: any, cookie: string) {
+    const token = getCookieValue(tokenKey, cookie);
+    if (token !== state.token) {
       commit(Mutation.setToken, token);
     }
     return token;
@@ -71,13 +74,11 @@ export const actions = {
   async getUserInfo({ state, commit }: any) {
     let userInfo = state.userInfo;
     if (Empty.isObjectNull(userInfo)) {
-      userInfo = userInfoHelp.get();
-      if (Empty.isObjectNull(userInfo)) {
-        //如果内存和缓存中都没有则去后端取
-        userInfo = await userService.getInfo();
-      }
-      commit(Mutation.setUserInfo, userInfo);
+      //如果内存中没有则去后端取
+      const userService = new UserController(this.$axios);
+      userInfo = await userService.getInfo();
     }
+    commit(Mutation.setUserInfo, userInfo);
     return userInfo;
   },
 

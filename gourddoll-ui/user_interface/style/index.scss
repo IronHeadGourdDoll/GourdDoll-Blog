@@ -1,0 +1,51 @@
+@import "./public_mixin.scss";
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+@font-face {
+    font-family: "思源宋体";
+    src: url("~/assets/source-han-serif.ttf");
+}
+
+body {
+    font: 12px/1.5 tahoma, arial, "思源宋体";
+}
+
+.fill {
+    @include fill;
+}
+
+.left-float {
+    float: left;
+}
+
+.right-float {
+    float: right;
+}
+
+.clear-float {
+    clear: both;
+}
+
+.text-ellipsis {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+}
+
+.width-fill {
+    @include widthFill;
+}
+
+.height-fill {
+    @include heightFill;
+}
