@@ -38,7 +38,7 @@ export function getCookieValue(key: string, cookies: string) {
     const length = arrCookie.length;
     for (let i = 0; i < length; i++) {
       const arr = arrCookie[i].split("=");
-      if (arr[0] === key) return arr[1];
+      if (arr[0].trim() === key) return arr[1];
     }
   }
   return "";

@@ -1,5 +1,4 @@
 import Empty from "@/share/extensionMethod/empty";
-import { getCookieValue, tokenKey } from "@/share/token";
 
 const ignoreList = ["/login"]; //不需要跳转登录的路由
 
