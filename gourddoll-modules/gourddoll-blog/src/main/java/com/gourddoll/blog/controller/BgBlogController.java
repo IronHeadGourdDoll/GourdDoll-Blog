@@ -40,8 +40,8 @@ public class BgBlogController extends BaseController
     {
         startPage();
         List<BgBlog> list = bgBlogService.selectBgBlogList(bgBlog);
-        //return AjaxResult.success(getDataTable(list));
-        return AjaxResult.success(list);
+        return AjaxResult.success(getDataTable(list));
+        //return AjaxResult.success(list);
     }
 
     /**

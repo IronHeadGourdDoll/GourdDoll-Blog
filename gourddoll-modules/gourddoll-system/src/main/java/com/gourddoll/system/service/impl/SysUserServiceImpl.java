@@ -211,8 +211,11 @@ public class SysUserServiceImpl implements ISysUserService
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         //密码加密
-        if(!"".equals(user.getPassword())){
+        if(StringUtils.isNotEmpty(user.getPassword())){
             user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
+        }
+        if (user.getRoleIds().length == 0){// 没分配角色 ，默认普通用户
+            user.setRoleIds(new Long[]{2L});
         }
         // 新增用户岗位关联
         insertUserPost(user);

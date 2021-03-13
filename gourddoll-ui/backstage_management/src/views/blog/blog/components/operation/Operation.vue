@@ -1,0 +1,29 @@
+<template>
+  <FormModal
+    :modalWidth="580"
+    :title="title"
+    :visible="visible"
+    @save="onSubmit"
+    @reset="resetForm"
+    @cancel="onCancel"
+    :isReset="isShowReset"
+  >
+    <a-form-item label="标题" v-bind="validateInfos.title">
+      <a-input v-model:value="modelRef.title" />
+    </a-form-item>
+    <a-form-item label="作者" v-bind="validateInfos.author">
+      <a-input v-model:value="modelRef.author" />
+    </a-form-item>
+    <a-form-item label="简介" v-bind="validateInfos.summary">
+      <a-input v-model:value="modelRef.summary" />
+    </a-form-item>
+    <a-form-item label="内容" v-bind="validateInfos.status">
+      <a-input v-model:value="modelRef.status" />
+    </a-form-item>
+    <a-form-item label="是否推荐" v-bind="validateInfos.commend">
+      <a-textarea v-model:value="modelRef.commend" />
+    </a-form-item>
+  </FormModal>
+</template>
+
+<script lang="ts" src="./Operation.ts"></script>
