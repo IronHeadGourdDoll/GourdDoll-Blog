@@ -1,5 +1,7 @@
 import SexEnum from "../../../enumeration/sexEnum";
 import BaseEntity from "../../common/baseEntity";
+import DeptEntity from "../dept/deptEntity";
+import RoleEntity from "../role/roleEntity";
 
 class UserEntity extends BaseEntity {
   /**
@@ -81,6 +83,17 @@ class UserEntity extends BaseEntity {
    * 是否管理员
    */
   admin?: boolean;
+
+  dept?: DeptEntity;
+
+  /** 角色对象 */
+  roles?: Array<RoleEntity>;
+
+  /** 角色组 */
+  roleIds?: Array<bigint>;
+
+  /** 岗位组 */
+  postIds?: Array<bigint>;
 }
 
 export default UserEntity;

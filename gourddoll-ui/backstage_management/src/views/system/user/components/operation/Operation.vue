@@ -47,12 +47,30 @@
     <a-form-item label="电话" v-bind="validateInfos.phonenumber">
       <a-input v-model:value="modelRef.phonenumber" />
     </a-form-item>
-    <a-form-item label="管理员">
-      <a-switch
-        checked-children="是"
-        un-checked-children="否"
-        v-model:checked="modelRef.admin"
+    <a-form-item label="角色">
+      <a-select
+        v-model:value="state.value"
+        mode="multiple"
+        style="width: 100%"
+        placeholder="Please select"
+        :options="options"
       />
+    </a-form-item>
+    <a-form-item label="部门">
+      <a-tree-select
+        v-model:value="modelRef.deptId"
+        :tree-data="treeData"
+        placeholder="请选择"
+        :allowClear="true"
+        treeNodeFilterProp="label"
+        :replaceFields="{
+          children: 'children',
+          title: 'label',
+          key: 'id',
+          value: 'id',
+        }"
+      >
+      </a-tree-select>
     </a-form-item>
     <a-form-item label="备注" name="desc">
       <a-textarea v-model:value="modelRef.remark" />

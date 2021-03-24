@@ -1,5 +1,7 @@
-import { toRaw, SetupContext, ref, watch, reactive } from "vue";
+import { toRaw, SetupContext, ref, watch, reactive, defineComponent } from "vue";
 import UserController from "@/service/controller/system/userController";
+import RoleController from "@/service/controller/system/roleController";
+import DeptController from "@/service/controller/system/deptController";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
 import operationTypeEnum, {
@@ -12,10 +14,13 @@ export default {
   name: "Operation",
   props: {
     visible: Boolean,
+    treeData: Array,
+    treeSelectedId: [String, Number],
+    options: Array,
+    roles: Array,
   },
   setup(props: any, context: SetupContext) {
     let currentOperation = ref(operationTypeEnum.add);
-
     function load({ type, id }: any) {
       currentOperation.value = type;
       if (currentOperation.value == operationTypeEnum.edit) {
@@ -28,6 +33,37 @@ export default {
     Emitter.on("changeOperation", load, moduleEnum.user);
 
     const userController = new UserController();
+    const roleController = new RoleController();
+    const deptController = new DeptController();
+
+    const options: { value: string; disabled: boolean }[] = [];
+    for (let i = 0; i < 10000; i++) {
+      const value = `${i.toString(36)}${i}`;
+      options.push({
+        value,
+        disabled: i === 10,
+      });
+    }
+
+    const treeData = ref<Array<any>>([]);
+    function LoadTreeDept() {
+      deptController.getTreeDept().then((data) => {
+        treeData.value = data;
+      });
+    }
+    LoadTreeDept();
+
+    const roles = ref<Array<any>>([]);
+    function LoadRoles() {
+      roleController.getList({
+        quickText: "",
+        pageNum: 0,
+        pageSize: 0,
+      }).then((data) => {
+        roles.value = data.rows;
+      });
+    }
+    LoadTreeDept();
 
     function onSubmit() {
       validate().then(() => {
@@ -92,10 +128,16 @@ export default {
       resetValidate();
     }
 
+    debugger
+    const state = reactive({
+      options,
+      value: ['a10', 'c12'],
+    });
+
     return {
       validateInfos,
       resetForm,
-      modelRef,
+      modelRef, //用户对象
       onSubmit,
       sexMap: getSexMap(),
       onCancel,
@@ -104,6 +146,8 @@ export default {
       isShowReset,
       isDisabledUserName,
       isValidatePwd,
+      state,
+      treeData,
     };
   },
 };

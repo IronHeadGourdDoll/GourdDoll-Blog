@@ -12,6 +12,8 @@ const modelRef: any = reactive({
   admin: false,
   remark: "",
   password: "",
+  roleIds: [],
+  deptId: "",
 });
 
 const rulesRef: any = reactive({
