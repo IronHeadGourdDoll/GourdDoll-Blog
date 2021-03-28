@@ -16,7 +16,7 @@ export default {
     visible: Boolean,
     treeData: Array,
     treeSelectedId: [String, Number],
-    options: Array,
+    // options: Array,
     roles: Array,
   },
   setup(props: any, context: SetupContext) {
@@ -36,14 +36,14 @@ export default {
     const roleController = new RoleController();
     const deptController = new DeptController();
 
-    const options: { value: string; disabled: boolean }[] = [];
-    for (let i = 0; i < 10000; i++) {
-      const value = `${i.toString(36)}${i}`;
-      options.push({
-        value,
-        disabled: i === 10,
-      });
-    }
+    // const options: { value: string; disabled: boolean }[] = [];
+    // for (let i = 0; i < 10000; i++) {
+    //   const value = `${i.toString(36)}${i}`;
+    //   options.push({
+    //     value,
+    //     disabled: i === 10,
+    //   });
+    // }
 
     const treeData = ref<Array<any>>([]);
     function LoadTreeDept() {
@@ -53,16 +53,30 @@ export default {
     }
     LoadTreeDept();
 
-    const roles = ref<Array<any>>([]);
+
+    const roles = ref<Array<{ value: any; label: string, disabled: boolean, key: any, title: string }>>([]);
     function LoadRoles() {
       roleController.getList({
         quickText: "",
-        pageNum: 0,
-        pageSize: 0,
+        pageNum: 1,
+        pageSize: 20,
       }).then((data) => {
-        roles.value = data.rows;
+        const selects = [];
+        for (const { roleName, roleId } of data.rows) {
+          selects.push({
+            value: roleId,
+            label: roleName,
+            key: roleId,
+            title: roleName,
+            disabled: false,
+          });
+        }
+        roles.value = selects;
       });
     }
+    LoadRoles();
+
+
     LoadTreeDept();
 
     function onSubmit() {
@@ -128,11 +142,6 @@ export default {
       resetValidate();
     }
 
-    debugger
-    const state = reactive({
-      options,
-      value: ['a10', 'c12'],
-    });
 
     return {
       validateInfos,
@@ -146,8 +155,8 @@ export default {
       isShowReset,
       isDisabledUserName,
       isValidatePwd,
-      state,
       treeData,
+      roles,
     };
   },
 };

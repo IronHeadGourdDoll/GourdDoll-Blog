@@ -49,11 +49,11 @@
     </a-form-item>
     <a-form-item label="角色">
       <a-select
-        v-model:value="state.value"
+        v-model:value="modelRef.roleIds"
         mode="multiple"
         style="width: 100%"
         placeholder="Please select"
-        :options="options"
+        :options="roles"
       />
     </a-form-item>
     <a-form-item label="部门">

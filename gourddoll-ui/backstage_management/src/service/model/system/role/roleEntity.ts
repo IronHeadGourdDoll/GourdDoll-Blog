@@ -4,17 +4,17 @@ class RoleEntity extends BaseEntity {
   /**
    * 角色ID
    */
-  roleId!: bigint;
+  roleId!: bigint | number;
 
   /**
    * 角色名称
    */
-  roleName?: string;
+  roleName!: string;
 
   /**
    * 角色权限
    */
-  roleKey?: string;
+  roleKey!: string;
 
   /**
    * 角色排序
