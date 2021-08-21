@@ -1,16 +1,20 @@
 package com.gourddoll.system.controller;
 
+import com.gourddoll.common.core.constant.UserConstants;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
 import com.gourddoll.common.core.web.domain.AjaxResult;
 import com.gourddoll.common.log.annotation.Log;
 import com.gourddoll.common.log.enums.BusinessType;
 import com.gourddoll.common.security.annotation.PreAuthorize;
+import com.gourddoll.common.security.utils.SecurityUtils;
 import com.gourddoll.system.api.domain.SysOperLog;
+import com.gourddoll.system.api.domain.SysRole;
 import com.gourddoll.system.service.ISysOperLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -74,5 +78,27 @@ public class SysOperlogController extends BaseController
     public AjaxResult add(@RequestBody SysOperLog operLog)
     {
         return toAjax(operLogService.insertOperlog(operLog));
+    }
+
+    /**
+     * 根据日志id获取详细信息
+     */
+    @ApiOperation(value="根据日志编号获取详细信息", notes="详细描述")
+    @PreAuthorize(hasPermi = "system:operlog:query")
+    @GetMapping(value = "/{operlogId}")
+    public AjaxResult getInfo(@PathVariable Long operlogId)
+    {
+        return AjaxResult.success(operLogService.selectOperLogById(operlogId));
+    }
+
+    @ApiOperation(value="修改日志", notes="详细描述")
+    @PreAuthorize(hasPermi = "system:operlog:edit")
+    @Log(title = "日志管理", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@Validated @RequestBody SysOperLog operLog)
+    {
+        operLog.setUpdateBy(SecurityUtils.getUsername());
+        //return toAjax(operLogService.updateOperLog(operLog));
+        return null;
     }
 }

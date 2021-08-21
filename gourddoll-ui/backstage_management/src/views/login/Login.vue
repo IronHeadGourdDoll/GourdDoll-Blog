@@ -32,6 +32,11 @@
             v-model:value="formInline.code"
           />
         </div>
+        <div>
+          <a-button type="link" @click="showRegister"
+            >没有账号？点击注册</a-button
+          >
+        </div>
         <a-form-item class="submitdiv">
           <a-button
             type="primary"
@@ -45,6 +50,33 @@
       </a-form>
     </a-card>
   </div>
+
+  <a-modal v-model:visible="registerVisible" title="注册" :footer="null">
+    <a-form
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 14 }"
+      layout="horizontal"
+      :style="{ width: '460px' }"
+    >
+      <a-form-item label="姓名" v-bind="validateInfos.nickName">
+        <a-input v-model:value="modelRef.nickName" />
+      </a-form-item>
+      <a-form-item label="用户名" v-bind="validateInfos.userName">
+        <a-input v-model:value="modelRef.userName" />
+      </a-form-item>
+      <a-form-item label="密码" v-bind="validateInfos.password">
+        <a-input-password v-model:value="modelRef.password" />
+      </a-form-item>
+      <a-form-item label="确认密码" v-bind="validateInfos.confirmPassword">
+        <a-input-password v-model:value="modelRef.confirmPassword" />
+      </a-form-item>
+
+      <a-form-item class="downBtn" :wrapper-col="{ span: 8, offset: 9 }">
+        <a-button type="primary" @click="onSubmit">确认注册</a-button>
+        <a-button @click="onCancel">取消</a-button>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <style lang="scss">

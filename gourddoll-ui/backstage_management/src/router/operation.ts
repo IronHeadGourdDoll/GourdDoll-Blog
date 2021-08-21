@@ -1,4 +1,4 @@
-import { isUrl } from "@/share/util";
+import { isUrl } from "@/share/utils";
 import Home from "@/views/Home.vue";
 import EmptyContent from "@/views/layout/emptyContent/EmptyContent.vue";
 import { RouteRecordRaw } from "vue-router";
@@ -13,7 +13,7 @@ import Empty from "@/share/extensionMethod/empty";
 export function addMenuRoute(menus: Array<MenuTreeDto>) {
   function isIgnore(menu: MenuTreeDto) {
     if (isUrl(menu.path)) return true;
-    if (menu.pathCode === "Dashboard") return true;
+    if (menu.pathCode === "Analysis") return true;
     return false;
   }
 

@@ -1,8 +1,9 @@
 <template>
   <a-table
     class="pag-data-table fill"
-    :scroll="{ x: true, y: true }"
+    :scroll="{x: scrollX, y: scrollY }"
     :columns="columns"
+    :bordered="true"
     :dataSource="dataSource"
     :pagination="pagination"
     @change="handlePaginationChange"
@@ -15,7 +16,7 @@
 
 <style lang="scss">
 .pag-data-table {
-  .ant-table-scroll > .ant-table-body {
+  .ant-table-scroll > .ant-table-body{
     overflow-x: auto !important;
     overflow-y: auto !important;
   }

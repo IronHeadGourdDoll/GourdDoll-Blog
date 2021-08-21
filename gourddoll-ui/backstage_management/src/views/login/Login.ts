@@ -3,6 +3,8 @@ import { defineComponent, reactive, ref, computed } from "vue";
 import UserController from "@/service/controller/system/userController";
 import router from "@/router";
 import store from "@/store";
+import { useForm } from "@ant-design-vue/use";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
   name: "Login",
@@ -18,7 +20,7 @@ export default defineComponent({
       img: "",
     });
 
-    if (Object.is(process.env.NODE_ENV, "development")) {
+    if (Object.is(process.env.NODE_ENV as string, "development")) {
       formInline.user = "admin";
       formInline.password = "admin123";
     }
@@ -67,6 +69,82 @@ export default defineComponent({
         btnText.value == loginedtxt
     );
 
-    return { formInline, handleSubmit, btnText, btnIsDisabled, loadCodeImg };
+
+
+
+
+    // let validateInfos = reactive<any>({});
+    const registerVisible = ref<boolean>(false);
+    const modelRef: any = reactive({
+      nickName: "",
+      userName: "",
+      admin: false,
+      password: "",
+      confirmPassword: "",
+    });
+
+    const rulesRef: any = reactive({
+      nickName: [
+        {
+          required: true,
+          message: "请输入姓名",
+        },
+      ],
+      userName: [
+        {
+          required: true,
+          message: "请输入用户名",
+        },
+      ],
+      password: [
+        {
+          required: true,
+          message: "请输入密码",
+        },
+      ],
+      confirmPassword: [
+        {
+          required: true,
+          message: "请输入确认密码",
+        },
+      ],
+    });
+    const { resetFields, validateInfos,validate } = useForm(modelRef, rulesRef);
+
+    function onCancel() {
+      registerVisible.value = false;
+    }
+    function onSubmit() {
+      validate().then(() => {
+        userService.register(modelRef).then(()=>{
+          message.success("注册成功，可直接登录");
+          formInline.user = modelRef.userName;
+          formInline.password = modelRef.password;
+          registerVisible.value = false;
+        });
+      });
+    }
+    function showRegister() {
+      resetFields();
+      registerVisible.value = true;
+    }
+
+
+
+    return {
+      formInline
+      , handleSubmit
+      , btnText
+      , btnIsDisabled
+      , loadCodeImg
+      , modelRef
+      , rulesRef
+      , registerVisible
+      , onCancel
+      , onSubmit
+      , showRegister
+      , validateInfos
+    };
+
   },
 });

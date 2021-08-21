@@ -1,7 +1,5 @@
 package com.gourddoll.common.swagger.config;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,12 +11,14 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Configuration
 @EnableSwagger2
@@ -57,27 +57,26 @@ public class SwaggerAutoConfiguration
         {
             swaggerProperties.getExcludePath().addAll(DEFAULT_EXCLUDE_PATH);
         }
+
         List<Predicate<String>> excludePath = new ArrayList<>();
         swaggerProperties.getExcludePath().forEach(path -> excludePath.add(PathSelectors.ant(path)));
 
-        //noinspection Guava
-        return new Docket(DocumentationType.SWAGGER_2)
-                .host(swaggerProperties.getHost())
+        ApiSelectorBuilder builder = new Docket(DocumentationType.SWAGGER_2).host(swaggerProperties.getHost())
                 .apiInfo(apiInfo(swaggerProperties)).select()
-                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
-                .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
-                .build()
-                .securitySchemes(securitySchemes())
-                .securityContexts(securityContexts())
-                .pathMapping("/");
+                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()));
+
+        swaggerProperties.getBasePath().forEach(p -> builder.paths(PathSelectors.ant(p)));
+        swaggerProperties.getExcludePath().forEach(p -> builder.paths(PathSelectors.ant(p).negate()));
+
+        return builder.build().securitySchemes(securitySchemes()).securityContexts(securityContexts()).pathMapping("/");
     }
 
     /**
      * 安全模式，这里指定token通过Authorization头请求头传递
      */
-    private List<ApiKey> securitySchemes()
+    private List<SecurityScheme> securitySchemes()
     {
-        List<ApiKey> apiKeyList = new ArrayList<ApiKey>();
+        List<SecurityScheme> apiKeyList = new ArrayList<SecurityScheme>();
         apiKeyList.add(new ApiKey("Authorization", "Authorization", "header"));
         return apiKeyList;
     }
@@ -91,7 +90,7 @@ public class SwaggerAutoConfiguration
         securityContexts.add(
                 SecurityContext.builder()
                         .securityReferences(defaultAuth())
-                        .forPaths(PathSelectors.regex("^(?!auth).*$"))
+                        .operationSelector(o -> o.requestMappingPattern().matches("/.*"))
                         .build());
         return securityContexts;
     }
@@ -113,14 +112,14 @@ public class SwaggerAutoConfiguration
 
     private ApiInfo apiInfo(SwaggerProperties swaggerProperties)
     {
-         return new ApiInfoBuilder()
-             .title(swaggerProperties.getTitle())
-             .description(swaggerProperties.getDescription())
-             .license(swaggerProperties.getLicense())
-             .licenseUrl(swaggerProperties.getLicenseUrl())
-             .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
-             .contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
-             .version(swaggerProperties.getVersion())
-             .build();
+        return new ApiInfoBuilder()
+                .title(swaggerProperties.getTitle())
+                .description(swaggerProperties.getDescription())
+                .license(swaggerProperties.getLicense())
+                .licenseUrl(swaggerProperties.getLicenseUrl())
+                .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
+                .contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
+                .version(swaggerProperties.getVersion())
+                .build();
     }
 }

@@ -1,7 +1,9 @@
 package com.gourddoll.blog.service;
 
-import java.util.List;
 import com.gourddoll.blog.domain.BgBlogComment;
+import com.gourddoll.blog.domain.vo.CommentTreeSelect;
+
+import java.util.List;
 
 /**
  * 评论管理Service接口
@@ -58,4 +60,10 @@ public interface IBgBlogCommentService
      * @return 结果
      */
     public int deleteBgBlogCommentById(Long id);
+
+    List<BgBlogComment> selectBlogCommentList(BgBlogComment bgBlogComment);
+
+    List<CommentTreeSelect> buildCommentTreeSelect(List<BgBlogComment> list);
+
+    List<BgBlogComment> buildCommentTree(List<BgBlogComment> comments);
 }

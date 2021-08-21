@@ -79,3 +79,5 @@ class OperLogEntity {
    */
   operTime?: string;
 }
+
+export default OperLogEntity;

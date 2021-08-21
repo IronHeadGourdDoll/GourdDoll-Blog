@@ -37,6 +37,7 @@
         rowKey="deptId"
         :total="dataTotal"
         :calcHeight="365"
+        :scrollX="365"
         v-model:selectedRowKeys="tableSelectedRowKeys"
         v-model:selectedRows="tableSelectedRows"
         @loadData="loadDataByPage"

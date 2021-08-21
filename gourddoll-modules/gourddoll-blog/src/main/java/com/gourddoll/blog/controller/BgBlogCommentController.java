@@ -102,4 +102,19 @@ public class BgBlogCommentController extends BaseController
     {
         return toAjax(bgBlogCommentService.deleteBgBlogCommentByIds(ids));
     }
+
+    /**
+     * 查询博客评论树
+     *
+     * @return
+     */
+    @PreAuthorize(hasPermi = "mcs:comment:list")
+    @GetMapping("/list-tree/{id}")
+    public AjaxResult listTree(@PathVariable("id") Long id) {
+        BgBlogComment bgBlogComment = new BgBlogComment();
+        bgBlogComment.setBlogId(id);
+        startPage();
+        List<BgBlogComment> list = bgBlogCommentService.selectBlogCommentList(bgBlogComment);
+        return AjaxResult.success(bgBlogCommentService.buildCommentTreeSelect(list));
+    }
 }

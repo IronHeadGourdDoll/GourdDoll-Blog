@@ -50,12 +50,6 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!-- GourdDoll Common Security -->
-        <dependency>
-            <groupId>com.gourddoll</groupId>
-            <artifactId>gourddoll-common-security</artifactId>
-        </dependency>
-
         <!-- GourdDoll Common Datascope -->
         <dependency>
             <groupId>com.gourddoll</groupId>
@@ -74,11 +68,6 @@
             <artifactId>gourddoll-common-swagger</artifactId>
         </dependency>
 
-        <!-- GourdDoll Common Redis-->
-        <dependency>
-            <groupId>com.gourddoll</groupId>
-            <artifactId>gourddoll-common-redis</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.gourddoll</groupId>
             <artifactId>gourddoll-common-core</artifactId>

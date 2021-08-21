@@ -18,10 +18,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="createBy"    column="create_by"    />
         <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectBgBlogVo">
-        select id, title, author, summary, content, commend, status, header_img, category_id, create_time, update_time, create_by, update_by from bg_blog
+        select id, title, author, summary, content, commend, status, header_img, category_id, create_time, update_time, create_by, update_by,remark
+        from bg_blog
     </sql>
 
     <select id="selectBgBlogList" parameterType="BgBlog" resultMap="BgBlogResult">

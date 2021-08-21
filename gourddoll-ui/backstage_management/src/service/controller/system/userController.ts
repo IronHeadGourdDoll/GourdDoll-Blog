@@ -87,6 +87,10 @@ class UserController extends ControllerBase {
     //转码传递
     return this.request.delete("/system/user/" + encodeURIComponent(idsStr));
   }
+
+  register(data: any) {
+    return this.request.post("/system/user/register", data);
+  }
 }
 
 export default UserController;

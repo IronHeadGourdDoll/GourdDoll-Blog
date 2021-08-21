@@ -13,6 +13,7 @@
 		<module>gourddoll-gen</module>
 		<module>gourddoll-job</module>
 		<module>gourddoll-blog</module>
+		<module>gourddoll-file</module>
     </modules>
 
 	<artifactId>gourddoll-modules</artifactId>

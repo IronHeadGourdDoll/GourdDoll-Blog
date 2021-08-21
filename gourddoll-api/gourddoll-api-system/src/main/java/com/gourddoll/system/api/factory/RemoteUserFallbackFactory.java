@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * 用户服务降级处理
+ * 用户服务降级处理,降级实现服务间调用
  * 
  * @author gourddoll
  */

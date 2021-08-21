@@ -1,4 +1,4 @@
-class BaseEntity {
+class BaseEntity{
   /**
    * 搜索值
    */
@@ -38,6 +38,16 @@ class BaseEntity {
    * 结束时间
    */
   endTime?: string;
+
+  /**
+   * 当前页码
+   */
+  pageNum?: number;
+
+  /**
+   * 每页条数
+   */
+  pageSize?: number;
 }
 
 export default BaseEntity;

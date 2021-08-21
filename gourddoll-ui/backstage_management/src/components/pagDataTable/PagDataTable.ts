@@ -1,6 +1,6 @@
 import { defineComponent, reactive, SetupContext, toRefs, watch } from "vue";
 import pageSizeEnum, { pageSizes } from "@/service/enumeration/pageSizeEnum";
-import { throttle } from "@/share/util";
+import { throttle } from "@/share/utils";
 import calcTableHeight from "./calcTableHeight";
 
 /**
@@ -49,6 +49,14 @@ export default defineComponent({
     adaptiveHeight: {
       type: Boolean,
       default: true,
+    },
+    scrollX: {
+      type: Number,
+      default: 1200,
+    },
+    scrollY: {
+      type: Number,
+      default: 300,
     },
   },
   setup(props: any, context: SetupContext) {

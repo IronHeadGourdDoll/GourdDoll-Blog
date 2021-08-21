@@ -5,6 +5,9 @@ import com.gourddoll.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 评论管理对象 bg_blog_comment
  * 
@@ -45,6 +48,13 @@ public class BgBlogComment extends BaseEntity
     /** 右编码值 */
     @Excel(name = "右编码值")
     private Long rft;
+
+    /** 评分 */
+    @Excel(name = "评分")
+    private Integer rate;
+
+    /** 子评论 */
+    private List<BgBlogComment> children = new ArrayList<BgBlogComment>();
 
     public void setId(Long id) 
     {
@@ -119,18 +129,34 @@ public class BgBlogComment extends BaseEntity
         return rft;
     }
 
+    public Integer getRate() {
+        return rate;
+    }
+
+    public void setRate(Integer rate) {
+        this.rate = rate;
+    }
+
+    public List<BgBlogComment> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<BgBlogComment> children) {
+        this.children = children;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("blogId", getBlogId())
             .append("content", getContent())
-            .append("createTime", getCreateTime())
             .append("commentator", getCommentator())
             .append("parent", getParent())
             .append("layer", getLayer())
             .append("lft", getLft())
             .append("rft", getRft())
+            .append("rate", getRate())
             .toString();
     }
 }

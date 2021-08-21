@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent, ref } from "vue";
 import menuHelp from "@/share/cache/menu";
-import { isUrl, openWindow } from "@/share/util";
+import { isUrl, openWindow } from "@/share/utils";
 import router from "@/router";
 
 export default defineComponent({

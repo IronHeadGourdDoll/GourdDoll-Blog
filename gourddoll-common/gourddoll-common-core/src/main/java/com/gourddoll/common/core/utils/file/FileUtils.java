@@ -1,8 +1,14 @@
 package com.gourddoll.common.core.utils.file;
 
+import com.gourddoll.common.core.constant.FileConstant;
+import com.gourddoll.common.core.utils.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 文件处理工具类
@@ -11,6 +17,12 @@ import java.net.URLEncoder;
  */
 public class FileUtils extends org.apache.commons.io.FileUtils
 {
+    /** 字符常量：斜杠 {@code '/'} */
+    public static final char SLASH = '/';
+
+    /** 字符常量：反斜杠 {@code '\\'} */
+    public static final char BACKSLASH = '\\';
+
     public static String FILENAME_PATTERN = "[a-zA-Z0-9_\\-\\|\\.\\u4e00-\\u9fa5]+";
 
     /**
@@ -100,14 +112,37 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     }
 
     /**
+     * 检查文件是否可下载
+     * 
+     * @param resource 需要下载的文件
+     * @return true 正常 false 非法
+     */
+    public static boolean checkAllowDownload(String resource)
+    {
+        // 禁止目录上跳级别
+        if (StringUtils.contains(resource, ".."))
+        {
+            return false;
+        }
+
+        // 检查允许下载的文件规则
+        if (ArrayUtils.contains(MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, FileTypeUtils.getFileType(resource)))
+        {
+            return true;
+        }
+
+        // 不在允许下载的文件规则
+        return false;
+    }
+
+    /**
      * 下载文件名重新编码
      * 
      * @param request 请求对象
      * @param fileName 文件名
      * @return 编码后的文件名
      */
-    public static String setFileDownloadHeader(HttpServletRequest request, String fileName)
-            throws UnsupportedEncodingException
+    public static String setFileDownloadHeader(HttpServletRequest request, String fileName) throws UnsupportedEncodingException
     {
         final String agent = request.getHeader("USER-AGENT");
         String filename = fileName;
@@ -133,5 +168,130 @@ public class FileUtils extends org.apache.commons.io.FileUtils
             filename = URLEncoder.encode(filename, "utf-8");
         }
         return filename;
+    }
+
+    /**
+     * 返回文件名
+     *
+     * @param filePath 文件
+     * @return 文件名
+     */
+    public static String getName(String filePath)
+    {
+        if (null == filePath)
+        {
+            return null;
+        }
+        int len = filePath.length();
+        if (0 == len)
+        {
+            return filePath;
+        }
+        if (isFileSeparator(filePath.charAt(len - 1)))
+        {
+            // 以分隔符结尾的去掉结尾分隔符
+            len--;
+        }
+
+        int begin = 0;
+        char c;
+        for (int i = len - 1; i > -1; i--)
+        {
+            c = filePath.charAt(i);
+            if (isFileSeparator(c))
+            {
+                // 查找最后一个路径分隔符（/或者\）
+                begin = i + 1;
+                break;
+            }
+        }
+
+        return filePath.substring(begin, len);
+    }
+
+    /**
+     * 是否为Windows或者Linux（Unix）文件分隔符<br>
+     * Windows平台下分隔符为\，Linux（Unix）为/
+     *
+     * @param c 字符
+     * @return 是否为Windows或者Linux（Unix）文件分隔符
+     */
+    public static boolean isFileSeparator(char c)
+    {
+        return SLASH == c || BACKSLASH == c;
+    }
+
+    /**
+     * 下载文件名重新编码
+     *
+     * @param response 响应对象
+     * @param realFileName 真实文件名
+     * @return
+     */
+    public static void setAttachmentResponseHeader(HttpServletResponse response, String realFileName) throws UnsupportedEncodingException
+    {
+        String percentEncodedFileName = percentEncode(realFileName);
+
+        StringBuilder contentDispositionValue = new StringBuilder();
+        contentDispositionValue.append("attachment; filename=")
+                .append(percentEncodedFileName)
+                .append(";")
+                .append("filename*=")
+                .append("utf-8''")
+                .append(percentEncodedFileName);
+
+        response.setHeader("Content-disposition", contentDispositionValue.toString());
+    }
+
+    /**
+     * 百分号编码工具方法
+     *
+     * @param s 需要百分号编码的字符串
+     * @return 百分号编码后的字符串
+     */
+    public static String percentEncode(String s) throws UnsupportedEncodingException
+    {
+        String encode = URLEncoder.encode(s, StandardCharsets.UTF_8.toString());
+        return encode.replaceAll("\\+", "%20");
+    }
+
+    public static String savePic(InputStream inputStream, String fileName) {
+
+        OutputStream os = null;
+        String url = FileConstant.BASE_MCS_URL;
+        try {
+            String path = FileConstant.BASE_DIR;
+            url = url + "/" + fileName;
+            // 2、保存到临时文件
+            // 1K的数据缓冲
+            byte[] bs = new byte[1024];
+            // 读取到的数据长度
+            int len;
+            // 输出的文件流保存到本地文件
+
+            File tempFile = new File(path);
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+            os = new FileOutputStream(tempFile.getPath() + File.separator + fileName);
+            // 开始读取
+            while ((len = inputStream.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                os.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return url;
     }
 }

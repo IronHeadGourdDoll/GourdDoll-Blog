@@ -24,7 +24,7 @@ export default {
     },
     modalWidth: {
       type: Number,
-      default: 1780,
+      default: 1280,
     },
     title: {
       type: String,

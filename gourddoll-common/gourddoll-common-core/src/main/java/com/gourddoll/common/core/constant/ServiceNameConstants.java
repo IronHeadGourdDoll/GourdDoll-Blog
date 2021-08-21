@@ -20,5 +20,10 @@ public class ServiceNameConstants
     /**
      * 博客模块的serviceid
      */
-    public static final String BlOG_SERVICE = "gourddoll-blog";
+    public static final String BLOG_SERVICE = "gourddoll-blog";
+
+    /**
+     * 文件服务的serviceid
+     */
+    public static final String FILE_SERVICE = "gourddoll-file";
 }
