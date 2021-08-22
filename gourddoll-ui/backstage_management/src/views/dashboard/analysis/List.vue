@@ -1,8 +1,22 @@
-<template>分析页</template>
+<template>
+  <div class="p-4">
+    <NormalChart />
+  </div>
+</template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from 'vue';
+import NormalChart from './components/NormalChart.vue';
 export default defineComponent({
   name: "Analysis",
+  components: {
+    NormalChart,
+  },
+  setup() {
+  
+    
+    return {
+    }
+  },
 });
 </script>

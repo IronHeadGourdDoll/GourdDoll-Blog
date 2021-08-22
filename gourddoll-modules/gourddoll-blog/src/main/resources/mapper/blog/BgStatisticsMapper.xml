@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgStatisticsMapper">
+
+    <select id="getCategorys" parameterType="map" resultType="String">
+        SELECT category_name
+        from bg_category
+        order by id
+    </select>
+
+    <select id="getCategoryBlogs" resultType="Integer">
+        SELECT t.cnt
+        from
+        (
+            SELECT c.id as category_id, count(b.id) as cnt
+            from bg_category c
+            LEFT JOIN bg_blog b on c.id = b.category_id
+            group by c.id
+        ) t
+        order by t.category_id
+    </select>
+</mapper>
