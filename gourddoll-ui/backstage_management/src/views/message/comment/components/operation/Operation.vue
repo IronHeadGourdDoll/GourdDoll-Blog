@@ -9,12 +9,12 @@
     :isReset="isShowReset"
   >
     <a-form-item label="服务名">
-      <a-select 
-          v-model:value="modelRef.serviceId"
-          show-search
-          @change="handleChange"
-        >
-          <a-select-option v-for="item in services" :key="item.value">
+      <a-select
+        v-model:value="modelRef.serviceId"
+        show-search
+        @change="handleChange"
+      >
+        <a-select-option v-for="item in services" :key="item.value">
           {{ item.label }}
         </a-select-option>
       </a-select>
@@ -30,7 +30,7 @@
       <a-input v-model:value="modelRef.parent" />
     </a-form-item> -->
     <a-form-item label="状态">
-      <a-input v-model:value="modelRef.status"/>
+      <a-input v-model:value="modelRef.status" />
     </a-form-item>
     <a-form-item label="备注" name="desc">
       <a-textarea v-model:value="modelRef.remark" />

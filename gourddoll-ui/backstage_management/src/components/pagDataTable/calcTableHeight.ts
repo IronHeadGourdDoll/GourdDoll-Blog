@@ -22,8 +22,10 @@ const loadTableWidth = (calcHeight: any) => {
   }
   const dom = getTableDom();
   if (!dom) return;
-  dom.style["height"] = dom.style["min-height"] = dom.style["max-height"] =
-    tableHeight + "px";
+  dom.style["height"] =
+    dom.style["min-height"] =
+    dom.style["max-height"] =
+      tableHeight + "px";
 };
 
 export default function (calcHeight: number) {

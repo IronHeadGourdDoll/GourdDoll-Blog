@@ -13,8 +13,7 @@ const modelRef: any = reactive({
   status: "",
 });
 
-const rulesRef: any = reactive({
-});
+const rulesRef: any = reactive({});
 const { resetFields } = useForm(modelRef, rulesRef);
 
 export { modelRef, rulesRef, resetFields };

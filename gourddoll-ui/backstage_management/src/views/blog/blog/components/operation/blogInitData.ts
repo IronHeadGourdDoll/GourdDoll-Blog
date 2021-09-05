@@ -11,34 +11,7 @@ const modelRef: any = reactive({
 });
 
 const rulesRef: any = reactive({
-  title: [
-    {
-      required: true,
-      message: "请输入标题",
-    },
-  ],
-  author: [
-    {
-      required: true,
-      message: "请输入作者",
-    },
-  ],
-  summary: [
-    {
-      required: true,
-      message: "请输入简介",
-    },
-  ],
-  content: [
-    {
-      message: "内容",
-    },
-  ],
-  commend: [
-    {
-      message: "是否推荐",
-    },
-  ],
+
 });
 const { resetFields } = useForm(modelRef, rulesRef);
 

@@ -5,18 +5,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import NormalChart from './components/NormalChart.vue';
+import { defineComponent, ref } from "vue";
+import NormalChart from "./components/NormalChart.vue";
 export default defineComponent({
   name: "Analysis",
   components: {
     NormalChart,
   },
   setup() {
-  
-    
-    return {
-    }
+    return {};
   },
 });
 </script>

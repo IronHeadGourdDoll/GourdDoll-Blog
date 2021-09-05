@@ -9,8 +9,7 @@ const modelRef: any = reactive({
   operName: "",
 });
 
-const rulesRef: any = reactive({
-});
+const rulesRef: any = reactive({});
 const { resetFields } = useForm(modelRef, rulesRef);
 
 export { modelRef, rulesRef, resetFields };

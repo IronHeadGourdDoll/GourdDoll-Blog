@@ -41,8 +41,4 @@ const rulesRef: any = reactive({
 });
 const { resetFields } = useForm(modelRef, rulesRef);
 
-export {
-  modelRef,
-  rulesRef,
-  resetFields,
-};
+export { modelRef, rulesRef, resetFields };

@@ -1,6 +1,6 @@
 <template>
   <FormModal
-    :modalWidth="580"
+    :modalWidth="1180"
     :title="title"
     :visible="visible"
     @save="onSubmit"
@@ -17,12 +17,11 @@
     <a-form-item label="简介" v-bind="validateInfos.summary">
       <a-input v-model:value="modelRef.summary" />
     </a-form-item>
-    <a-form-item label="内容" v-bind="validateInfos.status">
-      <a-input v-model:value="modelRef.status" />
-    </a-form-item>
     <a-form-item label="是否推荐" v-bind="validateInfos.commend">
       <a-textarea v-model:value="modelRef.commend" />
     </a-form-item>
+    <!-- <TEditor ref="editor" v-model:value="modelRef.content" /> -->
+    <MEditor ref="editor" v-model:value="modelRef.content" />
   </FormModal>
 </template>
 

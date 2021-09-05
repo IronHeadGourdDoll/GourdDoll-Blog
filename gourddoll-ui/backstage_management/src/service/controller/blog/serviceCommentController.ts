@@ -21,10 +21,12 @@ class ServiceCommentController extends ControllerBase {
   }
 
   /**
-     * 根据博客id获取评论树
-     */
+   * 根据博客id获取评论树
+   */
   getTreeComment(id: bigint | number) {
-    return this.request.get<Array<ServiceCommentEntity>>("/blog/comment/list-tree/" + id);
+    return this.request.get<Array<ServiceCommentEntity>>(
+      "/blog/comment/list-tree/" + id
+    );
   }
 
   /**

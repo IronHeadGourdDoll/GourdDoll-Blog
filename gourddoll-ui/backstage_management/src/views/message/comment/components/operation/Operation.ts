@@ -30,28 +30,32 @@ export default {
     const serviceCommentController = new ServiceCommentController();
     const blogController = new BlogController();
 
-    const services = ref<Array<{ value: any; label: any, disabled: boolean, key: any, title: any }>>([]);
+    const services = ref<
+      Array<{ value: any; label: any; disabled: boolean; key: any; title: any }>
+    >([]);
     function LoadServices() {
-      blogController.getList({
-        quickText: "",
-        pageNum: 1,
-        pageSize: 20,
-      }).then((data) => {
-        const selects = [];
-        for (const { title, id } of data.rows) {
-          selects.push({
-            value: id,
-            label: title,
-            key: id,
-            title: title,
-            disabled: false,
-          });
-        }
-        services.value = selects;
-      });
+      blogController
+        .getList({
+          quickText: "",
+          pageNum: 1,
+          pageSize: 20,
+        })
+        .then((data) => {
+          const selects = [];
+          for (const { title, id } of data.rows) {
+            selects.push({
+              value: id,
+              label: title,
+              key: id,
+              title: title,
+              disabled: false,
+            });
+          }
+          services.value = selects;
+        });
     }
     LoadServices();
-    
+
     function onSubmit() {
       validate().then(() => {
         let save!: Promise<any>;
@@ -71,7 +75,7 @@ export default {
       context.emit("update:visible", false);
     }
 
-    const handleChange = (value: bigint,title: any) => {
+    const handleChange = (value: bigint, title: any) => {
       console.log(`selected ${value}`);
       modelRef.serviceName = title.children[0].children;
     };

@@ -17,8 +17,8 @@ class ServiceCommentEntity extends BaseEntity {
   bId?: bigint;
 
   /**
-    * 服务名
-    */
+   * 服务名
+   */
   serviceName?: string;
 
   /**
@@ -56,7 +56,7 @@ class ServiceCommentEntity extends BaseEntity {
    */
   rate?: bigint;
 
-    /**
+  /**
    * 子集
    */
   children!: Array<ServiceCommentEntity>;

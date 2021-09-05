@@ -70,9 +70,13 @@
 }
 </style>
 <script lang="ts">
-import { defineComponent, createVNode, ref, reactive,toRaw } from "vue";
+import { defineComponent, createVNode, ref, reactive, toRaw } from "vue";
 import UserInfo from "@/share/cache/userInfo";
-import { UserOutlined, ExclamationCircleOutlined,SolutionOutlined } from "@ant-design/icons-vue";
+import {
+  UserOutlined,
+  ExclamationCircleOutlined,
+  SolutionOutlined,
+} from "@ant-design/icons-vue";
 import { Modal, message } from "ant-design-vue";
 import router from "@/router";
 import store from "@/store";
@@ -163,15 +167,18 @@ export default defineComponent({
         },
       ],
     });
-    const { resetFields, validateInfos,validate } = useForm(modelRef, rulesRef);
+    const { resetFields, validateInfos, validate } = useForm(
+      modelRef,
+      rulesRef
+    );
 
     function onCancel() {
       userInfoVisible.value = false;
     }
     const userService = new UserController();
     function onSubmit() {
-      validate().then(()=>{
-        userService.edit(toRaw(modelRef)).then(()=>{
+      validate().then(() => {
+        userService.edit(toRaw(modelRef)).then(() => {
           message.success("修改个人信息成功");
           userInfoVisible.value = false;
         });
@@ -180,7 +187,7 @@ export default defineComponent({
 
     function showUserInfo() {
       resetFields();
-      userService.getInfo().then((data)=>{
+      userService.getInfo().then((data) => {
         data.user.password = "";
         Object.assign(modelRef, data.user);
         userInfoVisible.value = true;

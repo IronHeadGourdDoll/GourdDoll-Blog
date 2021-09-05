@@ -1,4 +1,11 @@
-import { toRaw, SetupContext, ref, watch, reactive, defineComponent } from "vue";
+import {
+  toRaw,
+  SetupContext,
+  ref,
+  watch,
+  reactive,
+  defineComponent,
+} from "vue";
 import UserController from "@/service/controller/system/userController";
 import RoleController from "@/service/controller/system/roleController";
 import DeptController from "@/service/controller/system/deptController";
@@ -53,29 +60,37 @@ export default {
     }
     LoadTreeDept();
 
-
-    const roles = ref<Array<{ value: any; label: string, disabled: boolean, key: any, title: string }>>([]);
+    const roles = ref<
+      Array<{
+        value: any;
+        label: string;
+        disabled: boolean;
+        key: any;
+        title: string;
+      }>
+    >([]);
     function LoadRoles() {
-      roleController.getList({
-        quickText: "",
-        pageNum: 1,
-        pageSize: 20,
-      }).then((data) => {
-        const selects = [];
-        for (const { roleName, roleId } of data.rows) {
-          selects.push({
-            value: roleId,
-            label: roleName,
-            key: roleId,
-            title: roleName,
-            disabled: false,
-          });
-        }
-        roles.value = selects;
-      });
+      roleController
+        .getList({
+          quickText: "",
+          pageNum: 1,
+          pageSize: 20,
+        })
+        .then((data) => {
+          const selects = [];
+          for (const { roleName, roleId } of data.rows) {
+            selects.push({
+              value: roleId,
+              label: roleName,
+              key: roleId,
+              title: roleName,
+              disabled: false,
+            });
+          }
+          roles.value = selects;
+        });
     }
     LoadRoles();
-
 
     LoadTreeDept();
 
@@ -141,7 +156,6 @@ export default {
       resetFields();
       resetValidate();
     }
-
 
     return {
       validateInfos,

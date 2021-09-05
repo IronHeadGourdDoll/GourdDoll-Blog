@@ -20,7 +20,7 @@ export default {
       currentOperation.value = type;
       if (currentOperation.value == operationTypeEnum.edit) {
         operlogController.getOperlogById(id).then((data) => {
-          debugger
+          debugger;
           Object.assign(modelRef, data);
         });
       }

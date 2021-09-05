@@ -37,7 +37,7 @@ export default defineComponent({
       },
     ];
 
-    const tagController= new TagController();
+    const tagController = new TagController();
 
     let searchText = ref("");
 

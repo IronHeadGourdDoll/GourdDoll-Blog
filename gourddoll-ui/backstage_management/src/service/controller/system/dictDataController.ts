@@ -9,7 +9,7 @@ class DictDataController extends ControllerBase {
    */
   getList(data: any) {
     const { modelRef } = data;
-    console.log("data========",data);
+    console.log("data========", data);
     return this.request.get<TableResult<DictDataEntity>>(
       "/system/dict/data/list",
       modelRef
@@ -49,7 +49,9 @@ class DictDataController extends ControllerBase {
     //逗号连接
     idsStr = idsStr.substr(0, idsStr.length - 1);
     //转码传递
-    return this.request.delete("/system/dict/data/" + encodeURIComponent(idsStr));
+    return this.request.delete(
+      "/system/dict/data/" + encodeURIComponent(idsStr)
+    );
   }
 }
 

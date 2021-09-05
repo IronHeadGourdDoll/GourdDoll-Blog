@@ -6,3 +6,5 @@ export { default as CurdLayout } from "./curdLayout/CurdLayout.vue";
 export { default as LeftRightLayout } from "./leftRightLayout/LeftRightLayout.vue";
 export { default as EllipsisTooltip } from "./ellipsisTooltip/EllipsisTooltip.vue";
 export { default as SearchTree } from "./searchTree/SearchTree.vue";
+export { default as TEditor } from "./TEditor/TEditor.vue";
+export { default as MEditor } from "./MEditor/MEditor.vue";

@@ -18,7 +18,7 @@
       <a-input v-model:value="modelRef.orderNum" type="number" />
     </a-form-item>
     <a-form-item label="状态" v-bind="validateInfos.status">
-      <a-input v-model:value="modelRef.status"/>
+      <a-input v-model:value="modelRef.status" />
     </a-form-item>
     <a-form-item label="备注" name="desc">
       <a-textarea v-model:value="modelRef.remark" />

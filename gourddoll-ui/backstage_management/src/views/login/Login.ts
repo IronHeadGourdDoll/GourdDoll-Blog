@@ -69,10 +69,6 @@ export default defineComponent({
         btnText.value == loginedtxt
     );
 
-
-
-
-
     // let validateInfos = reactive<any>({});
     const registerVisible = ref<boolean>(false);
     const modelRef: any = reactive({
@@ -109,14 +105,17 @@ export default defineComponent({
         },
       ],
     });
-    const { resetFields, validateInfos,validate } = useForm(modelRef, rulesRef);
+    const { resetFields, validateInfos, validate } = useForm(
+      modelRef,
+      rulesRef
+    );
 
     function onCancel() {
       registerVisible.value = false;
     }
     function onSubmit() {
       validate().then(() => {
-        userService.register(modelRef).then(()=>{
+        userService.register(modelRef).then(() => {
           message.success("注册成功，可直接登录");
           formInline.user = modelRef.userName;
           formInline.password = modelRef.password;
@@ -129,22 +128,19 @@ export default defineComponent({
       registerVisible.value = true;
     }
 
-
-
     return {
-      formInline
-      , handleSubmit
-      , btnText
-      , btnIsDisabled
-      , loadCodeImg
-      , modelRef
-      , rulesRef
-      , registerVisible
-      , onCancel
-      , onSubmit
-      , showRegister
-      , validateInfos
+      formInline,
+      handleSubmit,
+      btnText,
+      btnIsDisabled,
+      loadCodeImg,
+      modelRef,
+      rulesRef,
+      registerVisible,
+      onCancel,
+      onSubmit,
+      showRegister,
+      validateInfos,
     };
-
   },
 });

@@ -1,4 +1,4 @@
-class BaseEntity{
+class BaseEntity {
   /**
    * 搜索值
    */

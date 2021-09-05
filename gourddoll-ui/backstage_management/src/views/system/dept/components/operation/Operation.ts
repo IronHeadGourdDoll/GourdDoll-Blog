@@ -4,11 +4,7 @@ import moduleEnum from "@/service/enumeration/moduleEnum";
 import operationTypeEnum, {
   getTitle,
 } from "@/service/enumeration/operationTypeEnum";
-import {
-  modelRef,
-  rulesRef,
-  resetFields,
-} from "./deptInitData";
+import { modelRef, rulesRef, resetFields } from "./deptInitData";
 import { useForm } from "@ant-design-vue/use";
 import DeptController from "@/service/controller/system/deptController";
 
