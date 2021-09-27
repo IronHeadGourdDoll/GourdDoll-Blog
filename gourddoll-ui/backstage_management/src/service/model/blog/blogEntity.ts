@@ -43,6 +43,11 @@ class BlogEntity {
    * 分类id
    */
   categoryId?: string;
+
+  /**
+   * 分类名
+   */
+  categoryName?: string;
 }
 
 export default BlogEntity;

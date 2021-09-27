@@ -1,5 +1,6 @@
 import { toRaw, SetupContext, ref, watch, reactive } from "vue";
 import BlogController from "@/service/controller/blog/blogController";
+import CategoryController from "@/service/controller/blog/categoryController";
 import Emitter from "@/share/plugins/mitt";
 import moduleEnum from "@/service/enumeration/moduleEnum";
 import operationTypeEnum, {
@@ -15,6 +16,29 @@ export default {
   },
   setup(props: any, context: SetupContext) {
     let currentOperation = ref(operationTypeEnum.add);
+
+    const categoryController = new CategoryController();
+    const categories = ref<Array<{ value: any; label: any, disabled: boolean, key: any, title: any }>>([]);//分类列表
+    function LoadCategories() {
+      categoryController.getList({
+        quickText: "",
+        pageNum: 1,
+        pageSize: 20,
+      }).then((data) => {
+        const selects = [];
+        for (const { categoryName, id } of data.rows) {
+          selects.push({
+            value: id,
+            label: categoryName,
+            key: id,
+            title: categoryName,
+            disabled: false,
+          });
+        }
+        categories.value = selects;
+      });
+    }
+    LoadCategories();
 
     function load({ type, id }: any) {
       currentOperation.value = type;
@@ -78,6 +102,11 @@ export default {
       resetValidate();
     }
 
+    const handleChange = (value: bigint,title: any) => {
+      console.log(`selected ${value}`);
+      modelRef.categoryName = title.children[0].children;
+    };
+
     return {
       validateInfos,
       resetForm,
@@ -87,6 +116,8 @@ export default {
       currentOperation,
       title,
       isShowReset,
+      handleChange,
+      categories,
     };
   },
 };
