@@ -1,23 +1,35 @@
 <template>
   <div class="header">
-    <div>
-      欢迎您,<strong>{{ nickName }}</strong>
-    </div>
-    <div>
-      <a-dropdown-button>
-        {{ nickName }}
+    <div></div>
+    <div class="avatar-box">
+      <!--      <a-dropdown-button>-->
+      <!--        {{ nickName }}-->
+      <!--        <template #overlay>-->
+      <!--          <a-menu>-->
+      <!--            <a-menu-item @click="showUserInfo"-->
+      <!--              ><SolutionOutlined />个人信息</a-menu-item-->
+      <!--            >-->
+      <!--            <a-menu-item @click="userExit"-->
+      <!--              ><UserOutlined />安全退出</a-menu-item-->
+      <!--            >-->
+      <!--          </a-menu>-->
+      <!--        </template>-->
+      <!--        <template #icon><UserOutlined /></template>-->
+      <!--      </a-dropdown-button>-->
+      <a-avatar class="">{{ nickName?.[0] }}</a-avatar>
+      <a-dropdown>
+        <a class="dropdown-link" @click.prevent> 晚上好！{{ nickName }} </a>
         <template #overlay>
           <a-menu>
             <a-menu-item @click="showUserInfo"
               ><SolutionOutlined />个人信息</a-menu-item
             >
-            <a-menu-item @click="userExit"
-              ><UserOutlined />安全退出</a-menu-item
-            >
+            <a-menu-item @click="userExit">
+              <UserOutlined />安全退出
+            </a-menu-item>
           </a-menu>
         </template>
-        <template #icon><UserOutlined /></template>
-      </a-dropdown-button>
+      </a-dropdown>
     </div>
   </div>
 
@@ -64,77 +76,60 @@
 </template>
 
 <style lang="scss" scoped>
+.avatar-box {
+  min-width: 8rem;
+}
+.avatar {
+  margin-left: 2rem;
+}
+.dropdown-link {
+  display: inline-block;
+  height: 100%;
+  margin-left: 1rem;
+  font-size: 1rem;
+  color: black;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
 }
 </style>
 <script lang="ts">
-import { defineComponent, createVNode, ref, reactive, toRaw } from "vue";
+import { defineComponent, ref, reactive, toRaw, UnwrapRef } from "vue";
 import UserInfo from "@/share/cache/userInfo";
-import {
-  UserOutlined,
-  ExclamationCircleOutlined,
-  SolutionOutlined,
-} from "@ant-design/icons-vue";
-import { Modal, message } from "ant-design-vue";
-import router from "@/router";
-import store from "@/store";
-import { useForm } from "@ant-design-vue/use";
-import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
+import { SolutionOutlined, UserOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+
+import { Form } from "ant-design-vue";
 import UserController from "@/service/controller/system/userController";
+
+import Header from "./Header";
+import UserEntity from "@/service/model/system/user/userEntity";
+import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
 
 export default defineComponent({
   name: "Header",
-  components: {
-    UserOutlined,
-    SolutionOutlined,
-  },
+  components: { SolutionOutlined, UserOutlined },
   setup() {
     const userInfo = UserInfo.get();
 
     const nickName = userInfo?.user.nickName;
 
-    function exitClear() {
-      const closeLoad = message.loading("安全退出中···");
-      store
-        .dispatch("user/logout")
-        .then(() => {
-          closeLoad();
-          router.push({ path: "/login", replace: true });
-          message.destroy();
-          message.success("安全退出成功", 0.8);
-        })
-        .catch(() => {
-          closeLoad();
-          message.error("安全退出失败");
-        });
-    }
-
-    function userExit() {
-      Modal.confirm({
-        title: "温馨提示",
-        icon: createVNode(ExclamationCircleOutlined),
-        content: "确定要退出吗？",
-        okText: "确认",
-        cancelText: "取消",
-        onOk: exitClear,
-      });
-    }
-
-    // let validateInfos = reactive<any>({});
     const userInfoVisible = ref<boolean>(false);
-    const modelRef: any = reactive({
+
+    const model: UserEntity = {
       nickName: "",
+      avatar: "",
       userName: "",
       admin: false,
       password: "",
-      userId: null,
-      sex: SexEnum.none,
+      userId: 0,
+      sex: SexEnum.man,
       email: "",
       phonenumber: "",
-    });
-
+    };
+    const modelRef: UnwrapRef<UserEntity> = reactive(model);
     const rulesRef: any = reactive({
       nickName: [
         {
@@ -167,7 +162,7 @@ export default defineComponent({
         },
       ],
     });
-    const { resetFields, validateInfos, validate } = useForm(
+    const { resetFields, validateInfos, validate } = Form.useForm(
       modelRef,
       rulesRef
     );
@@ -176,13 +171,23 @@ export default defineComponent({
       userInfoVisible.value = false;
     }
     const userService = new UserController();
-    function onSubmit() {
-      validate().then(() => {
-        userService.edit(toRaw(modelRef)).then(() => {
-          message.success("修改个人信息成功");
-          userInfoVisible.value = false;
-        });
-      });
+    async function onSubmit() {
+      try {
+        await validate();
+        await userService.edit(toRaw(modelRef));
+        message.success("修改个人信息成功");
+      } catch (err) {
+        console.error("操作失败");
+      }
+      console.log(1);
+      userInfoVisible.value = false;
+
+      // validate().then(() => {
+      //   userService.edit(toRaw(modelRef)).then(() => {
+      //     message.success("修改个人信息成功");
+      //     userInfoVisible.value = false;
+      //   });
+      // });
     }
 
     function showUserInfo() {
@@ -195,15 +200,15 @@ export default defineComponent({
     }
 
     return {
+      sexMap: getSexMap(),
+      ...Header,
       nickName,
-      userExit,
       userInfoVisible,
       showUserInfo,
       validateInfos,
       onCancel,
       onSubmit,
       modelRef,
-      sexMap: getSexMap(),
     };
   },
 });

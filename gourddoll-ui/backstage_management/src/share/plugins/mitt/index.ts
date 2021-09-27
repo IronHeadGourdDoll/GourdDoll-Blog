@@ -13,6 +13,7 @@ class Emitter {
    * @param callback 回调函数
    * @param moduleName 模块名称
    */
+  static nameArr: Array<string> = [];
   static on(
     event: string,
     callback: any,
@@ -20,12 +21,13 @@ class Emitter {
   ) {
     const eventName = `${moduleName}/${event}`;
     //防止事件被重复监听
-    if (emitter.all.has(eventName)) {
-      emitter.off(eventName, emitter.all.get(eventName) as any);
+    if (this.nameArr.includes(eventName)) {
+      emitter.on(eventName, callback);
+      this.nameArr.push(eventName);
     }
-    emitter.on(eventName, callback);
-  }
 
+    //emitter.off(eventName, emitter.all.get(eventName) as any);
+  }
   /**
    * 触发事件
    * @param event 事件名称

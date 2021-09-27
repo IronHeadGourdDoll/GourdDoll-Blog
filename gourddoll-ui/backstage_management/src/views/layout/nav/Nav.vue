@@ -10,15 +10,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import menuHelp from "@/share/cache/menu";
 import { isUrl, openWindow } from "@/share/utils";
 import router from "@/router";
-
+import NavItem from "./NavItem.vue";
 export default defineComponent({
   name: "Nav",
   components: {
-    NavItem: defineAsyncComponent(() => import("./NavItem.vue")),
+    NavItem,
   },
   setup() {
     const menus = menuHelp.get();

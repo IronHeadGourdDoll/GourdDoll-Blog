@@ -6,7 +6,7 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="layout-header">
-        <div class="trigger-div">
+        <div class="">
           <menu-unfold-outlined
             v-if="collapsed"
             class="trigger"
@@ -42,6 +42,11 @@
   .layout-header {
     background: #fff;
     padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1.5rem;
   }
   .trigger-div {
     display: inline-block;
@@ -72,7 +77,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { Nav, PageFoot, Content, Header } from "./layout";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import { ref } from "vue";

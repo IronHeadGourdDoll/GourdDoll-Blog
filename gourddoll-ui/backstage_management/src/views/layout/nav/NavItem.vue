@@ -19,7 +19,7 @@
     </span>
   </a-menu-item>
 </template>
-<script>
+<script lang="ts">
 import { SnippetsOutlined, TagOutlined } from "@ant-design/icons-vue";
 export default {
   name: "NavItem",

@@ -7,6 +7,7 @@ import operationTypeEnum, {
 } from "@/service/enumeration/operationTypeEnum";
 import { modelRef, rulesRef, resetFields } from "./blogInitData";
 import { useForm } from "@ant-design-vue/use";
+import mitt from "mitt";
 
 export default {
   name: "Operation",
@@ -24,6 +25,7 @@ export default {
         });
       }
     }
+
     Emitter.on("changeOperation", load, moduleEnum.blog);
 
     const blogController = new BlogController();
