@@ -1,7 +1,7 @@
 import store from "@/store";
 import { Modal, message } from "ant-design-vue";
 import { useRouter } from "vue-router";
-import { createVNode } from "vue";
+import { reactive, createVNode } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
 const router = useRouter();
@@ -33,5 +33,37 @@ const Header = {
     });
   },
 };
+export const rulesRef = reactive({
+  nickName: [
+    {
+      required: true,
+      message: "请输入姓名",
+    },
+  ],
+  userName: [
+    {
+      required: true,
+      message: "请输入用户名",
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: "请输入密码",
+    },
+  ],
+  email: [
+    {
+      type: "email",
+      message: "邮箱格式错误",
+    },
+  ],
+  phonenumber: [
+    {
+      max: 11,
+      message: "电话长度不可超过11位",
+    },
+  ],
+});
 
 export default Header;

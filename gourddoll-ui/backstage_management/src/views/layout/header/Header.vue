@@ -2,20 +2,6 @@
   <div class="header">
     <div></div>
     <div class="avatar-box">
-      <!--      <a-dropdown-button>-->
-      <!--        {{ nickName }}-->
-      <!--        <template #overlay>-->
-      <!--          <a-menu>-->
-      <!--            <a-menu-item @click="showUserInfo"-->
-      <!--              ><SolutionOutlined />个人信息</a-menu-item-->
-      <!--            >-->
-      <!--            <a-menu-item @click="userExit"-->
-      <!--              ><UserOutlined />安全退出</a-menu-item-->
-      <!--            >-->
-      <!--          </a-menu>-->
-      <!--        </template>-->
-      <!--        <template #icon><UserOutlined /></template>-->
-      <!--      </a-dropdown-button>-->
       <a-avatar class="">{{ nickName?.[0] }}</a-avatar>
       <a-dropdown>
         <a class="dropdown-link" @click.prevent> 晚上好！{{ nickName }} </a>
@@ -69,7 +55,7 @@
 
       <a-form-item class="downBtn" :wrapper-col="{ span: 8, offset: 9 }">
         <a-button type="primary" @click="onSubmit">确认修改</a-button>
-        <a-button @click="onCancel">取消</a-button>
+        <a-button @click="() => (userInfoVisible = false)">取消</a-button>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -104,7 +90,7 @@ import { message } from "ant-design-vue";
 import { Form } from "ant-design-vue";
 import UserController from "@/service/controller/system/userController";
 
-import Header from "./Header";
+import Header, { rulesRef } from "./Header";
 import UserEntity from "@/service/model/system/user/userEntity";
 import SexEnum, { getSexMap } from "@/service/enumeration/sexEnum";
 
@@ -130,46 +116,11 @@ export default defineComponent({
       phonenumber: "",
     };
     const modelRef: UnwrapRef<UserEntity> = reactive(model);
-    const rulesRef: any = reactive({
-      nickName: [
-        {
-          required: true,
-          message: "请输入姓名",
-        },
-      ],
-      userName: [
-        {
-          required: true,
-          message: "请输入用户名",
-        },
-      ],
-      password: [
-        {
-          required: true,
-          message: "请输入密码",
-        },
-      ],
-      email: [
-        {
-          type: "email",
-          message: "邮箱格式错误",
-        },
-      ],
-      phonenumber: [
-        {
-          max: 11,
-          message: "电话长度不可超过11位",
-        },
-      ],
-    });
+
     const { resetFields, validateInfos, validate } = Form.useForm(
       modelRef,
       rulesRef
     );
-
-    function onCancel() {
-      userInfoVisible.value = false;
-    }
     const userService = new UserController();
     async function onSubmit() {
       try {
@@ -181,23 +132,16 @@ export default defineComponent({
       }
       console.log(1);
       userInfoVisible.value = false;
-
-      // validate().then(() => {
-      //   userService.edit(toRaw(modelRef)).then(() => {
-      //     message.success("修改个人信息成功");
-      //     userInfoVisible.value = false;
-      //   });
-      // });
     }
 
-    function showUserInfo() {
+    const showUserInfo = () => {
       resetFields();
       userService.getInfo().then((data) => {
         data.user.password = "";
         Object.assign(modelRef, data.user);
         userInfoVisible.value = true;
       });
-    }
+    };
 
     return {
       sexMap: getSexMap(),
@@ -206,7 +150,6 @@ export default defineComponent({
       userInfoVisible,
       showUserInfo,
       validateInfos,
-      onCancel,
       onSubmit,
       modelRef,
     };
