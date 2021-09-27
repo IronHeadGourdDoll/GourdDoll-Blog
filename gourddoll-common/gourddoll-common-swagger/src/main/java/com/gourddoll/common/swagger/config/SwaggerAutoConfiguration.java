@@ -112,14 +112,14 @@ public class SwaggerAutoConfiguration
 
     private ApiInfo apiInfo(SwaggerProperties swaggerProperties)
     {
-        return new ApiInfoBuilder()
-                .title(swaggerProperties.getTitle())
-                .description(swaggerProperties.getDescription())
-                .license(swaggerProperties.getLicense())
-                .licenseUrl(swaggerProperties.getLicenseUrl())
-                .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
-                .contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
-                .version(swaggerProperties.getVersion())
-                .build();
+         return new ApiInfoBuilder()
+             .title(swaggerProperties.getTitle())
+             .description(swaggerProperties.getDescription())
+             .license(swaggerProperties.getLicense())
+             .licenseUrl(swaggerProperties.getLicenseUrl())
+             .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
+             .contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
+             .version(swaggerProperties.getVersion())
+             .build();
     }
 }

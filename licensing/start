@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>XRebel Trial</title>
+    <link href="../resources/xr-styles.css" type="text/css" rel="stylesheet">
+</head>
+<body class="reg-page">
+    <div
+        style="height: 100%;"
+        data-activation-container="register"
+        data-test-activation-container="register"
+    />
+</body>
+</html>

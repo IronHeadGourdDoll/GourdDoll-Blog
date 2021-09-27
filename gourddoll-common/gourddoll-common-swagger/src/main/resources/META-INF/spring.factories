@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.gourddoll.common.swagger.config.SwaggerAutoConfiguration
+  com.gourddoll.common.swagger.config.SwaggerAutoConfiguration,\
+  com.gourddoll.common.swagger.config.SwaggerWebConfiguration
