@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gourddoll.blog.mapper.BgBlogTagMapper">
+
+	<resultMap type="BgBlogTag" id="BgBlogTagResult">
+		<result property="blogId"     column="blog_id"      />
+		<result property="tagId"     column="tag_id"      />
+	</resultMap>
+
+	<delete id="deleteBlogTagByBlogId" parameterType="Long">
+		delete from bg_blog_tag where blog_id=#{blogId}
+	</delete>
+	
+	<select id="countBlogTagByTagId" resultType="Integer">
+	    select count(1) from bg_blog_tag where tag_id=#{tagId}
+	</select>
+	
+	<delete id="deleteBlogTag" parameterType="Long">
+ 		delete from bg_blog_tag where blog_id in
+ 		<foreach collection="array" item="blogId" open="(" separator="," close=")">
+ 			#{blogId}
+        </foreach>
+ 	</delete>
+	
+	<insert id="batchBlogTag">
+		insert into bg_blog_tag(blog_id, tag_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+			(#{item.blogId},#{item.tagId})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteBlogTagInfo" parameterType="BgBlogTag">
+		delete from bg_blog_tag where blog_id=#{blogId} and tag_id=#{tagId}
+	</delete>
+	
+	<delete id="deleteBlogTagInfos">
+	    delete from bg_blog_tag where tag_id=#{tagId} and blog_id in
+ 	    <foreach collection="blogIds" item="blogId" open="(" separator="," close=")">
+ 	        #{blogId}
+		</foreach>
+	</delete>
+</mapper> 

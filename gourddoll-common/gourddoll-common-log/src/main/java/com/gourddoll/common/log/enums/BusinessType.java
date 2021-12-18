@@ -13,6 +13,11 @@ public enum BusinessType
     OTHER,
 
     /**
+     * 查看
+     */
+    VIEW,
+
+    /**
      * 新增
      */
     INSERT,

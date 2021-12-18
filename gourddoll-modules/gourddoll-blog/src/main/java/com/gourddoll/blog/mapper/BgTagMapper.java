@@ -58,4 +58,6 @@ public interface BgTagMapper
      * @return 结果
      */
     public int deleteBgTagByIds(Long[] ids);
+
+    List<Long> selectTagListByBlogId(Long blogId);
 }

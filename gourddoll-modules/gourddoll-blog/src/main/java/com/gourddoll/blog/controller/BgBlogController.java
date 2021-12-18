@@ -1,6 +1,7 @@
 package com.gourddoll.blog.controller;
 
 import com.gourddoll.blog.domain.BgBlog;
+import com.gourddoll.blog.mapper.BgTagMapper;
 import com.gourddoll.blog.service.IBgBlogService;
 import com.gourddoll.common.core.utils.poi.ExcelUtil;
 import com.gourddoll.common.core.web.controller.BaseController;
@@ -31,10 +32,14 @@ public class BgBlogController extends BaseController
     @Autowired
     private IBgBlogService bgBlogService;
 
+    @Autowired
+    private BgTagMapper bgTagMapper;
+
     /**
      * 查询博客管理列表
      */
     @ApiOperation(value="查询博客列表", notes="详细描述")
+    @Log(title = "博客管理", businessType = BusinessType.VIEW)
     @GetMapping("/list")
     public AjaxResult list(BgBlog bgBlog)
     {
@@ -62,10 +67,14 @@ public class BgBlogController extends BaseController
      * 获取博客管理详细信息
      */
     @ApiOperation(value="根据id获取博客", notes="详细描述")
+    @Log(title = "博客管理", businessType = BusinessType.VIEW)
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(bgBlogService.selectBgBlogById(id));
+        BgBlog bgBlog = bgBlogService.selectBgBlogById(id);
+        List<Long> tags = bgTagMapper.selectTagListByBlogId(id);
+        bgBlog.setTagIds(tags.toArray(new Long[tags.size()]));
+        return AjaxResult.success(bgBlog);
     }
 
     /**

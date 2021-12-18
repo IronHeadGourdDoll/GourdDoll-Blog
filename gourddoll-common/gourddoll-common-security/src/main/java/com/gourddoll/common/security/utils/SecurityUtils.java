@@ -1,9 +1,13 @@
 package com.gourddoll.common.security.utils;
 
 import com.gourddoll.common.core.constant.CacheConstants;
+import com.gourddoll.common.core.constant.SecurityConstants;
 import com.gourddoll.common.core.text.Convert;
 import com.gourddoll.common.core.utils.ServletUtils;
+import com.gourddoll.common.core.utils.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 权限获取工具类
@@ -17,7 +21,8 @@ public class SecurityUtils
      */
     public static String getUsername()
     {
-        return ServletUtils.getRequest().getHeader(CacheConstants.DETAILS_USERNAME);
+        String username = ServletUtils.getRequest().getHeader(SecurityConstants.DETAILS_USERNAME);
+        return ServletUtils.urlDecode(username);
     }
 
     /**
@@ -25,12 +30,41 @@ public class SecurityUtils
      */
     public static Long getUserId()
     {
-        return Convert.toLong(ServletUtils.getRequest().getHeader(CacheConstants.DETAILS_USER_ID));
+        return Convert.toLong(ServletUtils.getRequest().getHeader(SecurityConstants.DETAILS_USER_ID));
+    }
+
+    /**
+     * 获取请求token
+     */
+    public static String getToken()
+    {
+        return getToken(ServletUtils.getRequest());
+    }
+
+    /**
+     * 根据request获取请求token
+     */
+    public static String getToken(HttpServletRequest request)
+    {
+        String token = request.getHeader(SecurityConstants.TOKEN_AUTHENTICATION);
+        return replaceTokenPrefix(token);
+    }
+
+    /**
+     * 替换token前缀
+     */
+    public static String replaceTokenPrefix(String token)
+    {
+        if (StringUtils.isNotEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX))
+        {
+            token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
+        }
+        return token;
     }
 
     /**
      * 是否为管理员
-     * 
+     *
      * @param userId 用户ID
      * @return 结果
      */
@@ -54,8 +88,8 @@ public class SecurityUtils
     /**
      * 判断密码是否相同
      *
-     * @param rawPassword 用户输入密码
-     * @param encodedPassword 真实密码（加密后）
+     * @param rawPassword 真实密码
+     * @param encodedPassword 加密后字符
      * @return 结果
      */
     public static boolean matchesPassword(String rawPassword, String encodedPassword)

@@ -17,4 +17,12 @@ public interface IBgStatisticsService
     List<Map<String, Object>> getCategoryBlogs();
 
     List<Map<String, Object>> getCategorys();
+
+    List<Map<String, Object>> getTagBlogs();
+
+    List<Map<String, Object>> getTags();
+
+    Map<String, Object> getStatCard();
+
+    List<Map<String, Object>> getViewTimes();
 }

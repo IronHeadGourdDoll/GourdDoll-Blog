@@ -1,7 +1,5 @@
 package com.gourddoll.blog.mapper;
 
-import com.gourddoll.blog.domain.BgTag;
-
 import java.util.List;
 import java.util.Map;
 
@@ -17,4 +15,12 @@ public interface BgStatisticsMapper
     List<Map<String, Object>> getCategoryBlogs();
 
     List<Map<String, Object>> getCategorys();
+
+    List<Map<String, Object>> getTagBlogs();
+
+    List<Map<String, Object>> getTags();
+
+    Map<String, Object> getStatCard(String username);
+
+    List<Map<String, Object>> getViewTimes();
 }

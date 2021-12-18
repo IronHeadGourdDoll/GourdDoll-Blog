@@ -58,4 +58,12 @@ public interface IBgTagService
      * @return 结果
      */
     public int deleteBgTagById(Long id);
+
+    /**
+     * 获得博客的标签信息
+     *
+     * @param blogId 博客ID
+     * @return 结果
+     */
+    public List<Long> selectTagListByBlogId(Long blogId);
 }

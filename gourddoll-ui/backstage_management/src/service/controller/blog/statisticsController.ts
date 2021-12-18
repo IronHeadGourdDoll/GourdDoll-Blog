@@ -8,6 +8,13 @@ class StatisticsController extends ControllerBase {
   getCategoryBlogs() {
     return this.request.get<any>("/blog/statistics/getCategoryBlogs");
   }
+
+  /**
+   * 获取博客分类统计
+   */
+  getStatCard() {
+    return this.request.get<any>("/blog/statistics/getStatCard");
+  }
 }
 
 export default StatisticsController;

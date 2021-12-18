@@ -90,4 +90,9 @@ public class BgTagServiceImpl implements IBgTagService
     {
         return bgTagMapper.deleteBgTagById(id);
     }
+
+    @Override
+    public List<Long> selectTagListByBlogId(Long blogId) {
+        return bgTagMapper.selectTagListByBlogId(blogId);
+    }
 }

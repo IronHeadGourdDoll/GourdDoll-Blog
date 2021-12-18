@@ -35,6 +35,7 @@ public class BgBlogCommentController extends BaseController
      * 查询评论管理列表
      */
     @ApiOperation(value="获取所有博客评论", notes="详细描述")
+    @Log(title = "评论管理", businessType = BusinessType.VIEW)
     @GetMapping("/list")
     public AjaxResult list(BgBlogComment bgBlogComment)
     {
@@ -61,6 +62,7 @@ public class BgBlogCommentController extends BaseController
      * 获取评论管理详细信息
      */
     @ApiOperation(value="根据id获取博客评论", notes="详细描述")
+    @Log(title = "评论管理", businessType = BusinessType.VIEW)
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {

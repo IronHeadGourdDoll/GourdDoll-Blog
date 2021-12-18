@@ -25,7 +25,7 @@ public class SysOperLog extends BaseEntity
     private String title;
 
     /** 业务类型（0其它 1新增 2修改 3删除） */
-    @Excel(name = "业务类型", readConverterExp = "0=其它,1=新增,2=修改,3=删除,4=授权,5=导出,6=导入,7=强退,8=生成代码,9=清空数据")
+    @Excel(name = "业务类型", readConverterExp = "0=其它,1=新增,2=修改,3=删除,4=授权,5=导出,6=导入,7=强退,8=生成代码,9=清空数据,10=查看")
     private Integer businessType;
 
     /** 业务类型数组 */

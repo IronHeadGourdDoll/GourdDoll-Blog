@@ -157,9 +157,12 @@ public class SysUserController extends BaseController
         ajax.put("posts", postService.selectPostAll());
         if (StringUtils.isNotNull(userId))
         {
-            ajax.put(AjaxResult.DATA_TAG, userService.selectUserById(userId));
-            ajax.put("postIds", postService.selectPostListByUserId(userId));
-            ajax.put("roleIds", roleService.selectRoleListByUserId(userId));
+            SysUser sysUser = userService.selectUserById(userId);
+            List<Long> postIds = postService.selectPostListByUserId(userId);
+            List<Long> roleIds = roleService.selectRoleListByUserId(userId);
+            sysUser.setPostIds(postIds.toArray(new Long[postIds.size()]));
+            sysUser.setRoleIds(roleIds.toArray(new Long[roleIds.size()]));
+            ajax.put(AjaxResult.DATA_TAG, sysUser);
         }
         return ajax;
     }

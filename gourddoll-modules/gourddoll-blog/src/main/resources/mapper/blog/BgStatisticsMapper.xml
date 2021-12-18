@@ -21,4 +21,86 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) t
         order by t.category_id
     </select>
+
+    <select id="getTags" parameterType="map" resultType="String">
+        SELECT tag_name
+        from bg_tag
+        order by id
+    </select>
+
+    <select id="getTagBlogs" resultType="Integer">
+        SELECT t.cnt
+        from
+        (
+            SELECT t.id as tag_id, count(bt.blog_id) as cnt
+            from bg_tag t
+            LEFT JOIN bg_blog_tag bt on t.id = bt.tag_id
+            group by t.id
+        ) t
+        order by t.tag_id
+    </select>
+
+    <select id="getStatCard" resultType="java.util.Map">
+        select d.*
+        from
+        (
+            select
+            (
+            select count(1)
+            from bg_blog b
+            ) as 'blogSize'
+            ,(
+            select count(1)
+            from bg_tag t
+            ) as 'tagSize'
+            ,(
+            select count(1)
+            from bg_medal t
+            ) as 'medalSize'
+            ,(
+            select count(1)
+            from sys_user u
+            ) as 'userSize'
+            ,(
+            select ipaddr
+            from sys_logininfor l
+            where user_name = #{username}
+            ORDER BY access_time desc
+            limit 1
+            ) as 'lastIpaddr'
+            ,(
+            select access_time
+            from sys_logininfor l
+            where user_name = #{username}
+            ORDER BY access_time desc
+            limit 1
+            ) as 'lastAccessTime'
+        )d
+    </select>
+
+    <select id="getViewTimes" resultType="java.util.Map">
+        SELECT
+            left(temp.date,7) as dateAbscissa
+            ,IFNULL(u.unmber,0) as viewTimes
+        from(
+            SELECT DATE_SUB(CURDATE(), interval numlist.id month) AS 'date' FROM
+            (
+            SELECT * from
+            (
+            SELECT i AS id FROM num
+            ) a
+            where a.id &lt;= 11
+        ) AS numlist) temp
+        LEFT JOIN
+        (
+        SELECT
+            left(c.oper_time,7) AS udate
+            ,count(1) as unmber
+        FROM sys_oper_log c
+        WHERE
+            1 = 1
+            and c.oper_url = '/statistics/getCategoryBlogs'
+        GROUP BY left(c.oper_time,7)
+        ) u on left(temp.date,7) = u.udate ORDER BY temp.date
+    </select>
 </mapper>

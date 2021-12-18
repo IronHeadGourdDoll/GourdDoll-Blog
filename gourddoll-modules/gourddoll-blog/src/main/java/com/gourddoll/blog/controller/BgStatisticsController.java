@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,15 +36,60 @@ public class BgStatisticsController extends BaseController
     private IBgStatisticsService bgStatisticsService;
 
     /**
-     * 查询博客统计列表
+     * 查询分类博客统计列表
      */
-    @ApiOperation(value="查询博客统计列表", notes="详细描述")
+    @ApiOperation(value="查询分类博客统计列表", notes="详细描述")
+    @Log(title = "分析接口", businessType = BusinessType.VIEW)
     @GetMapping("/getCategoryBlogs")
-    public AjaxResult list()
+    public AjaxResult getCategoryBlogs()
     {
         Map<String, Object> res = new HashMap<>();
         res.put("xData", bgStatisticsService.getCategorys());
         res.put("yData", bgStatisticsService.getCategoryBlogs());
+        return AjaxResult.success(res);
+    }
+
+    /**
+     * 查询标签博客统计列表
+     */
+    @ApiOperation(value="查询标签博客统计列表", notes="详细描述")
+    @GetMapping("/getTagBlogs")
+    public AjaxResult getTagBlogs()
+    {
+        Map<String, Object> res = new HashMap<>();
+        res.put("xData", bgStatisticsService.getTags());
+        res.put("yData", bgStatisticsService.getTagBlogs());
+        return AjaxResult.success(res);
+    }
+
+    /**
+     * 查询统计卡片列表
+     */
+    @ApiOperation(value="查询统计卡片", notes="详细描述")
+    @GetMapping("/getStatCard")
+    public AjaxResult getStatCard()
+    {
+        Map<String, Object> res = bgStatisticsService.getStatCard();
+        return AjaxResult.success(res);
+    }
+
+    /**
+     * 查询访问量
+     */
+    @ApiOperation(value="查询访问量", notes="详细描述")
+    @GetMapping("/getViewTimes")
+    public AjaxResult getViewTimes()
+    {
+        List<Map<String, Object>> raws = bgStatisticsService.getViewTimes();
+        Map<String, Object> res = new HashMap<>();
+        List<String> xData = new ArrayList<>();
+        List<Long> yData = new ArrayList<>();
+        for (Map<String,Object> raw : raws){
+            xData.add((String) raw.get("dateAbscissa"));
+            yData.add((Long) raw.get("viewTimes"));
+        }
+        res.put("xData", xData);
+        res.put("yData", yData);
         return AjaxResult.success(res);
     }
 }

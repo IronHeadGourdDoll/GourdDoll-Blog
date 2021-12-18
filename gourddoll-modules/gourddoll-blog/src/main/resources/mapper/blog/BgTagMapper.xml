@@ -58,5 +58,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectTagListByBlogId" parameterType="Long" resultType="Long">
+		select distinct bt.tag_id
+        from bg_blog_tag bt
+        where bt.blog_id = #{blogId}
+	</select>
     
 </mapper>

@@ -1,12 +1,17 @@
 package com.gourddoll.blog.service.impl;
 
-import java.util.List;
+import com.gourddoll.blog.domain.BgBlog;
+import com.gourddoll.blog.domain.BgBlogTag;
+import com.gourddoll.blog.mapper.BgBlogMapper;
+import com.gourddoll.blog.mapper.BgBlogTagMapper;
+import com.gourddoll.blog.service.IBgBlogService;
 import com.gourddoll.common.core.utils.DateUtils;
+import com.gourddoll.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gourddoll.blog.mapper.BgBlogMapper;
-import com.gourddoll.blog.domain.BgBlog;
-import com.gourddoll.blog.service.IBgBlogService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 博客管理Service业务层处理
@@ -19,6 +24,9 @@ public class BgBlogServiceImpl implements IBgBlogService
 {
     @Autowired
     private BgBlogMapper bgBlogMapper;
+
+    @Autowired
+    private BgBlogTagMapper bgBlogTagMapper;
 
     /**
      * 查询博客管理
@@ -54,7 +62,10 @@ public class BgBlogServiceImpl implements IBgBlogService
     public int insertBgBlog(BgBlog bgBlog)
     {
         bgBlog.setCreateTime(DateUtils.getNowDate());
-        return bgBlogMapper.insertBgBlog(bgBlog);
+        int rows = bgBlogMapper.insertBgBlog(bgBlog);
+        // 新增博客标签关联
+        insertBlogTag(bgBlog);
+        return rows;
     }
 
     /**
@@ -67,6 +78,10 @@ public class BgBlogServiceImpl implements IBgBlogService
     public int updateBgBlog(BgBlog bgBlog)
     {
         bgBlog.setUpdateTime(DateUtils.getNowDate());
+        // 删除博客标签关联
+        bgBlogTagMapper.deleteBlogTagByBlogId(bgBlog.getId());
+        // 新增博客标签关联
+        insertBlogTag(bgBlog);
         return bgBlogMapper.updateBgBlog(bgBlog);
     }
 
@@ -92,5 +107,30 @@ public class BgBlogServiceImpl implements IBgBlogService
     public int deleteBgBlogById(Long id)
     {
         return bgBlogMapper.deleteBgBlogById(id);
+    }
+
+    /**
+     * 新增博客标签信息
+     *
+     * @param blog 对象
+     */
+    public void insertBlogTag(BgBlog blog){
+        Long[] tags = blog.getTagIds();
+        if (StringUtils.isNotNull(tags))
+        {
+            // 新增用户与角色管理
+            List<BgBlogTag> list = new ArrayList<BgBlogTag>();
+            for (Long tagId : tags)
+            {
+                BgBlogTag bt = new BgBlogTag();
+                bt.setBlogId(blog.getId());
+                bt.setTagId(tagId);
+                list.add(bt);
+            }
+            if (list.size() > 0)
+            {
+                bgBlogTagMapper.batchBlogTag(list);
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ import com.gourddoll.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.List;
+
 /**
  * 博客管理对象 bg_blog
  * 
@@ -49,6 +51,12 @@ public class BgBlog extends BaseEntity
     /** 分类id */
     @Excel(name = "分类id")
     private String categoryId;
+
+    /** 分类名 */
+    @Excel(name = "分类名")
+    private String categoryName;
+
+    public Long[] tagIds;
 
     public void setId(Long id) 
     {
@@ -132,6 +140,22 @@ public class BgBlog extends BaseEntity
         return categoryId;
     }
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Long[] getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(Long[] tagIds) {
+        this.tagIds = tagIds;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -144,6 +168,7 @@ public class BgBlog extends BaseEntity
             .append("status", getStatus())
             .append("headerImg", getHeaderImg())
             .append("categoryId", getCategoryId())
+            .append("categoryName", getCategoryName())
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
             .append("createBy", getCreateBy())
