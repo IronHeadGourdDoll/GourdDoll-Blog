@@ -1,5 +1,6 @@
 package com.gourddoll.common.core.utils.bean;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,5 +107,18 @@ public class BeanUtils extends org.springframework.beans.BeanUtils
     public static boolean isMethodPropEquals(String m1, String m2)
     {
         return m1.substring(BEAN_METHOD_PROP_INDEX).equals(m2.substring(BEAN_METHOD_PROP_INDEX));
+    }
+
+    /**
+     * 修改对象中某个属性的值
+     * @param object 修改对象
+     * @param fieldName 属性名
+     * @param newFieldValue 新值
+     * @throws Exception
+     */
+    public static void modify(Object object, String fieldName, Object newFieldValue) throws Exception {
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(object, newFieldValue);
     }
 }

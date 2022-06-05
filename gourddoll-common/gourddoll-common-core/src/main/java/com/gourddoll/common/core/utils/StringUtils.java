@@ -524,7 +524,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
     }
 
     /**
-     * 计算俩个字符串levenshteinDistance距离
+     * 计算俩个字符串levenshteinDistance距离（编辑距离）
      *
      * @param lhs 指定字符串
      * @param rhs 需要检查的字符串
@@ -572,6 +572,12 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
         return cost[len0 - 1];
     }
 
+    /**
+     * 全字符相似度
+     * @param lhs
+     * @param rhs
+     * @return
+     */
     public static double getSimilarity(CharSequence lhs, CharSequence rhs){
         double distance = levenshteinDistance(lhs, rhs);
         double a = lhs.length();

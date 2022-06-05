@@ -1,11 +1,11 @@
 import ControllerBase from "../controllerBase";
 import TableSearch from "../../model/common/tableSearch";
 import TableResult from "../../model/common/tableResult";
-import RoleEntity from "../../model/system/role/roleEntity";
+import MedalEntity from "../../model/blog/MedalEntity";
 
-class RoleController extends ControllerBase {
+class MedalController extends ControllerBase {
   /**
-   * 获取角色列表
+   * 获取勋章列表
    */
   getList(data: TableSearch) {
     const { pageNum, pageSize, quickText } = data;
@@ -14,37 +14,37 @@ class RoleController extends ControllerBase {
       pageSize,
       searchValue: quickText,
     };
-    return this.request.get<TableResult<RoleEntity>>(
-      "/system/role/list",
+    return this.request.get<TableResult<MedalEntity>>(
+      "/blog/medal/list",
       searchWhere
     );
   }
 
   /**
-   * 新增角色
+   * 新增勋章
    */
-  add(data: RoleEntity) {
-    return this.request.post("/system/role", data);
+  add(data: MedalEntity) {
+    return this.request.post("/blog/medal", data);
   }
 
   /**
-   * 根据id获取角色信息
+   * 根据id获取勋章信息
    */
-  getRoleById(id: bigint | number) {
-    return this.request.get("/system/role/" + id);
+  getmedalById(id: bigint | number) {
+    return this.request.get("/blog/medal/" + id);
   }
 
   /**
-   * 编辑角色
+   * 编辑勋章
    */
-  edit(data: RoleEntity) {
-    return this.request.put("/system/role", data);
+  edit(data: MedalEntity) {
+    return this.request.put("/blog/medal", data);
   }
 
   /**
-   * 根据id集合删除角色
+   * 根据id集合删除勋章
    */
-  deleteRoleByIds(ids: Array<number | bigint>) {
+  deleteMedalByIds(ids: Array<number | bigint>) {
     let idsStr = "";
     //去重
     for (const id of new Set(ids).values()) {
@@ -53,8 +53,8 @@ class RoleController extends ControllerBase {
     //逗号连接
     idsStr = idsStr.substr(0, idsStr.length - 1);
     //转码传递
-    return this.request.delete("/system/role/" + encodeURIComponent(idsStr));
+    return this.request.delete("/blog/medal/" + encodeURIComponent(idsStr));
   }
 }
 
-export default RoleController;
+export default MedalController;

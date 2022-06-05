@@ -27,11 +27,6 @@ class MenuEntity extends BaseEntity {
   component?: string;
 
   /**
-   *
-   */
-  remark?: string;
-
-  /**
    * 父级名称
    */
   parentName?: string;

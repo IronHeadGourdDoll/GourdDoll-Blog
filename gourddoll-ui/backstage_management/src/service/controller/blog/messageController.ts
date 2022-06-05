@@ -1,9 +1,9 @@
 import ControllerBase from "../controllerBase";
 import TableSearch from "../../model/common/tableSearch";
 import TableResult from "../../model/common/tableResult";
-import RoleEntity from "../../model/system/role/roleEntity";
+import LeaveMessageEntity from "../../model/blog/leaveMessageEntity";
 
-class RoleController extends ControllerBase {
+class leaveController extends ControllerBase {
   /**
    * 获取角色列表
    */
@@ -14,8 +14,8 @@ class RoleController extends ControllerBase {
       pageSize,
       searchValue: quickText,
     };
-    return this.request.get<TableResult<RoleEntity>>(
-      "/system/role/list",
+    return this.request.get<TableResult<LeaveMessageEntity>>(
+      "/blog/leave/list",
       searchWhere
     );
   }
@@ -23,28 +23,28 @@ class RoleController extends ControllerBase {
   /**
    * 新增角色
    */
-  add(data: RoleEntity) {
-    return this.request.post("/system/role", data);
+  add(data: LeaveMessageEntity) {
+    return this.request.post("/blog/leave", data);
   }
 
   /**
    * 根据id获取角色信息
    */
-  getRoleById(id: bigint | number) {
-    return this.request.get("/system/role/" + id);
+  getleaveById(id: bigint | number) {
+    return this.request.get("/blog/leave/" + id);
   }
 
   /**
    * 编辑角色
    */
-  edit(data: RoleEntity) {
-    return this.request.put("/system/role", data);
+  edit(data: LeaveMessageEntity) {
+    return this.request.put("/blog/leave", data);
   }
 
   /**
    * 根据id集合删除角色
    */
-  deleteRoleByIds(ids: Array<number | bigint>) {
+  deleteLeaveByIds(ids: Array<number | bigint>) {
     let idsStr = "";
     //去重
     for (const id of new Set(ids).values()) {
@@ -53,8 +53,8 @@ class RoleController extends ControllerBase {
     //逗号连接
     idsStr = idsStr.substr(0, idsStr.length - 1);
     //转码传递
-    return this.request.delete("/system/role/" + encodeURIComponent(idsStr));
+    return this.request.delete("/blog/leave/" + encodeURIComponent(idsStr));
   }
 }
 
-export default RoleController;
+export default leaveController;

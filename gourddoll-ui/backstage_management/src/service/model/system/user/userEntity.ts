@@ -7,7 +7,7 @@ class UserEntity extends BaseEntity {
   /**
    * 用户ID
    */
-  userId!: bigint;
+  userId: bigint | number = 1;
 
   /**
    * 部门ID
