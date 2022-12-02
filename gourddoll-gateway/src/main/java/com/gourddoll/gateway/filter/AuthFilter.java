@@ -22,20 +22,20 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.ServerWebExchangeDecorator;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 
 /**
  * 网关鉴权
- * 
+ *
  * @author gourddoll
  */
 @Component
-public class AuthFilter implements GlobalFilter, Ordered
-{
+public class AuthFilter implements GlobalFilter, Ordered {
     private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
-    
+
     private final static long EXPIRE_TIME = Constants.TOKEN_EXPIRE * 60;
 
     // 排除过滤的 uri 地址，nacos自行添加
@@ -44,49 +44,46 @@ public class AuthFilter implements GlobalFilter, Ordered
 
     @Resource(name = "stringRedisTemplate")
     private ValueOperations<String, String> sops;
-    
+
     @Autowired
     private RedisService redisService;
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain)
-    {
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        boolean isWhite = false;
         String url = exchange.getRequest().getURI().getPath();
-        // 跳过不需要验证的路径
-        if (StringUtils.matches(url, ignoreWhite.getWhites()))
-        {
-            return chain.filter(exchange);
-        }
         String token = getToken(exchange.getRequest());
-        if (StringUtils.isBlank(token))
-        {
-            return setUnauthorizedResponse(exchange, "令牌不能为空");
-        }
         String userStr = sops.get(getTokenKey(token));
-        if (StringUtils.isNull(userStr))
-        {
-            return setUnauthorizedResponse(exchange, "登录状态已过期");
+        // 白名单也设置token，但不校验
+        isWhite = StringUtils.matches(url, ignoreWhite.getWhites());
+        if (!isWhite) {
+            if (StringUtils.isBlank(token)) {
+                return setUnauthorizedResponse(exchange, "令牌不能为空");
+            }
+            if (StringUtils.isNull(userStr)) {
+                return setUnauthorizedResponse(exchange, "登录状态已过期");
+            }
         }
         JSONObject obj = JSONObject.parseObject(userStr);
         String userid = obj.getString("userid");
         String username = obj.getString("username");
-        if (StringUtils.isBlank(userid) || StringUtils.isBlank(username))
-        {
+        if (StringUtils.isBlank(userid) || StringUtils.isBlank(username)) {
             return setUnauthorizedResponse(exchange, "令牌验证失败");
         }
-        
-        // 设置过期时间
-        redisService.expire(getTokenKey(token), EXPIRE_TIME);
-        // 设置用户信息到请求
-        ServerHttpRequest mutableReq = exchange.getRequest().mutate().header(CacheConstants.DETAILS_USER_ID, userid)
-                .header(CacheConstants.DETAILS_USERNAME, username).build();
-        ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();
-
-        return chain.filter(mutableExchange);
+        if(!StringUtils.isNull(userStr)){
+            // 设置过期时间
+            redisService.expire(getTokenKey(token), EXPIRE_TIME);
+            // 设置用户信息到请求
+            ServerHttpRequest mutableReq = exchange.getRequest().mutate().header(CacheConstants.DETAILS_USER_ID, userid)
+                    .header(CacheConstants.DETAILS_USERNAME, username).build();
+            ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();
+            return chain.filter(mutableExchange);
+        }
+        // white白名单
+        return chain.filter(exchange);
     }
 
-    private Mono<Void> setUnauthorizedResponse(ServerWebExchange exchange, String msg)
-    {
+    private Mono<Void> setUnauthorizedResponse(ServerWebExchange exchange, String msg) {
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         response.setStatusCode(HttpStatus.OK);
@@ -95,31 +92,27 @@ public class AuthFilter implements GlobalFilter, Ordered
 
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
-            return bufferFactory.wrap(JSON.toJSONBytes(R.fail(403,msg)));//令牌为无效或为null，拒绝访问
+            return bufferFactory.wrap(JSON.toJSONBytes(R.fail(403, msg)));//令牌为无效或为null，拒绝访问
         }));
     }
 
-    private String getTokenKey(String token)
-    {
+    private String getTokenKey(String token) {
         return CacheConstants.LOGIN_TOKEN_KEY + token;
     }
 
     /**
      * 获取请求token
      */
-    private String getToken(ServerHttpRequest request)
-    {
+    private String getToken(ServerHttpRequest request) {
         String token = request.getHeaders().getFirst(CacheConstants.HEADER);
-        if (StringUtils.isNotEmpty(token) && token.startsWith(CacheConstants.TOKEN_PREFIX))
-        {
+        if (StringUtils.isNotEmpty(token) && token.startsWith(CacheConstants.TOKEN_PREFIX)) {
             token = token.replace(CacheConstants.TOKEN_PREFIX, "");
         }
         return token;
     }
 
     @Override
-    public int getOrder()
-    {
+    public int getOrder() {
         return -200;
     }
 }

@@ -1,0 +1,15 @@
+# 基础镜像
+FROM  openjdk:8-jre
+# author
+MAINTAINER gourddoll
+
+# 挂载目录
+VOLUME /home/gourddoll
+# 创建目录
+RUN mkdir -p /home/gourddoll
+# 指定路径
+WORKDIR /home/gourddoll
+# 复制jar文件到路径
+COPY ./jar/gourddoll-modules-job.jar /home/gourddoll/gourddoll-modules-job.jar
+# 启动定时任务服务
+ENTRYPOINT ["java","-jar","gourddoll-modules-job.jar"]

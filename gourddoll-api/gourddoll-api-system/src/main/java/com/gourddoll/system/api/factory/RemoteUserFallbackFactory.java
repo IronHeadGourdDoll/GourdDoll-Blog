@@ -7,6 +7,7 @@ import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * 用户服务降级处理,降级实现服务间调用
@@ -24,6 +25,7 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
         log.error("用户服务调用失败:{}", throwable.getMessage());
         return new RemoteUserService()
         {
+            @GetMapping("/user/info/{username}")
             @Override
             public R<LoginUser> getUserInfo(String username)
             {
